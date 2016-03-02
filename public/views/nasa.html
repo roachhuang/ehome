@@ -1,0 +1,12 @@
+<b>NASA 每日一圖:</b>
+<!--<pre>{{apod.reqObject}}</pre> -->
+
+<img ng-hide="apod.media_type=='video'" ng-src={{apod.url}} class='img-responsive'/>
+<iframe ng-hide="apod.media_type=='image'" type="text/html" width="640" height="385" frameborder="0">{{apod.vid_id}}</iframe>
+<p>{{apod.copyright}}</p>
+
+<h3>{{apod.title}}</h3>
+<p>{{apod.explanation}}</p>
+<br/>
+<b>Date:</b>
+<pre>{{apod.date}}</pre>
