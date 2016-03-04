@@ -5,14 +5,14 @@ angular.module("myApp", ['ngSanitize', 'ngRoute'])
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
     $scope.yahoo = {};  
-    $http.get('//localhost:3000/api/yahoo').then(function(res) {
+    $http.get('//ubuy.asuscomm.com:3000/api/yahoo').then(function(res) {
     	$scope.yahoo = res.data.query.results.channel;
     });
 })
 
 .controller("nasaCtrl", function($scope, $http) {
     $scope.apod = {};   
-    $http.get('//localhost:3000/api/apod').then(function(res) {
+    $http.get('//ubuy.asuscomm.com:3000/api/apod').then(function(res) {
     	$scope.apod = res.data;
     });
 })  

@@ -28,7 +28,7 @@
         <p>日出: {{yahoo.astronomy.sunrise}}， 日落: {{yahoo.astronomy.sunset}}</p>
         </div>
         <div>
-        <p>濕度: {{yahoo.atmosphere.humidity}}</p>
+        <p>濕度: {{yahoo.atmosphere.humidity}}, 能見度：{{yahoo.atmosphere.visibility*1.6 |number:0}}km</p>
         <div ng-bind-html="yahoo.item.description"></div>
         </div>
       </aside>
