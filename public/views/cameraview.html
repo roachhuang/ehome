@@ -1,5 +1,17 @@
-<img ng-src='http://ubuy.asuscomm.com/image.jpg' class='img-responsive'/>
+<!--
+<img ng-src='http://ubuy.asuscomm.com:8080/image.jpg' class='img-responsive'/>
 <hr/>
-<iframe src='http://ubuy.asuscomm.com/video.cgi' type="text/html" width="100%" height="320" frameborder="0">
+
+<div>
+<video src='http://ubuy.asuscomm.com:8080/video.cgi' width='400' height='300' autoplay>
+	Your browser does not support the video tag.
+</video>
+</div>
+-->
+
+<iframe width='320' height='240' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
 	<p>Your browser does not support iframes. It, however, works on Chrome</p>
 </iframe>
+
+<button class="btn btn-primary" ng-click="snapshot()">Snapshot</button>
+

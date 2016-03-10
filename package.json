@@ -1,0 +1,34 @@
+{
+  "name": "pi",
+  "version": "1.0.0",
+  "description": "ehome",
+  "main": "app.js",
+  "dependencies": {
+    "gql": "^1.1.0",
+    "morgan": "^1.7.0",
+    "nodemailer": "^2.2.1",
+    "mod-aspsms": "^1.0.0",
+    "request": "^2.69.0",
+    "textbelt": "^0.0.3",
+    "twilio": "^3.0.0-rc1",
+    "yql": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roachhuang/ehome.git"
+  },
+  "keywords": [
+    "smart",
+    "home"
+  ],
+  "author": "mark huang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roachhuang/ehome/issues"
+  },
+  "homepage": "https://github.com/roachhuang/ehome#readme"
+}

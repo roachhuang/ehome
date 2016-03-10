@@ -1,0 +1,7 @@
+.booth {
+	width:320px;
+	height:240px;
+	background:#ccc;
+	border:10px solid #ddd;
+	margin: 0;
+}
