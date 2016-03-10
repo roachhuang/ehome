@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
-module.exports = function() {
+
+exports.sendEmail = function() {
     var smtpConfig = {
         service: 'gmail',
         auth: {
