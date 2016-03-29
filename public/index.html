@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Example APOD call</title>
+    <title>Smart Home</title>
     <script src="./bower_components/angular/angular.js"></script>
     <script src="./bower_components/angular-route/angular-route.js"></script>
     <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="./myapp.js"></script>
+
     <link href="./bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
     <link href="./mycss.css" rel="stylesheet"/>
   </head>
@@ -16,8 +17,10 @@
     <div calss='container'>      
       <main class="row">
        Choose:
+          <a ng-href="#/">Home</a> |
           <a ng-href="#/cameraView">Camera</a> |
-          <a ng-href="#/nasa">NASA</a>  
+          <a ng-href="#/nasa">NASA</a>  |
+          <a ng-href="#/smarthome">Smart Home</a> 
       <aside class="col-md-2 well">
         <h3>{{yahoo.title}}</h3>
         <!--

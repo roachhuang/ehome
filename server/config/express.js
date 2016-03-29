@@ -11,4 +11,12 @@ module.exports = function(app, config) {
     app.use(express.static(config.rootPath + 'public'));
     // view engine setup
     app.set('views', config.rootPath + '/server/views');
+
+    // development error handler
+    // will print stacktrace
+    app.use(function(err, req, res, next) {
+        // Do logging and user-friendly error message display
+        console.error(err);
+        res.status(500).send('internal server error: ' + err);
+    })
 }

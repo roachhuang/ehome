@@ -1,5 +1,8 @@
 angular.module("myApp", ['ngSanitize', 'ngRoute'])
 
+.controller("widgetCtrl", function($scope) {
+    $scope.widget = {};    
+})
 .controller("mainCtrl", function($scope, $http, $route, $routeParams, $location) {
     $scope.$route = $route;
     $scope.$location = $location;
@@ -17,12 +20,17 @@ angular.module("myApp", ['ngSanitize', 'ngRoute'])
     });
 })
 
-.controller("cameraCtrl", function($scope, $http) {
-  $scope.snapshot = function() {
-    $http.get('/api/snapshot').then(function(res) {
-        console.log('img captured');
+.controller("cameraCtrl", function($scope, $http, $window) {
+    $http.get("/api/url").then(function(res) {
+        var url = res.data;
+        $window.open(url, "Please sign in with Google", "width=500px,height:700px");
     });
-  }
+
+    $scope.snapShot = function() {
+        $http.get('/api/saveimage').then(function(res) {
+            console.log('img captured');
+        });
+    }
 })
 
 /* not support yet
@@ -66,17 +74,21 @@ p.catch(function(err) { console.log(err.name); }); // always check for errors at
 */
 
 .config(function($routeProvider, $locationProvider, $httpProvider) {
-    /* Enable cross domain calls
+        /* Enable cross domain calls
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common = 'Content-Type: application/json';
     //Remove the header used to identify ajax call  that would prevent CORS from working
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     */
     $routeProvider
-        .when('/cameraView', {
-            templateUrl: './views/cameraview.html',
-            controller: 'cameraCtrl'
-            /*
+    .when('/', {
+        controller: 'widgetCtrl',
+        templateUrl: './views/widget.html'
+    })
+    .when('/cameraView', {
+        templateUrl: './views/cameraview.html',
+        controller: 'cameraCtrl'
+        /*
     	controller: 'cameraCtrl',
     	resolve: {
       		// I will cause a 1 second delay
@@ -87,13 +99,17 @@ p.catch(function(err) { console.log(err.name); }); // always check for errors at
       		}
     	}
     	*/
-        })
-        .when('/nasa', {
-            templateUrl: './views/nasa.html',
-            controller: 'nasaCtrl'
-        })
-        .otherwise({
-            controller: 'nasaCtrl',
-            templateUrl: './views/nasa.html'
-        });
+    })
+    .when('/nasa', {
+        templateUrl: './views/nasa.html',
+        controller: 'nasaCtrl'
+    })
+    .when('/smarthome', {
+        templateUrl: './views/smarthome.html',
+        controller: 'smartHomeCtrl'
+    })
+    .otherwise({
+        controller: 'widgetCtrl',
+        templateUrl: './views/widgets.html'
+    });
 });
