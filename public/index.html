@@ -9,47 +9,33 @@
     <script src="./bower_components/angular-route/angular-route.js"></script>
     <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="./myapp.js"></script>
-
     <link href="./bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
     <link href="./mycss.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   </head>
   <body ng-controller="mainCtrl">
-    <div calss='container'>      
-      <main class="row">
-       Choose:
-          <a ng-href="#/">Home</a> |
-          <a ng-href="#/cameraView">Camera</a> |
-          <a ng-href="#/nasa">NASA</a>  |
-          <a ng-href="#/smarthome">Smart Home</a> 
-      <aside class="col-md-2 well">
-        <h3>{{yahoo.title}}</h3>
-        <!--
-        <p>The current weather in {{yahoo.location.city}} {{yahoo.location.region}} is {{yahoo.item.condition.temp}} degrees</p>
-        <p>{{yahoo.item.condition.text}}</p>
-        <br/>
-        -->
+    <div calss='container'>
+      <main class='row'>
+      Choose:
+      <a ng-href="#/">Home</a> |
+      <a ng-href="#/cameraView">Camera</a> |
+      <a ng-href="#/nasa">NASA</a>  |
+      <a ng-href="#/smarthome">Smart Home</a>
+      <aside class="col-sm-3 well">
+        <h3>{{yahoo.title}}</h3>       
         <div>
-        <p>日出: {{yahoo.astronomy.sunrise}}， 日落: {{yahoo.astronomy.sunset}}</p>
+          <p>日出: {{yahoo.astronomy.sunrise}}， 日落: {{yahoo.astronomy.sunset}}</p>
         </div>
         <div>
-        <p>濕度: {{yahoo.atmosphere.humidity}}, 能見度：{{yahoo.atmosphere.visibility*1.6 |number:0}}km</p>
-        <div ng-bind-html="yahoo.item.description"></div>
+          <p>濕度: {{yahoo.atmosphere.humidity}}, 能見度：{{yahoo.atmosphere.visibility*1.6 |number:0}}km</p>
+          <div ng-bind-html="yahoo.item.description"></div>
         </div>
       </aside>
-      <div class='col-md-10'>
-
-        <ng-view></ng-view>  
-
+      <div class='col-sm-9'>
+        <ng-view></ng-view>
         <hr/>
-<!--
-        <pre>$location.path() = {{$location.path()}}</pre>
-        <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-        <pre>$route.current.params = {{$route.current.params}}</pre>
-        <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-        <pre>$routeParams = {{$routeParams}}</pre>
--->
       </div>
-    </main>
-  </div>
-</body>
+      </main>
+    </div>
+  </body>
 </html>

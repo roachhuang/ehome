@@ -20,8 +20,7 @@ body, html {
     box-shadow: 10px 10px 0px #8d8d8d;
 }
 
-.pdsa-summary-block .summary-background i, 
-.pdsa-summary-block .summary-background div { 
+.pdsa-summary-block .summary-bg i { 
 	margin-left: -0.4em; 
 	margin-top: 0.1em; 
 	font-size: 8em; 
@@ -61,8 +60,7 @@ body, html {
 	color: white; 
 }
 
-.pdsa-sensor-block .sensor-bg i, 
-.pdsa-sensor-block .sensor-bg div { 
+.pdsa-sensor-block .sensor-bg i { 
 	margin-left: -0.4em; 
 	margin-top: 0.1em; 
 	font-size: 8em; 
