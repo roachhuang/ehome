@@ -6,10 +6,79 @@
 	margin: 0;
 }
 
+/* pulralsight.com */
+.container {
+	width: 100%;
+}
+.body-content {
+	transition: margin-left 0.3s linear;
+	margin-left: 14em;
+	margin-top: 0.5em;
+	width:85%;
+}
+.pdsa-sn-wrapper {	
+	transition: left 0.3s linear;
+	position: absolute;
+	top: 3.6em;
+	left: 0em;
+	width: 13em;
+	height: 100%;
+	background-color: black;
+}
+header {
+	padding: 0.7em;
+	background-color: gray;
+	color: white;
+	font-size: large;
+}
+@media all and (max-width:768px) {
+	.pdsa-sn-wrapper {
+		left: -13em;
+	}
+	.body-content {
+		margin-left: 0em;
+	}
+}
+/* end of pulralsight
+
 /* for Smart home */
 body, html {
     background-color: #f6f6f6;
 }
+
+/* code school */
+body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 20px 20px 20px 20px;
+	
+	margin-top: 70px;
+}
+
+h1 {
+	margin: 10px 0 15px 0;
+	padding: 0 0 0 50px;
+}
+ol {
+	padding: 0 0 0 50px;
+}
+ul {
+	padding: 0 0 0 50px;
+}
+h2 {
+	margin: 10px 0 20px 0;
+}
+h3 {
+	margin: 15px 0 15px 0;
+	border-bottom: 1px solid #cccccc;
+	padding-bottom: 3px;
+}
+
+aside {	
+	/* background-color: #337ab7; */
+	padding: 10px;
+	background-color: #9068be
+}
+
 #painting {
     background-color: #fff4db;
     width: 400px;
@@ -24,24 +93,24 @@ body, html {
 	margin-left: -0.4em; 
 	margin-top: 0.1em; 
 	/* font-size: 8em; */
-	opacity: 0.4; 
+	opacity: 0.3; 
 }
 .pdsa-summary-block { 
 	position: relative; 
 	width: 100%; 
 	margin: 0.3em; 
 	padding: 1em; 
-	min-height: 15em; 
+	min-height: 15em; 	
 }
 
 .pdsa-summary-block .summary-body {
-	position: relative;
-	margin-top: 2em;
-	margin-bottom:2em;
+	position: absolute;
+	top: 1.3em;
+	right: 0.8em;
 }
 .pdsa-summary-block .summary-body .summary-line-1 { 
 	text-align: right; 
-	font-size: medium; 
+	font-size: xx-large; 
 }
 .pdsa-summary-block .summary-body .summary-line-2 { 
 	text-align: right; 
@@ -116,4 +185,9 @@ a.divLink {
  
 .summary-body .img-responsive {
     margin: 0 auto;
+}
+.img-responsive {
+	margin: 0px auto;
+	border:3px solid lightgrey;
+	box-shadow: rgba(0,0,0,0.5) 10px 10px 60px);
 }
