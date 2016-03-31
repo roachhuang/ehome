@@ -4,6 +4,7 @@
   "description": "ehome",
   "main": "app.js",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "fs": "0.0.2",
     "google-drive": "0.0.6",
     "google-oauth2-token": "^0.2.0",

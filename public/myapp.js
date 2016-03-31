@@ -3,6 +3,9 @@ angular.module("myApp", ['ngSanitize', 'ngRoute'])
 .controller("widgetCtrl", function($scope) {
     $scope.widget = {};    
 })
+.controller("smartHomeCtrl", function($scope) {
+    $scope.eHome = {};    
+})
 .controller("mainCtrl", function($scope, $http, $route, $routeParams, $location) {
     $scope.$route = $route;
     $scope.$location = $location;
@@ -10,6 +13,11 @@ angular.module("myApp", ['ngSanitize', 'ngRoute'])
     $scope.yahoo = {};
     $http.get('/api/yahoo').then(function(res) {
         $scope.yahoo = res.data.query.results.channel;
+    });
+
+    $scope.apod = {};
+    $http.get('/api/apod').then(function(res) {
+        $scope.apod = res.data;
     });
 })
 

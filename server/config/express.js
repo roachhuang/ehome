@@ -1,11 +1,11 @@
 var express = require('express');
 var morgan = require('morgan');
-var bodyParser = require('bodyParser');
+var bodyParser = require('body-parser');
 
 module.exports = function(app, config) {
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded(true));
-	
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded(true));
+
     // logging request details
     app.use(morgan('dev'));
     //app.use(bodyParser.urlencoded({

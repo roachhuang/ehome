@@ -1,42 +1,43 @@
 <div class="row">
-	<div class ='col-sm-3'>
-		<div class='pdsa-summary-block pdsa-block-success'>
+	<div class ='col-sm-4'>
+		<div class='pdsa-summary-block pdsa-block-default'>
 			<div class="summary-bg">
-				<i class="fa fa-video-camera"></i>
+				<!-- <i class="fa fa-video-camera"></i> -->
 			</div>
-			<div class='summary-body'>
-				<iframe width='50%' height='50%' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
-				<p>Your browser does not support iframes. It, however, works on Chrome</p>
-				</iframe>
-				
-			</div>
-			<div class="summary-footer">
-				<a href='#'>Cameras & icon</a>
-			</div>
+			<div class='summary-body divLink'>
+				<a ng-href='#/camera'>
+				<iframe width='220px' height='200px' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
+				<p>Your browser does not support iframes. It, however, works on Chrome</p>				
+				</iframe>				
+				</a>
+			</div>			
 		</div>
 	</div>
-	<div class ='col-sm-3'>
+	<div class ='col-sm-4'>
 		<div class='pdsa-summary-block pdsa-block-primary'>
 			<div class="summary-bg">
-				<i class="fa fa-home fa-fw"></i>				
+				<i class="fa fa-plug fa-3x">&nbsp;&nbsp</i>
+				<i class="fa fa-lightbulb-o fa-3x">&nbsp;&nbsp</i>
+				<i class="fa fa-toggle-on fa-3x">&nbsp;&nbsp</i>
+
 			</div>
 			<div class='summary-body'>
-				<div class='summary-line-1'>14</div>
-				<div class='summary-line-2'>eHome</div>
+				<div class='summary-line-1'>家電控制</div>
+				<div class='summary-line-2'>Smart Home</div>
 			</div>
 			<div class="summary-footer">
 				<a href='#'>Smart Home & icon</a>
 			</div>
 		</div>
 	</div>
-	<div class ='col-sm-3'>
-		<div class='pdsa-summary-block pdsa-block-primary'>
+	<div class ='col-sm-4'>
+		<div class='pdsa-summary-block pdsa-block-info'>
 			<div class="summary-bg">
-				<i class="fa fa-home fa-fw"></i>				
+				<i class="fa fa-registered fa-5x"></i>			
 			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>14</div>
-				<div class='summary-line-2'>eHome</div>
+			<div class='summary-body'>				
+				<div class='summary-line-1'>公司簡介
+				</div>
 			</div>
 			<div class="summary-footer">
 				<a href='#'>Smart Home & icon</a>
@@ -45,45 +46,43 @@
 	</div>
 </div>
 <div class="row">
-	<div class ='col-sm-3'>
-		<div class='pdsa-summary-block pdsa-block-info'>
+	<div class ='col-sm-4'>
+		<div class='pdsa-summary-block pdsa-block-success'>
 			<div class="summary-bg">
-				<i class="fa fa-cogs"></i>
+				<i class="fa fa-cogs fa-5x fa-spin"></i>
 			</div>
 			<div class='summary-body'>
-				<div class='summary-line-1'>14</div>
-				<div class='summary-line-2'>Genres</div>
+				<div class='summary-line-1'>設定</div>
+				<a class='divLink' href='#'></a>
 			</div>
 			<div class="summary-footer">
 				<a href='#'>Settings & icon</a>
 			</div>
 		</div>
 	</div>
-	<div class ='col-sm-3'>
+	<div class ='col-sm-4'>
 		<div class='pdsa-summary-block pdsa-block-warning'>
 			<div class="summary-bg">
-				<i class="fa fa-tachometer"></i>
+				<i class="fa fa-tachometer fa-5x"></i>
 			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>14</div>
-				<div class='summary-line-2'>Genres</div>
+			<div class='summary-body divLink'>
+				<div class='summary-line-1'>感應數據讀取</div>
+				<div class='summary-line-2'>15</div>
 			</div>
 			<div class="summary-footer">
 				<a href='#'>Settings & icon</a>
 			</div>
 		</div>
 	</div>
-	<div class ='col-sm-3'>
-		<div class='pdsa-summary-block pdsa-block-primary'>
+	<div class ='col-sm-4'>
+		<div class='pdsa-summary-block pdsa-block-danger'>
 			<div class="summary-bg">
-				<i class="fa fa-home fa-fw"></i>				
+				
 			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>14</div>
-				<div class='summary-line-2'>eHome</div>
-			</div>
-			<div class="summary-footer">
-				<a href='#'>Smart Home & icon</a>
+			<div class='summary-body divLink'>
+				<a ng-href='#/nasa'>
+					<img class='img-responsive' ng-src="{{apod.url}}" >
+				</a>			
 			</div>
 		</div>
 	</div>
