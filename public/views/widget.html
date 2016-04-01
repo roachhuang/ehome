@@ -6,36 +6,37 @@
 			</div>
 			<div class='summary-body divLink'>
 				<a ng-href='#/camera'>
-				<iframe width='220px' height='200px' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
-				<p>Your browser does not support iframes. It, however, works on Chrome</p>				
-				</iframe>				
+					<iframe width='220px' height='200px' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
+					<p>Your browser does not support iframes. It, however, works on Chrome</p>
+					</iframe>
 				</a>
-			</div>			
+			</div>
 		</div>
 	</div>
 	<div class ='col-sm-4'>
 		<div class='pdsa-summary-block pdsa-block-primary'>
 			<div class="summary-bg">
-				<i class="fa fa-plug fa-3x">&nbsp;&nbsp</i>
-				<i class="fa fa-lightbulb-o fa-3x">&nbsp;&nbsp</i>
-				<i class="fa fa-toggle-on fa-3x">&nbsp;&nbsp</i>
-
+				<span>
+					<i class="fa fa-plug fa-3x">&nbsp;&nbsp</i>
+					<i class="fa fa-lightbulb-o fa-3x"></i><br>
+					&nbsp;&nbsp;&nbsp;&nbsp<i class="fa fa-power-off fa-3x"></i>
+				</span>
 			</div>
 			<div class='summary-body'>
-				<div class='summary-line-1'>家電控制</div>
-				<div class='summary-line-2'>Smart Home</div>
+				<div class='summary-line-1'>Smart Home</div>
+				<div class='summary-line-2'>家電控制</div>
 			</div>
 			<div class="summary-footer">
-				<a href='#'>Smart Home & icon</a>
+				<a href='#/smarthome'>Smart Home & icon</a>
 			</div>
 		</div>
 	</div>
 	<div class ='col-sm-4'>
 		<div class='pdsa-summary-block pdsa-block-info'>
 			<div class="summary-bg">
-				<i class="fa fa-registered fa-5x"></i>			
+				<i class="fa fa-registered fa-5x"></i>
 			</div>
-			<div class='summary-body'>				
+			<div class='summary-body'>
 				<div class='summary-line-1'>公司簡介
 				</div>
 			</div>
@@ -77,12 +78,16 @@
 	<div class ='col-sm-4'>
 		<div class='pdsa-summary-block pdsa-block-danger'>
 			<div class="summary-bg">
-				
+				<i class="fa fa-space-shuttle fa-5x"></i>
 			</div>
 			<div class='summary-body divLink'>
+				<!-- <div class='summary-line-1'>NASA 每日一圖</div> -->
 				<a ng-href='#/nasa'>
 					<img class='img-responsive' ng-src="{{apod.url}}" >
-				</a>			
+				</a>
+			</div>
+			<div class="summary-footer">
+				<a href='#'>NASA 每日一圖</a>
 			</div>
 		</div>
 	</div>

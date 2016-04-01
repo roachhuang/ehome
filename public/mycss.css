@@ -23,7 +23,7 @@
 	left: 0em;
 	width: 13em;
 	height: 100%;
-	background-color: black;
+	background-color: #abc123;
 }
 header {
 	padding: 0.7em;
@@ -76,7 +76,8 @@ h3 {
 aside {	
 	/* background-color: #337ab7; */
 	padding: 10px;
-	background-color: #9068be
+	/* background-color: #9068be; */
+	background-color: #520916;
 }
 
 #painting {
@@ -110,7 +111,7 @@ aside {
 }
 .pdsa-summary-block .summary-body .summary-line-1 { 
 	text-align: right; 
-	font-size: xx-large; 
+	font-size: large; 
 }
 .pdsa-summary-block .summary-body .summary-line-2 { 
 	text-align: right; 
