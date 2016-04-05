@@ -15,6 +15,6 @@ var extapi = require('./server/routes/extapi');
 // router is mounted in a particular root url
 app.use('/api', extapi);
 
-app.listen(config.port, function(req, res) {
-    console.info('Listening on port: ' +config.port + '...');
+app.listen(config.port, function (req, res) {
+	console.info('Listening on port: ' + config.port + '...');
 });

@@ -5,6 +5,9 @@ var bodyParser = require('body-parser');
 module.exports = function(app, config) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded(true));
+	
+	app.use(cookieParser());
+	app.use(session({secret: 'roach'}));
 
     // logging request details
     app.use(morgan('dev'));
