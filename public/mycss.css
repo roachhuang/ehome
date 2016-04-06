@@ -1,3 +1,7 @@
+
+html {
+	font-size:16px; 	
+}
 .booth {
 	width:320px;
 	height:240px;
@@ -49,8 +53,7 @@ body, html {
 /* code school */
 body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-	padding: 20px 20px 20px 20px;
-	
+	padding: 20px 20px 20px 20px;	
 	margin-top: 70px;
 }
 
@@ -101,7 +104,9 @@ aside {
 	width: 100%; 
 	margin: 0.3em; 
 	padding: 1em; 
-	min-height: 15em; 	
+	min-height: 15em; 
+	border-color:#6495ED;
+    border-radius:4px;	
 }
 
 .pdsa-summary-block .summary-body {
@@ -187,6 +192,7 @@ a.divLink {
 .summary-body .img-responsive {
     margin: 0 auto;
 }
+/* center the img (auto) */
 .img-responsive {
 	margin: 0px auto;
 	border:3px solid lightgrey;
