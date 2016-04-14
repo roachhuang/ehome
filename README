@@ -1,0 +1,35 @@
+npm config set save=true (spare --save when doing npm install)
+gulpfile.js should be able to used by other projects
+add the following line in the <header> tage of your index.ejs 
+
+    <!-- bower:css -->   
+    <!-- endbower -->
+
+    <!-- bower:js -->   
+    <!-- endbower -->
+
+    <!-- inject:css --> 
+    <!-- endinject -->
+    
+    <!-- inject:js -->
+    <!-- endinject -->
+
+npm install --save-dev gulp
+npm install -g gulp
+standard folder structure for all porject so the gulpfile works for all
+
+add the below lines following by dependencies {}
+
+'overrides': {
+    'bootstrap': {
+        'main': [
+            'dist'/js/bootstrap.js',
+            'dist/css/bootstrap.min.css'
+        ]
+    },
+    'font-awesome': {
+        'main': [
+            'css/font-awesome.min.css'
+        ]
+    }
+}

@@ -1,45 +1,22 @@
 angular.module("myApp", ['ngSanitize', 'ngRoute'])
+    .controller("mainCtrl", function ($scope, $http, $route, $routeParams, $location) {
+        $scope.$route = $route;
+        $scope.$location = $location;
+        $scope.$routeParams = $routeParams;
+        $scope.yahoo = {};
+        $http.get('/api/yahoo').then(function (res) {
+            $scope.yahoo = res.data.query.results.channel;
+        });
 
-.controller("widgetCtrl", function ($scope) {
-		$scope.widget = {};
-	})
-	.controller("smartHomeCtrl", function ($scope) {
-		$scope.eHome = {};
-	})
-	.controller("mainCtrl", function ($scope, $http, $route, $routeParams, $location) {
-		$scope.$route = $route;
-		$scope.$location = $location;
-		$scope.$routeParams = $routeParams;
-		$scope.yahoo = {};
-		$http.get('/api/yahoo').then(function (res) {
-			$scope.yahoo = res.data.query.results.channel;
-		});
+        $scope.apod = {};
+        $http.get('/api/apod').then(function (res) {
+            $scope.apod = res.data;
+        });
+    })
 
-		$scope.apod = {};
-		$http.get('/api/apod').then(function (res) {
-			$scope.apod = res.data;
-		});
-	})
 
-.controller("nasaCtrl", function ($scope, $http) {
-	$scope.apod = {};
-	$http.get('/api/apod').then(function (res) {
-		$scope.apod = res.data;
-	});
-})
 
-.controller("cameraCtrl", function ($scope, $http, $window) {
-	$http.get("/api/url").then(function (res) {
-		var url = res.data;
-		$window.open(url, "Please sign in with Google", "width=500px,height:700px");
-	});
 
-	$scope.snapShot = function () {
-		$http.get('/api/saveimage').then(function (res) {
-			console.log('img captured');
-		});
-	}
-})
 
 /* not support yet
 	var video,
@@ -80,44 +57,3 @@ p.catch(function(err) { console.log(err.name); }); // always check for errors at
         $scope.camera.cgi = res.data;
     });
 */
-
-.config(function ($routeProvider, $locationProvider, $httpProvider) {
-	/* Enable cross domain calls
-    $httpProvider.defaults.useXDomain = true;
-    $httpProvider.defaults.headers.common = 'Content-Type: application/json';
-    //Remove the header used to identify ajax call  that would prevent CORS from working
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    */
-	$routeProvider
-		.when('/', {
-			controller: 'widgetCtrl'
-			, templateUrl: './views/widget.html'
-		})
-		.when('/cameraView', {
-			templateUrl: './views/cameraview.html'
-			, controller: 'cameraCtrl'
-				/*
-    	controller: 'cameraCtrl',
-    	resolve: {
-      		// I will cause a 1 second delay
-      		delay: function($q, $timeout) {
-        		var delay = $q.defer();
-        		$timeout(delay.resolve, 1000);
-        		return delay.promise;
-      		}
-    	}
-    	*/
-		})
-		.when('/nasa', {
-			templateUrl: './views/nasa.html'
-			, controller: 'nasaCtrl'
-		})
-		.when('/smarthome', {
-			templateUrl: './views/smarthome.html'
-			, controller: 'smartHomeCtrl'
-		})
-		.otherwise({
-			controller: 'widgetCtrl'
-			, templateUrl: './views/widgets.html'
-		});
-});
