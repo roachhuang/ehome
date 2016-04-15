@@ -1,4 +1,4 @@
-npm config set save=true (spare --save when doing npm install)
+1. npm config set save=true (spare --save when doing npm install)
 gulpfile.js should be able to used by other projects
 add the following line in the <header> tage of your index.ejs 
 
@@ -16,9 +16,10 @@ add the following line in the <header> tage of your index.ejs
 
 npm install --save-dev gulp
 npm install -g gulp
+
 standard folder structure for all porject so the gulpfile works for all
 
-add the below lines following by dependencies {}
+add the below lines following by dependencies {} onto the bower.json file to fix boostrape gulp issue.
 
 'overrides': {
     'bootstrap': {
@@ -33,3 +34,5 @@ add the below lines following by dependencies {}
         ]
     }
 }
+
+client side angular main app should alway be named app.js so it'll be the 1st one included in index.html by gulp coz order matter.

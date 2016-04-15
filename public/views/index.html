@@ -22,33 +22,38 @@
     <!-- endbower -->
 
     <!-- inject:css -->
-    <link rel="stylesheet" href="/css/elegantNav.css">
     <link rel="stylesheet" href="/css/mycss.css">
     <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/widgets.css">
     <!-- endinject -->
 
     <!-- inject:js -->
+    <script src="/js/app.js"></script>
     <script src="/js/ehome.ctrl.js"></script>
-    <script src="/js/myapp.js"></script>
     <script src="/js/nasa.ctrl.js"></script>
     <script src="/js/sidebar.ctrl.js"></script>
     <script src="/js/widgets.ctrl.js"></script>
     <script src="/js/camera/camera.ctrl.js"></script>
     <script src="/js/config/router.js"></script>
     <!-- endinject -->
-
-
 </head>
 
 <body ng-controller="mainCtrl">
     <div ng-include="'/views/layout/nav.html'"></div>
-    <div ng-include="'/views/layout/sidebar.html'"></div>
 
-    <div class='container body-content col-xs-10 col-lg-12'>
-        <ng-view></ng-view>
-        <hr/>
+    <section class='container'>
+        <div class='row'>
+            <div ng-include="'/views/layout/sidebar.html'"></div>
+
+            <main calss='body-content col-md-10'>
+                <ng-view></ng-view>
+            </main>
+        </div>
+    </section>
+    <hr/>
+    <div class='container'>
+        <div class='row' ng-include="'/views/layout/footer.html'"></div>
     </div>
-    <div ng-include="'/views/layout/footer.html'"></div>
 </body>
 
 </html>
