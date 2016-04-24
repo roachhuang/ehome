@@ -1,0 +1,22 @@
+{
+	// See http://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "0.1.0",
+	"command": "gulp",
+	"isShellCommand": true,
+	"args": [
+		"--no-color"
+	],
+	"tasks": [
+		{
+			"args": ["js" "--out-dir", "dist", "--source_maps"],
+			"taskName": "babel",
+			"isBuildCommand": true
+		},
+			{
+			"args": ["js" "--out-dir", "dist", "w", "--source_maps"],
+			"taskName": "babel-watch",
+			"isBuildCommand": false
+		}
+	]
+}

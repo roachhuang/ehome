@@ -1,5 +1,5 @@
-angular.module("myApp")
-    .controller("nasaCtrl", function ($scope, $http) {
+angular.module('myApp')
+    .controller('nasaCtrl', function ($scope, $http) {
         $scope.yahoo = {};
         $http.get('/api/yahoo').then(function (res) {
             $scope.yahoo = res.data.query.results.channel;
@@ -9,4 +9,4 @@ angular.module("myApp")
         $http.get('/api/apod').then(function (res) {
             $scope.apod = res.data;
         });
-    })
+    });

@@ -1,5 +1,5 @@
-angular.module("myApp", ['ngSanitize', 'ngRoute'])
-    .controller("mainCtrl", function ($scope, $http, $route, $routeParams, $location) {
+angular.module('myApp', ['ngSanitize', 'ngRoute'])
+    .controller('mainCtrl', function ($scope, $http, $route, $routeParams, $location) {
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
@@ -12,9 +12,8 @@ angular.module("myApp", ['ngSanitize', 'ngRoute'])
         $http.get('/api/apod').then(function (res) {
             $scope.apod = res.data;
         });
-    })
-
-
+    });
+    
 
 
 

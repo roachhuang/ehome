@@ -1,4 +1,4 @@
- angular.module("myApp")
-    .controller("eHomeCtrl", function ($scope) {
+angular.module('myApp')
+    .controller('eHomeCtrl', function ($scope) {
         $scope.eHome = {};
     })
