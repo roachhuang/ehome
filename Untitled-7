@@ -1,5 +1,0 @@
-var nasaService = function(){
-	var
-}
-
-module.exports = nasaService;

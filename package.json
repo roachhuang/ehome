@@ -1,54 +1,54 @@
 {
-    "name": "pi",
-    "version": "1.1.0",
-    "description": "ehome",
-    "main": "app.js",
-    "dependencies": {
-        "body-parser": "^1.15.0",
-        "cookie-parser": "^1.4.1",
-        "ejs": "^2.3.4",
-        "express": "^4.13.4",
-        "express-session": "^1.13.0",
-        "fs": "0.0.2",
-        "google-drive": "0.0.6",
-        "google-oauth2-token": "^0.2.0",
-        "googleapis": "^3.1.0",
-        "gql": "^1.1.0",
-        "mod-aspsms": "^1.0.0",
-        "morgan": "^1.7.0",
-        "nasa-apod": "^0.1.1",
-        "nodemailer": "^2.3.0",
-        "readline": "^1.3.0",
-        "request": "^2.69.0",
-        "textbelt": "^0.0.3",
-        "yql": "^1.0.2"
-    },
-    "devDependencies": {
-        "gulp": "^3.9.1",
-        "gulp-inject": "^4.0.0",
-        "gulp-jscs": "^3.0.2",
-        "gulp-jshint": "^2.0.0",
-        "gulp-load-plugins": "^1.2.0",
-        "gulp-nodemon": "^2.0.6",
-        "jshint": "^2.9.1",
-        "jshint-stylish": "^2.1.0",
-        "wiredep": "^4.0.0"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/roachhuang/ehome.git"
-    },
-    "keywords": [
+  "name": "pi",
+  "version": "1.1.0",
+  "description": "ehome",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "fs": "0.0.2",
+    "google-drive": "0.0.6",
+    "google-oauth2-token": "^0.2.0",
+    "googleapis": "^3.1.0",
+    "gql": "^1.1.0",
+    "mod-aspsms": "^1.0.0",
+    "morgan": "^1.7.0",
+    "nasa-apod": "^0.1.1",
+    "nodemailer": "^2.3.0",
+    "pi-gpio": "0.0.8",
+    "readline": "^1.3.0",
+    "request": "^2.69.0",
+    "textbelt": "^0.0.3",
+    "yql": "^1.0.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-inject": "^4.0.0",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-nodemon": "^2.0.6",
+    "jshint": "^2.9.1",
+    "jshint-stylish": "^2.1.0",
+    "wiredep": "^4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roachhuang/ehome.git"
+  },
+  "keywords": [
     "smart",
     "home"
   ],
-    "author": "mark huang",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/roachhuang/ehome/issues"
-    },
-    "homepage": "https://github.com/roachhuang/ehome#readme"
+  "author": "mark huang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roachhuang/ehome/issues"
+  },
+  "homepage": "https://github.com/roachhuang/ehome#readme"
 }

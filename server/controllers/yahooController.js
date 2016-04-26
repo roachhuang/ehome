@@ -10,5 +10,6 @@ exports.weather = function(req, res) {
         var condition = data.query.results.channel.item.condition;
         //console.log('The current weather in ' + yahoo.location.city + ', ' + yahoo.location.region + ' is ' + yahoo.condition.temp + ' degrees.');
         res.status(200).json(data);
+        console.log(data.query.results.channel.item.forcast)
     });
 };

@@ -15,12 +15,10 @@
 	}
 }
 
-
-/*
-.summary-body .img-responsive {
-	margin: 0 auto;
+.img {
+	
+	width: 100%;	
 }
-*/
 
 .pdsa-sn-wrapper {
 	-webkit-transition: left 0.3s linear;

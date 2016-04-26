@@ -69,7 +69,7 @@ h3 {
 }
 
 .aside {
-	background-color: #337ab7;
+	background-color: #f6f6f6;
 	padding: 10px;
 	/*
     background-color: #9068be;
@@ -78,12 +78,12 @@ h3 {
 
 .footer {
 	margin: 10px;
-	background-color: #6ed3cf;
+	background-color: #232681;
 	clear: both;
 }
 
 .footer p {
-	background-color: #520916;
+	/* background-color: #ccc; */
 	text-align: center;
 	font-weight: bold;
 	font-size: 12px;

@@ -82,19 +82,13 @@
 		</div>
 	</section>
 	<section class='col-sm-4'>
-		<div class='pdsa-summary-block pdsa-block-danger'>
-			<div class="summary-bg">
-				<i class="fa fa-space-shuttle fa-5x"></i>
-			</div>
-			<div class='summary-body divLink thumbnail'>
-				<!-- <div class='summary-line-1'>NASA 每日一圖</div> -->
-				<a ng-href='#/nasa'>
-					<img class='img-responsive' ng-src="{{apod.url}}">
-				</a>
-			</div>
-			<div class="summary-footer">
-				<a href='#'>NASA 每日一圖</a>
-			</div>
+		<div>
+			<a ng-href='#/nasa' class="thumbnail">
+				<img class="img-responsive" ng-src="{{apod.url}}">
+			</a>
+		</div>
+		<div class="summary-footer">
+			<a href='#'>NASA 每日一圖</a>
 		</div>
 	</section>
 </div>
