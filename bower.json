@@ -1,45 +1,44 @@
 {
-    "name": "pi",
-    "homepage": "https://github.com/roachhuang/ehome",
-    "authors": [
+  "name": "pi",
+  "homepage": "https://github.com/roachhuang/ehome",
+  "authors": [
     "Mark Huang <giraftw2002@gmail.com>"
   ],
-    "description": "smart home",
-    "main": "index.html",
-    "moduleType": [
+  "description": "smart home",
+  "main": "index.html",
+  "moduleType": [
     "node"
   ],
-    "license": "MIT",
-    "ignore": [
+  "license": "MIT",
+  "ignore": [
     "**/.*",
     "node_modules",
     "lib",
     "test",
     "tests"
   ],
-    "dependencies": {
-        "angular-route": "^1.5.3",
-        "angular-sanitize": "^1.5.3",
-        "bootstrap": "~3.3.5",
-        "angular": "^1.5.3",
-        "font-awesome": "^4.5.0"
-    },
-    "overrides": {
-        "bootstrap": {
-            "main": [
-               "dist/js/bootstrap.js",
-               "dist/css/bootstrap.min.css",
-                "less/bootstrap.less"
-           ]
-        },
-        "font-awesome": {
-            "main": [
-                "less/font-awesome.less",
-        "css/font-awesome.min.css",
-                "scss/font-awesome.scss"
-
+  "dependencies": {
+    "angular-route": "^1.5.3",
+    "angular-sanitize": "^1.5.3",
+    "bootstrap": "~3.3.5",
+    "angular": "^1.5.3",
+    "font-awesome": "^4.5.0",
+    "angular-cron-jobs": "^1.4.2"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.min.css",
+        "less/bootstrap.less"
       ]
-        }
-
+    },
+    "font-awesome": {
+      "main": [
+        "less/font-awesome.less",
+        "css/font-awesome.min.css",
+        "scss/font-awesome.scss"
+      ]
     }
+  }
 }

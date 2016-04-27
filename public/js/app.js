@@ -1,4 +1,4 @@
-angular.module('myApp', ['ngSanitize', 'ngRoute'])
+angular.module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
     .controller('mainCtrl', function ($scope, $http, $route, $routeParams, $location) {
         $scope.$route = $route;
         $scope.$location = $location;
@@ -13,14 +13,14 @@ angular.module('myApp', ['ngSanitize', 'ngRoute'])
             $scope.apod = res.data;
         });
     });
-    
+
 
 
 
 /* not support yet
 	var video,
 		vendorUrl = window.URL || window.webitURL;
-	
+
 	var p = navigator.mediaDevices.getUserMedia({ audio: false, video: true });
 
 	p.then(function(mediaStream) {

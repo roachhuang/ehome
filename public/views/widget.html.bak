@@ -6,13 +6,8 @@
 			</div>
 			<div class='summary-body divLink'>
 				<a ng-href='#/camera'>
-
-					<iframe class='img-responsive' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
-						<p>Your browser does not support iframes. It, however, works on Chrome</p>
-						<!--
 					<iframe width='220px' height='200px' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
 						<p>Your browser does not support iframes. It, however, works on Chrome</p>
--->
 					</iframe>
 				</a>
 			</div>
@@ -60,7 +55,7 @@
 			</div>
 			<div class='summary-body'>
 				<div class='summary-line-1'>設定</div>
-				<a class='divLink' href='#/settings'></a>
+				<a class='divLink' href='#'></a>
 			</div>
 			<div class="summary-footer">
 				<a href='#/settings'>Settings & icon</a>
@@ -82,13 +77,19 @@
 		</div>
 	</section>
 	<section class='col-sm-4'>
-		<div>
-			<a ng-href='#/nasa' class="thumbnail">
-				<img class="img-responsive" ng-src="{{apod.url}}">
-			</a>
-		</div>
-		<div class="summary-footer">
-			<a href='#'>NASA 每日一圖</a>
+		<div class='pdsa-summary-block pdsa-block-danger'>
+			<div class="summary-bg">
+				<i class="fa fa-space-shuttle fa-5x"></i>
+			</div>
+			<div class='summary-body divLink'>
+				<!-- <div class='summary-line-1'>NASA 每日一圖</div> -->
+				<a ng-href='#/nasa'>
+					<img class='img-responsive' ng-src="{{apod.url}}">
+				</a>
+			</div>
+			<div class="summary-footer">
+				<a href='#'>NASA 每日一圖</a>
+			</div>
 		</div>
 	</section>
 </div>

@@ -1,6 +1,6 @@
 'use strict';
 
-// set NODE_ENV environment variable at cmd prompt. e.g., set NODE_ENV = production 
+// set NODE_ENV environment variable at cmd prompt. e.g., set NODE_ENV = production
 // port defined in server/config/env/*.js file
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has to be before config coz config reads it
@@ -18,11 +18,11 @@ app.get('/', function (req, res) {
 });
 
 var extapi = require('./server/routes/extapi');
-var gpio = require('./server/routes/gpio');
+// var gpio = require('./server/routes/gpio');
 
 // router is mounted in a particular root url
 app.use('/api', extapi);
-app.use('/gpio/', gpio);
+//app.use('/gpio/', gpio);
 
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');

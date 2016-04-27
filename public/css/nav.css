@@ -1,7 +1,7 @@
 .nav {
 	padding-left: 0;
-	collor: #FFFFFF;
-	background-color: #CC3333;
+	color: #FFFFFF;
+	background-color: rgba(0,0,0,.1);
 }
 
 .nav a {
