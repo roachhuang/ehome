@@ -28,9 +28,9 @@ angular.module('myApp')
 				templateUrl: '../js/nasa.html',
 				controller: 'nasaCtrl'
 			})
-			.when('/smarthome', {
-				templateUrl: '../js/ehome.html',
-				controller: 'eHomeCtrl'
+			.when('/devivesControl', {
+				templateUrl: '../js/devices-ctrl.html',
+				controller: 'devicesCtrl'
 			})
 			.when('/settings', {
 				templateUrl: '../js/cron/settings.html',

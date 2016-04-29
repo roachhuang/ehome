@@ -3,10 +3,10 @@
 
     angular
         .module('myApp')
-        .controller('eHomeCtrl', eHomeCtrl);
+        .controller('devicesCtrl', devicesCtrl);
 
-    eHomeCtrl.$inject = [];
-    function eHomeCtrl() {
+    devicesCtrl.$inject = [];
+    function devicesCtrl() {
         var vm = this;
 
         activate();

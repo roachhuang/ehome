@@ -80,6 +80,7 @@ Device.prototype.getScheudle = function () {
 };
 Device.prototype.getStatus = function () {
     //this.status = readPin();
+    return true;
 };
 Device.prototype.setStatus = function () {
 

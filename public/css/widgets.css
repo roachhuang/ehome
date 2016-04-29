@@ -1,7 +1,14 @@
+
+/*
+.fa-power-off {
+	background: red;
+}
+*/
+
 .btn {
 	margin: 10px;
 }
-/* spacing between widgets */
+/* spacing between widgets */ 
 section.col-sm-4 {
 	padding-left:0;
 	padding-right:10px;

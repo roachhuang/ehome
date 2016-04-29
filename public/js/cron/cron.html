@@ -1,15 +1,14 @@
+<section>
+<h1>{{selectedDevice.name}} 開關定時設定 - 第{{count+1}}組</h1>
 
-<h1>{{selectedDevice.name}} 定時開關設定</h1>
 
-
-<div class='well well-sm'>
+<div class='well well-sm pdsa-block-danger'>
     <h3> 開： </h3>
     <cron-selection output="selectedDevice.cronOnJobs[count]" config="myConfig"></cron-selection>
     {{selectedDevice.cronOnJobs[count]}}
-
 </div>
 
-<div class='well well-sm'>
+<div class='well well-sm pdsa-block-success'>
     <h3> 関：</h3>
     <cron-selection output="selectedDevice.cronOffJobs[count]" config="myConfig"></cron-selection>
 </div>
@@ -24,5 +23,7 @@
 
     </div>
 -->
-<button class="btn btn-primary" ng-click="saveEdit(currentProduct)">Save</button>
-<button class="btn btn-primary" ng-click="cancelEdit()">Cancel</button>
+<button class="btn btn-warning" ng-click="count = count+1">新增下一組</button>
+<button class="btn btn-primary" ng-click="saveEdit(selectedDevice)">Save</button>
+<button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+</section>

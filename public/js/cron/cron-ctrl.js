@@ -18,5 +18,15 @@
             vm.selectedDevice = JSON.parse($routeParams.device);
             console.log($scope.selectedDevice.name);
         }
+        function saveEdit(device){
+            // save to localstorage and call node cron 
+        }
+        function cancelEdit(device){
+            vm.count = 0; 
+        }
+        function addCron() {
+            vm.count = vm.count + 1;
+            
+        }
     }
 })();
