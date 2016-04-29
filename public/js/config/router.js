@@ -3,6 +3,7 @@
  */
 angular.module('myApp')
 	.config(function ($routeProvider, $locationProvider, $httpProvider) {
+		//$locationProvider.html5Mode({ enabled: true, requireBase: false });
 		$routeProvider
 			.when('/', {
 				controller: 'widgetsCtrl',
@@ -32,8 +33,13 @@ angular.module('myApp')
 				controller: 'eHomeCtrl'
 			})
 			.when('/settings', {
-				templateUrl: '../views/settings.html',
+				templateUrl: '../js/cron/settings.html',
 				controller: 'SettingsController'
+			})
+			.when('/cron/:device', {
+				// set cronjob by devId
+				templateUrl: '../js/cron/cron.html',
+				controller: 'cronCtrl as vm'
 			})
 			.otherwise({
 				controller: 'widgetsCtrl',

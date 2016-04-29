@@ -1,3 +1,6 @@
+.btn {
+	margin: 10px;
+}
 /* spacing between widgets */
 section.col-sm-4 {
 	padding-left:0;
@@ -21,9 +24,16 @@ section.col-sm-4 {
 	}
 }
 
-.img {
+.fill-screen {
+	background-size: cover;
+	background-position: center;
+}
 
-	width: 100%;
+.img-responsive {
+	display: inline;
+	height: 70%;
+	border: 3px solid burlywood
+	margin: 0px auto;
 }
 
 .pdsa-sn-wrapper {

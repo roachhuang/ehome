@@ -1,4 +1,20 @@
-angular.module('myApp')
-    .controller('eHomeCtrl', function ($scope) {
-        $scope.eHome = {};
-    })
+(function() {
+'use strict';
+
+    angular
+        .module('myApp')
+        .controller('eHomeCtrl', eHomeCtrl);
+
+    eHomeCtrl.$inject = [];
+    function eHomeCtrl() {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+         }
+    }
+})();

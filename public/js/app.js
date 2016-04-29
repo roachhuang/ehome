@@ -1,3 +1,4 @@
+/*
 angular.module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
     .controller('mainCtrl', function ($scope, $http, $route, $routeParams, $location) {
         $scope.$route = $route;
@@ -13,7 +14,49 @@ angular.module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
             $scope.apod = res.data;
         });
     });
+*/
 
+(function () {
+    'use strict';
+
+    angular
+        .module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
+        .controller('mainCtrl', mainCtrl);
+
+    mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
+    function mainCtrl($scope, $http, $route, $routeParams, $location) {
+        var vm = $scope;
+        vm.apod = {};
+        vm.yahoo = {};
+        vm.devices = [];
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+            vm.d1 = new Device('bedRoom', 1);
+            vm.d2 = new Device('livingRoom', 2);
+            vm.d3 = new Device('kitchen', 3);
+            vm.devices.push(vm.d1);
+            vm.devices.push(vm.d2);
+            vm.devices.push(vm.d3);
+
+            /*
+            vm.$route = $route;
+            vm.$location = $location;
+            vm.$routeParams = $routeParams;
+            */
+            $http.get('/api/yahoo').then(function (res) {
+                vm.yahoo = res.data.query.results.channel;
+            });
+
+            $http.get('/api/apod').then(function (res) {
+                vm.apod = res.data;
+            });
+        }
+    }
+})();
 
 
 

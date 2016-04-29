@@ -82,10 +82,12 @@
 		</div>
 	</section>
 	<section class='col-sm-4'>
-		<div>
-			<a ng-href='#/nasa' class="thumbnail">
-				<img class="img-responsive" ng-src="{{apod.url}}">
+		<div class='fill-screen' style='background-image: url({{apod.url}})'>
+			<!--
+			<a ng-href='#/nasa'>
+				<img class="img-responsive" ng-src="{{apod.url}} height:70%">
 			</a>
+			-->
 		</div>
 		<div class="summary-footer">
 			<a href='#'>NASA 每日一圖</a>

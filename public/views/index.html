@@ -23,6 +23,7 @@
 	<!-- endbower -->
 
 	<!-- inject:css -->
+	<link rel="stylesheet" href="/css/angular-cron-jobs.min.css">
 	<link rel="stylesheet" href="/css/mycss.css">
 	<link rel="stylesheet" href="/css/nav.css">
 	<link rel="stylesheet" href="/css/widgets.css">
@@ -34,9 +35,11 @@
 	<script src="/js/nasa.ctrl.js"></script>
 	<script src="/js/sidebar.ctrl.js"></script>
 	<script src="/js/widgets.ctrl.js"></script>
-	<script src="/js/config/router.js"></script>
 	<script src="/js/camera/camera.ctrl.js"></script>
-	<script src="/js/controllers/settings-ctrl.js"></script>
+	<script src="/js/cron/class-device.js"></script>
+	<script src="/js/cron/cron-ctrl.js"></script>
+	<script src="/js/cron/settings-ctrl.js"></script>
+	<script src="/js/config/router.js"></script>
 	<!-- endinject -->
 </head>
 
@@ -57,7 +60,7 @@
 	<div class='container-fluid'>
 		<div ng-include="'/views/layout/footer.html'"></div>
 	</div>
-	
+
 	<input type="range">
 
 </body>

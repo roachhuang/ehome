@@ -1,0 +1,8 @@
+<main class='well well-sm'>
+    <p>
+        <div ng-repeat='device in devices'>
+            <!-- passing in param (device) into the url -->
+            <a ng-href='#/cron/{{device}}' type="button" class="btn btn-success btn-lg btn-block"> {{device.name}} 定時設定</a>
+        </div>
+    </p>
+</main>
