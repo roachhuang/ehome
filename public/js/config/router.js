@@ -36,10 +36,10 @@ angular.module('myApp')
 				templateUrl: '../js/cron/settings.html',
 				controller: 'SettingsController'
 			})
-			.when('/cron/:device', {
+			.when('/cron/:deviceId', {
 				// set cronjob by devId
 				templateUrl: '../js/cron/cron.html',
-				controller: 'cronCtrl as vm'
+				controller: 'cronCtrl'
 			})
 			.otherwise({
 				controller: 'widgetsCtrl',

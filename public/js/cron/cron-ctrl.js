@@ -5,28 +5,31 @@
         .module('myApp')
         .controller('cronCtrl', cronCtrl);
 
-    cronCtrl.$inject = ['$scope', '$routeParams'];
-    function cronCtrl($scope, $routeParams) {
+    cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService'];
+    function cronCtrl($scope, $routeParams, deviceService) {
         var vm = $scope;
-        vm.count=0;
-
+        vm.selectedDeviceId = null;
         activate();
 
         ////////////////
 
         function activate() {
-            vm.selectedDevice = JSON.parse($routeParams.device);
-            console.log($scope.selectedDevice.name);
+            vm.count = 0;
+            //vm.selectedDeviceId = $routeParams.deviceId;
+            // selected device
+            vm.device = deviceService[$routeParams.deviceId];
+            console.log(vm.device);
         }
-        function saveEdit(device){
-            // save to localstorage and call node cron 
-        }
-        function cancelEdit(device){
-            vm.count = 0; 
-        }
-        function addCron() {
+        vm.saveEdit = function (dev, count) {
+            // save to localstorage and call node cron      
+            //device = dev[vm.selectedDeviceId];
+            dev.saveCronData(count);
+        };
+        vm.cancelEdit = function (device) {
+            vm.count = 0;
+        };
+        vm.NewCronjob = function() {
             vm.count = vm.count + 1;
-            
-        }
+        };
     }
 })();

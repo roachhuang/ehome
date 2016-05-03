@@ -1,20 +1,3 @@
-/*
-angular.module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
-    .controller('mainCtrl', function ($scope, $http, $route, $routeParams, $location) {
-        $scope.$route = $route;
-        $scope.$location = $location;
-        $scope.$routeParams = $routeParams;
-        $scope.yahoo = {};
-        $http.get('/api/yahoo').then(function (res) {
-            $scope.yahoo = res.data.query.results.channel;
-        });
-
-        $scope.apod = {};
-        $http.get('/api/apod').then(function (res) {
-            $scope.apod = res.data;
-        });
-    });
-*/
 
 (function () {
     'use strict';
@@ -23,25 +6,27 @@ angular.module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
         .module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
         .controller('mainCtrl', mainCtrl);
 
-    mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
-    function mainCtrl($scope, $http, $route, $routeParams, $location) {
+    // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
+    mainCtrl.$inject = ['$scope', '$http'];
+    function mainCtrl($scope, $http) {
         var vm = $scope;
         vm.apod = {};
         vm.yahoo = {};
-        vm.devices = [];
+        //vm.devices = [];
 
         activate();
 
         ////////////////
 
         function activate() {
+            /*
             vm.d1 = new Device('bedRoom', 1);
             vm.d2 = new Device('livingRoom', 2);
             vm.d3 = new Device('kitchen', 3);
             vm.devices.push(vm.d1);
             vm.devices.push(vm.d2);
             vm.devices.push(vm.d3);
-
+            */
             /*
             vm.$route = $route;
             vm.$location = $location;

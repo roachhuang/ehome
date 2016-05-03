@@ -1,19 +1,20 @@
 <section>
-<h1>{{selectedDevice.name}} 開關定時設定 - 第{{count+1}}組</h1>
+    <h1>{{device.name}} 開關定時設定 - 第{{count+1}}組</h1>
 
 
-<div class='well well-sm pdsa-block-danger'>
-    <h3> 開： </h3>
-    <cron-selection output="selectedDevice.cronOnJobs[count]" config="myConfig"></cron-selection>
-    {{selectedDevice.cronOnJobs[count]}}
-</div>
+    <div class='well well-sm pdsa-block-danger'>
+        <h3><i class="fa fa-toggle-on" aria-hidden="true"></i> 開： </h3>
+        <cron-selection output="device.cronJobs[count].on" config="myConfig"></cron-selection>
+        {{device.cronJobs[count].on}}
+    </div>
 
-<div class='well well-sm pdsa-block-success'>
-    <h3> 関：</h3>
-    <cron-selection output="selectedDevice.cronOffJobs[count]" config="myConfig"></cron-selection>
-</div>
-  {{selectedDevice.cronOffJobs[count]}}
-<!--
+    <div class='well well-sm pdsa-block-success'>
+        <h3><i class="fa fa-toggle-off" aria-hidden="true"></i> 関：</h3>
+        <cron-selection output="device.cronJobs[count].off" config="myConfig"></cron-selection>
+        {{device.cronJobs[count].off}}
+    </div>
+
+    <!--
   <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-primary active">
     <input type="checkbox" checked autocomplete="off"> Checkbox 1 (pre-checked)
@@ -23,7 +24,7 @@
 
     </div>
 -->
-<button class="btn btn-warning" ng-click="count = count+1">新增下一組</button>
-<button class="btn btn-primary" ng-click="saveEdit(selectedDevice)">Save</button>
-<button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+    <button class="btn btn-warning" ng-click="count = count+1">新增下一組</button>
+    <button class="btn btn-primary" ng-click="saveEdit(device, count)">Save & Exit</button>
+    <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
 </section>

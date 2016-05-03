@@ -5,15 +5,17 @@
         .module('myApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['$scope'];
-    function SettingsController($scope) {
+    SettingsController.$inject = ['$scope', 'deviceService'];
+    function SettingsController($scope, deviceService) {
         var vm = $scope;
 
         activate();
 
         ////////////////
 
-        function activate() {            
+        function activate() {
+            vm.devices = deviceService;
+            //angular.copy(deviceService, vm.devices);
             vm.myConfig = {
                 options: {
                     allowMinute: false,
@@ -21,9 +23,7 @@
                     allowMonth: false,
                     allowYear: false
                 }
-            }
+            };
         }
     }
-   
-
 })();

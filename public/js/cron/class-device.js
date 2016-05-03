@@ -7,8 +7,10 @@ var Device = (function () {
         this.pin = GpioPin;
         this.location;
         this.status;
-        this.cronOnJobs = [6];   // each dev can have max. of 6 cronjob
-        this.cronOffJobs = [6];   // each dev can have max. of 6 cronjob
+        this.cronJobs = {
+            on:[6],   // each dev can have max. of 6 cronjob
+            off:[6]   // each dev can have max. of 6 cronjob
+        }
         // load cronjobs from local storage when initializing
         //this.readCronJobs();
 
@@ -28,7 +30,7 @@ var Device = (function () {
 })();
 
 Device.prototype.readCronJob = function () {
-    var items = localStorage != null ? localStorage[this.cartName + '_items'] : null;
+    var items = localStorage != null ? localStorage[this.name] : null;
     if (items != null && JSON != null) {
         try {
             items = JSON.parse(items);
@@ -49,20 +51,20 @@ Device.prototype.readCronJob = function () {
     }
 };
 // save cronjobs to local storage (data will still exist if )
-Device.prototype.saveCronData = function () {
-    this.isCronGetUpdated = !this.isCronGetUpdated;
+Device.prototype.saveCronData = function (id) {
+    //this.isCronGetUpdated = !this.isCronGetUpdated;
     if (localStorage != null && JSON != null) {
-        localStorage[this.cartName + "_items"] = JSON.stringify(this.cron);
+        localStorage[this.name + this.id.toString()] = JSON.stringify(this.cronJobs);
     }
 };
 
 // add a cronjob to a device
-Device.prototype.addSchedule = function (jobId, cron) {
+Device.prototype.saveCronJob = function (id) {
     // max 6 cronjob for a device
 
-    this.cron[jobId].push(cron);
+    //this.cron[id].push(cron);
     // save changes to local storage
-    //this.saveCronData();
+    this.saveCronData();
 };
 
 Device.prototype.delSchedule = function (id) {
@@ -73,7 +75,7 @@ Device.prototype.delSchedule = function (id) {
         }
     }
     // save changes to local storage
-    this.saveCron();
+    this.saveCronData();
 };
 Device.prototype.getScheudle = function () {
     return this.cron;
