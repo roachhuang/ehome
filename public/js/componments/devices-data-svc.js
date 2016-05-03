@@ -20,7 +20,7 @@
     }
 
     var Device = (function () {
-        var nextId = 0; // init = 0 
+        var nextId = 0; // init = 0
 
         return function Device(name, GpioPin) {
             this.id = nextId++;
@@ -28,10 +28,11 @@
             this.pin = GpioPin;
             this.location;
             this.status;
-            this.cronJobs = [
-                {on: ''},   // each dev can have max. of 6 cronjob
-                {off: ''}   // each dev can have max. of 6 cronjob
-            ]
+            //this.cronJobs = [{ cnt: 0, on: '', off: '' }];
+            this.cronJobs = [];
+                //{on: ''},   // each dev can have max. of 6 cronjob
+                //{off: ''}   // each dev can have max. of 6 cronjob
+            //]
             // load cronjobs from local storage when initializing
             //this.readCronJobs();
 
@@ -75,7 +76,7 @@
     Device.prototype.saveCronData = function (count) {
         //this.isCronGetUpdated = !this.isCronGetUpdated;
         if (localStorage != null && JSON != null) {
-            localStorage[this.name + count.toString()] = JSON.stringify(this.cronJobs[count]);
+            localStorage[this.name] = JSON.stringify(this.cronJobs);
             //localStorage[this.name] = JSON.stringify(this.cronJobs);
         }
     };
