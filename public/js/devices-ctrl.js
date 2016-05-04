@@ -5,16 +5,16 @@
         .module('myApp')
         .controller('devicesCtrl', devicesCtrl);
 
-    devicesCtrl.$inject = [];
-    function devicesCtrl() {
-        var vm = this;
+    devicesCtrl.$inject = ['$scope', 'deviceService'];
+    function devicesCtrl($scope, deviceService) {
+        var vm = $scope;
 
         activate();
 
         ////////////////
 
         function activate() {
-
+            vm.devices = deviceService;
          }
     }
 })();

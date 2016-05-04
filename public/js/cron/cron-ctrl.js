@@ -8,36 +8,56 @@
     cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService'];
     function cronCtrl($scope, $routeParams, deviceService) {
         var vm = $scope;
+        var itemName;
 
         activate();
 
         ////////////////
 
-        function activate() {
-            vm.count = 0;
-            vm.selectedDevice = deviceService[$routeParams.deviceId];
-
-            vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(vm.selectedDevice.name));
-            vm.tempJob = {
-                cnt: 0,
+        function activate() {            
+            vm.tmpJob = {
+                count: 0,
                 on: '',
                 off: ''
-            }
-
+            };
+            vm.tmpJob.count = 0;
+            vm.myConfig = {
+                options: {
+                    allowMinute: false,
+                    //allowWeek: false,
+                    allowMonth: false,
+                    allowYear: false
+                }
+            };
+            //selected device for setting up cronjob
+            vm.selectedDevice = deviceService[$routeParams.deviceId];
+            //vm.selectedDevice.cronJobs = [];
+            itemName = vm.selectedDevice.name;
+            // save all to local and read all from local
+            vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
+            //vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(vm.selectedDevice.name));
             console.log(vm.selectedDevice);
         }
-        vm.saveEdit = function (dev, count) {
+
+        vm.saveEdit = function (data) {
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
-            dev.saveCronData(count);
+            angular.extend(vm.selectedDevice.cronJobs[data.count], data);
+            vm.selectedDevice.saveCronData();
         };
         vm.cancelEdit = function (device) {
-            vm.count = 0;
+            //vm.count = 0;
         };
-        vm.addNextCronjob = function (dev, data) {
-            data.cnt = vm.count;
-            dev.cronJobs.push(data);
-            vm.count = vm.count + 1;
+        vm.addNextCronJob = function (data) {
+            if (data.count < 6) {     
+                vm.selectedDevice.cronJobs[data.count] = vm.selectedDevice.cronJobs[data.count] || {};          
+                angular.extend(vm.selectedDevice.cronJobs[data.count], data);
+                vm.selectedDevice.saveCronData();
+                vm.tmpJob.count++;
+            } else {
+                console.error(data.count);    // need to take care
+            }
         };
+
     }
 })();

@@ -16,6 +16,7 @@
         function activate() {
             vm.devices = deviceService;
             //angular.copy(deviceService, vm.devices);
+            /* move to cron-ctrl.js
             vm.myConfig = {
                 options: {
                     allowMinute: false,
@@ -24,6 +25,7 @@
                     allowYear: false
                 }
             };
+            */
         }
     }
 })();

@@ -29,7 +29,7 @@
             this.location;
             this.status;
             //this.cronJobs = [{ cnt: 0, on: '', off: '' }];
-            this.cronJobs = [];
+            this.cronJobs = [{count: 0, on:'', off:''}];
                 //{on: ''},   // each dev can have max. of 6 cronjob
                 //{off: ''}   // each dev can have max. of 6 cronjob
             //]
@@ -73,9 +73,10 @@
         }
     };
     // save cronjobs to local storage (data will still exist if )
-    Device.prototype.saveCronData = function (count) {
+    Device.prototype.saveCronData = function () {
         //this.isCronGetUpdated = !this.isCronGetUpdated;
         if (localStorage != null && JSON != null) {
+            // save all jobs at once
             localStorage[this.name] = JSON.stringify(this.cronJobs);
             //localStorage[this.name] = JSON.stringify(this.cronJobs);
         }
