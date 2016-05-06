@@ -2,7 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
-var gpioController = require('../controllers/gpio-controller');
+// gpiocontroller is a func; in order to have it returns an object back to us, we need to execute it by following "()" 
+var gpioController = require('../controllers/gpio-controller')();
 // boday-parser is included in app.js, so no need to do it here.
 // it is alreay apply to express
 

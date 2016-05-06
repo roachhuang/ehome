@@ -3,10 +3,10 @@
 
     angular
         .module('myApp')
-        .controller('SettingsController', SettingsController);
+        .controller('settingsCtrl', settingsCtrl);
 
-    SettingsController.$inject = ['$scope', 'deviceService'];
-    function SettingsController($scope, deviceService) {
+    settingsCtrl.$inject = ['$scope', 'deviceService'];
+    function settingsCtrl($scope, deviceService) {
         var vm = $scope;
 
         activate();

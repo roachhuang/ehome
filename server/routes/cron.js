@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-var gpioController = require('../controllers/cron-ctrl');
+var cronCtrl = require('../controllers/cron-ctrl');
 // boday-parser is included in app.js, so no need to do it here.
 // it is alreay apply to express
 
@@ -15,8 +15,8 @@ var gpioController = require('../controllers/cron-ctrl');
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-router.route('/:dev')
-    .set(cron-ctrl.set)  
+//router.route('/:cronjob')
+//    .post(cronCtrl.set)  
     
 
 module.exports = router;

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs'])
+        .module('myApp', ['ngSanitize', 'ngRoute', 'angular-cron-jobs', 'app.gpio'])
         .controller('mainCtrl', mainCtrl);
 
     // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];

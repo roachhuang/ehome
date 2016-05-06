@@ -5,14 +5,18 @@
         .module('myApp')
         .factory('deviceService', deviceService);
 
-    //deviceDataService.$inject = [''];
-    function deviceService() {
-        var devices = [];
-
+    deviceService.$inject = ['$http', 'gpioService'];
+    function deviceService($http, gpioService) {
+        var devices = [], i;
+        
         devices.push(new Device('bedRoom', 1));
         devices.push(new Device('livingRoom', 2));
         devices.push(new Device('kitchen', 3));
-
+        for( i = 0; i < devices.length; i++) {             
+            //angular.extend(devices[i].gpio, gpioService);         
+            //devices[i].gpio = new Gpio(devices[i].pin);
+            devices[i].gpio = gpioService;  // point to the same gpioService object
+        };
         return devices;
 
         ////////////////
@@ -25,14 +29,11 @@
         return function Device(name, GpioPin) {
             this.id = nextId++;
             this.name = name;
+            this.status = false;
             this.pin = GpioPin;
-            this.location;
-            this.status;
-            //this.cronJobs = [{ cnt: 0, on: '', off: '' }];
-            this.cronJobs = [{count: 0, on:'', off:''}];
-                //{on: ''},   // each dev can have max. of 6 cronjob
-                //{off: ''}   // each dev can have max. of 6 cronjob
-            //]
+            this.gpio = {};
+            this.cronJobs = [{ count: 0, on: '', off: '' }];
+
             // load cronjobs from local storage when initializing
             //this.readCronJobs();
 
@@ -82,15 +83,6 @@
         }
     };
 
-    // add a cronjob to a device
-    Device.prototype.saveCronJob = function (count) {
-        // max 6 cronjob for a device
-
-        //this.cron[id].push(cron);
-        // save changes to local storage
-        this.saveCronData();
-    };
-
     Device.prototype.delSchedule = function (id) {
         for (var i = 0; i < this.cron.length; i++) {
             if (this.cron[i].id === id) {
@@ -101,23 +93,19 @@
         // save changes to local storage
         this.saveCronData();
     };
-    Device.prototype.getScheudle = function () {
-        return this.cron;
-    };
-    Device.prototype.getStatus = function () {
-        //this.status = readPin();
-        return true;
-    };
-    Device.prototype.setStatus = function () {
 
+    Device.prototype.getStatus = function () {
+        return this.gpio.inPut(this.pin);    
+    };
+    
+    Device.prototype.setStatus = function (val) {
+        this.gpio.outPut(val, this.pin);
     };
     // reset cronjob
     Device.prototype.resetCron = function () {
         this.cron = [];
         this.saveCronData(); // save to local storage
     };
-
-
-
+   
 })();
 

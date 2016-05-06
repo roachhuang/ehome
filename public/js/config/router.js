@@ -34,9 +34,9 @@ angular.module('myApp')
 			})
 			.when('/settings', {
 				templateUrl: '../js/cron/settings.html',
-				controller: 'SettingsController'
+				controller: 'settingsCtrl'
 			})
-			.when('/cron/:deviceId', {
+			.when('/settings/:deviceId', {
 				// set cronjob by devId
 				templateUrl: '../js/cron/cron.html',
 				controller: 'cronCtrl'

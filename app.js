@@ -18,11 +18,13 @@ app.get('/', function (req, res) {
 });
 
 var extapi = require('./server/routes/extapi');
-// var gpio = require('./server/routes/gpio');
+var cron = require('./server/routes/cron.js');
+var gpio = require('./server/routes/gpio');
 
 // router is mounted in a particular root url
 app.use('/api', extapi);
-//app.use('/gpio/', gpio);
+//app.use('/cron', cron);
+app.use('/gpio/', gpio);
 
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');

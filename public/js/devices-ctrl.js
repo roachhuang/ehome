@@ -1,5 +1,5 @@
-(function() {
-'use strict';
+(function () {
+    'use strict';
 
     angular
         .module('myApp')
@@ -15,6 +15,9 @@
 
         function activate() {
             vm.devices = deviceService;
-         }
+            vm.devices.forEach(function(item) {
+                item.status = item.getStatus();               
+            })
+        }
     }
 })();
