@@ -32,6 +32,7 @@
             vm.$location = $location;
             vm.$routeParams = $routeParams;
             */
+            
             $http.get('/api/yahoo').then(function (res) {
                 vm.yahoo = res.data.query.results.channel;
             });

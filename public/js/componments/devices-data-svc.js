@@ -8,11 +8,11 @@
     deviceService.$inject = ['$http', 'gpioService'];
     function deviceService($http, gpioService) {
         var devices = [], i;
-        
+
         devices.push(new Device('bedRoom', 1));
         devices.push(new Device('livingRoom', 2));
         devices.push(new Device('kitchen', 3));
-        for( i = 0; i < devices.length; i++) {             
+        for (i = 0; i < devices.length; i++) {
             //angular.extend(devices[i].gpio, gpioService);         
             //devices[i].gpio = new Gpio(devices[i].pin);
             devices[i].gpio = gpioService;  // point to the same gpioService object
@@ -95,17 +95,19 @@
     };
 
     Device.prototype.getStatus = function () {
-        return this.gpio.inPut(this.pin);    
+        //return this.gpio.inPut(this.pin);
+        return false;
     };
-    
+
     Device.prototype.setStatus = function (val) {
         this.gpio.outPut(val, this.pin);
+        this.status = val;
     };
     // reset cronjob
     Device.prototype.resetCron = function () {
         this.cron = [];
         this.saveCronData(); // save to local storage
     };
-   
+
 })();
 
