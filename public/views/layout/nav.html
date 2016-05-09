@@ -10,8 +10,8 @@
             <li><a ng-href="#/settings">Settings</a></li>
             <li><a ng-href="#/about">About me</a></li>
         </ul>
-        <ul class='nav navbar-nav navbar-right'>
-            <li><a ng-href="template">Log in</a></li>
+        <ul class='nav navbar-nav navbar-right' ng-hide='hasloggedIn'>
+            <li><a ng-href="#/login">Log in</a></li>
         </ul>
     </div>
 </nav>

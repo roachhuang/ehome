@@ -13,10 +13,10 @@
         devices.push(new Device('livingRoom', 2));
         devices.push(new Device('kitchen', 3));
         for (i = 0; i < devices.length; i++) {
-            //angular.extend(devices[i].gpio, gpioService);         
+            //angular.extend(devices[i].gpio, gpioService);
             //devices[i].gpio = new Gpio(devices[i].pin);
             devices[i].gpio = gpioService;  // point to the same gpioService object
-        };
+        }
         return devices;
 
         ////////////////

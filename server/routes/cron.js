@@ -15,8 +15,7 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-router.route('/:cronJob')
-    .post(cronCtrl.set)  
-    
+router.route('/')
+    .post(cronCtrl.set)
 
 module.exports = router;

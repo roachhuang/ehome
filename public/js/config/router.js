@@ -12,17 +12,17 @@ angular.module('myApp')
 			.when('/cameraView', {
 				templateUrl: '../js/camera/cameraview.html',
 				controller: 'cameraCtrl'
-					/*
-    	controller: 'cameraCtrl',
-    	resolve: {
-      		// I will cause a 1 second delay
-      		delay: function($q, $timeout) {
-        		var delay = $q.defer();
-        		$timeout(delay.resolve, 1000);
-        		return delay.promise;
-      		}
-    	}
-    	*/
+				/*
+	controller: 'cameraCtrl',
+	resolve: {
+			// I will cause a 1 second delay
+			delay: function($q, $timeout) {
+			var delay = $q.defer();
+			$timeout(delay.resolve, 1000);
+			return delay.promise;
+			}
+	}
+	*/
 			})
 			.when('/nasa', {
 				templateUrl: '../js/nasa.html',
@@ -40,6 +40,11 @@ angular.module('myApp')
 				// set cronjob by devId
 				templateUrl: '../js/cron/cron.html',
 				controller: 'cronCtrl'
+			})
+			.when('/login', {
+				// set cronjob by devId
+				templateUrl: '../js/login/login.html',
+				controller: 'loginCtrl'
 			})
 			.otherwise({
 				controller: 'widgetsCtrl',

@@ -51,7 +51,7 @@ Device.prototype.readCronJob = function () {
     }
 };
 // save cronjobs to local storage (data will still exist if )
-Device.prototype.saveCronData = function (id) {
+Device.prototype.saveJob2LocalStorage = function (id) {
     //this.isCronGetUpdated = !this.isCronGetUpdated;
     if (localStorage != null && JSON != null) {
         localStorage[this.name + this.id.toString()] = JSON.stringify(this.cronJobs);

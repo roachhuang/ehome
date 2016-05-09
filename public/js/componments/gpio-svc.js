@@ -7,16 +7,16 @@
 
     gpioService.$inject = ['$http'];
     function gpioService($http) {
-        var service = {            
+        var service = {
             inPut: inPut,
-            outPut: outPut            
+            outPut: outPut
         };
 
         return service;
 
         //////////////////////////////////////////////////
         //  GPIO class
-     
+
         function outPut(value, pin) {
             var val = value;
             var req = {
@@ -24,14 +24,14 @@
                 url: '/gpio/' + pin,
                 //transformRequest: transformRequestAsFormPost,
                 data: { val: val }
-            }
-            $.http(req).then(function (data) {
+            };
+            $http(req).then(function (data) {
                 console.log(data);
             });
-        };
+        }
 
         function inPut(pin) {
             $http.get('/gpio/' + pin);
-        }; 
+        }
     }
 })();
