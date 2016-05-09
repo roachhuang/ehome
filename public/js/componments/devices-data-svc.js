@@ -9,7 +9,7 @@
     function deviceService($http, gpioService) {
         var devices = [], i;
 
-        devices.push(new Device('bedRoom', 1));
+        devices.push(new Device('bedRoom', 17));
         devices.push(new Device('livingRoom', 2));
         devices.push(new Device('kitchen', 3));
         for (i = 0; i < devices.length; i++) {
