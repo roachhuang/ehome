@@ -1,6 +1,6 @@
 var passport = require('passport');
 
-modules.exports = function(app) {
+module.exports = function(app) {
 	/* authen */	
 	app.use(passport.initialize());
 	app.use(passport.session());
@@ -16,4 +16,4 @@ modules.exports = function(app) {
 	
 	require('./strtegies/local.strategy')();
 	
-}
+};

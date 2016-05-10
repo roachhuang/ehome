@@ -13,7 +13,7 @@
                 vm.hasLoggedIn = true;
                 $location.path('/');
             }            
-        }
+        };
 
         activate();
 

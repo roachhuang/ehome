@@ -1,6 +1,8 @@
 'use strict';
 /*
-The Raspberry Pi's GPIO pins require you to be root to access them. That's totally unsafe for several reasons. To get around this problem, you should use the excellent gpio-admin.
+The Raspberry Pi's GPIO pins require you to be root to access them. 
+That's totally unsafe for several reasons. To get around this problem,
+you should use the excellent gpio-admin.
 
 Do the following on your raspberry pi:
 
@@ -22,7 +24,9 @@ module.exports = function () {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
         //}
-        if (!req.body) return res.sendStatus(400);
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
         var pin = req.params.pin;
         var val = req.body.val;
         console.log(pin);
@@ -43,10 +47,11 @@ module.exports = function () {
             gpio.open(pin, 'input', function (err) {
                 gpio.read(pin, function (err, value) {
                     gpio.close(pin);
-                    if (err)
+                    if (err) {
                         res.status(500).send(err);
-                    else
+                    } else {
                         res.json(200, { value: value });
+                    }
                 });
             });
         }

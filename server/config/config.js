@@ -12,4 +12,4 @@ module.exports = {
 		rootPath: rootPath,
 		port: process.env.PORT || 80
 	}
-}
+};

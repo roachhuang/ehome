@@ -36,5 +36,5 @@ module.exports = function (app, config) {
         // Do logging and user-friendly error message display
         console.error(err);
         res.status(500).send('internal server error: ' + err);
-    })
-}
+    });
+};
