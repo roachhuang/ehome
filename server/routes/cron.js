@@ -16,6 +16,6 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.route('/')
-    .post(cronCtrl.set)
+    .post(cronCtrl.set);
 
 module.exports = router;

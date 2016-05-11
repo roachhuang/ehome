@@ -1,4 +1,3 @@
-
 /*
 .fa-power-off {
 	background: red;
@@ -8,10 +7,13 @@
 .btn {
 	margin: 10px;
 }
-/* spacing between widgets */ 
+
+
+/* spacing between widgets */
+
 section.col-sm-4 {
-	padding-left:0;
-	padding-right:10px;
+	padding-left: 0;
+	padding-right: 10px;
 }
 
 .body-content {
@@ -39,7 +41,7 @@ section.col-sm-4 {
 .img-responsive {
 	display: inline;
 	height: 70%;
-	border: 3px solid burlywood
+	border: 3px solid burlywood;
 	margin: 0px auto;
 }
 
@@ -118,7 +120,7 @@ section.col-sm-4 {
 
 .pdsa-block-default {
 	color: #fff;
-	background-color: #f9f9f9;
+	background-color: #333;
 }
 
 .pdsa-block-info {
@@ -133,7 +135,8 @@ section.col-sm-4 {
 
 .pdsa-block-warning {
 	color: #fff;
-	background-color: #f0ad4e;
+	/* background-color: #f0ad4e; */
+	background-color: #414;
 }
 
 .pdsa-block-danger {
@@ -144,4 +147,11 @@ section.col-sm-4 {
 pdsa-summary-block:hover {
 	opacity: 1;
 	cursor: pointer;
+}
+
+#nasaImg {
+	height: 210px;
+	border: 0px;
+	background-size: cover;
+	background-image: no-repeat;
 }

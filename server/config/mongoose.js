@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var config = require('config');
+
 module.exports = function () {
 	mongoose.connect(config.db);
 	var db = mongoose.connection;
@@ -6,7 +8,7 @@ module.exports = function () {
 	db.once('open', function callback() {
 		console.log('ehome db opened');
 	});
-}
+};
 
 var userSchema = mongoose.Schema({
 	firstName: String,
@@ -24,4 +26,4 @@ User.find({}).exec(function (err, collection) {
 			userName: 'joe'
 		});
 	}
-})
+});

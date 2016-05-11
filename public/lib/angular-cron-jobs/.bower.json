@@ -24,6 +24,5 @@
   },
   "_source": "https://github.com/jacobscarter/angular-cron-jobs.git",
   "_target": "^1.4.2",
-  "_originalSource": "angular-cron-jobs",
-  "_direct": true
+  "_originalSource": "angular-cron-jobs"
 }
