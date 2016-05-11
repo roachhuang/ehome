@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 
 // gpiocontroller is a func; in order to have it returns an object back to us, we need to execute it by following "()" 
-var gpioController = require('../controllers/gpio-controller')();
+var gpioController = require('../controllers/onff-ctrl')();
 // boday-parser is included in app.js, so no need to do it here.
 // it is alreay apply to express
 
@@ -18,6 +18,6 @@ var gpioController = require('../controllers/gpio-controller')();
 
 router.route('/:pin')
     .get(gpioController.get)  
-    .put(gpioController.put);
+    .post(gpioController.post);
 
 module.exports = router;

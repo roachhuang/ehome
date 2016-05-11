@@ -95,13 +95,13 @@
     };
 
     Device.prototype.getStatus = function () {
-        //return this.gpio.inPut(this.pin);
-        return false;
+        return this.gpio.inPut(this.pin);
+        // return false;
     };
 
-    Device.prototype.setStatus = function (val) {
-        this.gpio.outPut(val, this.pin);
-        this.status = val;
+    Device.prototype.setStatus = function () {
+        this.status = this.status ^ 1;   // toggle btw 0 and 1
+        this.gpio.outPut(this.status, this.pin);      
     };
     // reset cronjob
     Device.prototype.resetCron = function () {
