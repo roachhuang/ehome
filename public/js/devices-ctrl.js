@@ -15,8 +15,10 @@
 
         function activate() {
             vm.devices = deviceService;
-            vm.devices.forEach(function (item) {
-                item.status = item.getStatus();
+            vm.devices.forEach(function (entry) {
+                console.log(entry);
+                entry.status = entry.getStatus();
+                console.log(entry.status);
             });
         }
     }

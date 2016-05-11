@@ -12,6 +12,9 @@ sudo adduser $USER gpio
 After this, you will need to logout and log back in. Details, if you are interested.
 
 Next, cd to your project directory and use npm to install pi-gpio in your project.
+
+After changing the path and reinstalling gpio-admin, you need to change the path variable to ( sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
+for pi-gpio lib, pin = physical pin number
 */
 
 module.exports = function () {
