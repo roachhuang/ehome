@@ -17,8 +17,8 @@ Next, cd to your project directory and use npm to install pi-gpio in your projec
 */
 
 module.exports = function () {
-    //var gpio = require("pi-gpio");
-    var gpio = {};
+    var gpio = require("pi-gpio");
+    //var gpio = {};
 
     var put = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
