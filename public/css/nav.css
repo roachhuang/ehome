@@ -1,13 +1,19 @@
+/*
 .nav {
 	padding-left: 0;
 	color: #FFFFFF;
 	background-color: rgba(0,0,0,.1);
 }
-
-.nav a {
-	color: red;
-	text-decoration: none;
+*/
+.navbar-inverse {
+    background-color: rgb(10,40,8);
+    border-color:lightyellow;
 }
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #bbb;
+}
+
 
 .header img {
 	display: block;
@@ -15,11 +21,7 @@
 }
 
 .navbar {
-	margin-bottom: 0px;
+	margin-bottom: 0px;	/* eliminate the gap btw navbar and main container */
 	padding: 10px 15px;
 	transition: all 0.5s;
-}
-
-.navbar-fixed-top {
-	background-color: yellow;
 }

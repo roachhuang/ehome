@@ -20,10 +20,10 @@ for pi-gpio lib, pin = physical pin number
 */
 
 module.exports = function () {
-    var gpio = require("pi-gpio");
-    //var gpio = {};
+    //var gpio = require("pi-gpio");
+    var gpio = {};
 
-    var put = function (req, res) {
+    var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
         //}
@@ -61,7 +61,7 @@ module.exports = function () {
     };
 
     return {
-        put: put,
+        post: post,
         get: get
     };
 };

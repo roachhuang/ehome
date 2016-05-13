@@ -1,18 +1,31 @@
-<!-- mobile ver -->
-<nav class='nav navbar navbar-default navbar-static role=navigation'>
-    <div class="container">
-        <div class='navbar-header'>
-            <a ng-href="#" class='navbar-brand'>HOME AUTOMATION</a>
-        </div>
-        <ul class='nav navbar-nav'>
-            <li><a ng-href="#/home">Home</a></li>
-            <li><a ng-href="#/devivesControl">Control</a></li>
-            <li><a ng-href="#/settings">Settings</a></li>
-            <li><a ng-href="#/about">About me</a></li>
-        </ul>
-        <ul class='nav navbar-nav navbar-right' ng-hide='hasloggedIn'>
-            <li><a ng-href="#/login">Log in</a></li>
-        </ul>
-    </div>
-</nav>
+<header>
+    <!-- mobile ver -->
+    <nav class='navbar navbar-inverse navbar-static role=navigation'>
+        <div class="container-fluid">
+            <div class='navbar-header'>
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <a ng-href="#" class='navbar-brand'>HOME AUTOMATION</a>
+            </div>
+            <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+                <ul class='nav navbar-nav navbar-left'>
+                    <li><a ng-href="#/home">Home</a></li>
+                    <li><a ng-href="#/devivesControl">Control</a></li>
+                    <li><a ng-href="#/settings">Settings</a></li>
+                    <li><a ng-href="#/about">About me</a></li>
+                </ul>
 
+                <ul class='navbar-form navbar-right' ng-hide='hasloggedIn'>
+                    <li><a ng-href="#/login">Log in</a></li>
+                </ul>
+
+            </div>
+            <!-- navbar-collapse -->
+        </div>
+    </nav>
+</header></header>
