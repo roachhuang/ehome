@@ -8,16 +8,16 @@ module.exports = function () {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var cronJob = req.body.cronJob;
+        var cronJob = req.body.cron, val = req.body.val, pin = req.body.pin;
 
         // set cron job on server
         try {
             var job = new CronJob(cronJob, function () {
-                //runTask(req);
-                console.log('to do: run task');
+                runTask(pin, val);
+                console.log('task ran');
             }, null, true);
         } catch (ex) {
-            console.log('cron pattern not valid');
+            console.log('cron pattern not valid', cronJob);
         }
 
         var cb = function (res) {
@@ -31,13 +31,11 @@ module.exports = function () {
         set: set
     };
     //////////////////////////////////////////////////////////////////////////
-    function runTask(req) {
-        var val = req.body.val;
-        var pin = req.body.pin;
+    function runTask(pin, val) {
 
         var options = {
-            url: 'http://localhost:3000/gpio/:' + pin.toString,
-            method: 'PUT',
+            url: 'http://localhost:3000/gpio/:' + pin,
+            method: 'POST',
             json: { val: val }
         };
 
