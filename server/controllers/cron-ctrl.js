@@ -4,7 +4,12 @@ var request = require('request');
 
 module.exports = function () {
 
-    var set = function (req, res) {
+    return {
+        set: set
+    };
+
+    //////////////////////////////////////////////////////////////////////////
+    function set(req, res) {
         if (!req.body) {
             return res.sendStatus(400);
         }
@@ -27,10 +32,6 @@ module.exports = function () {
         };
     };
 
-    return {
-        set: set
-    };
-    //////////////////////////////////////////////////////////////////////////
     function runTask(req) {
         var val = req.body.val;
         var pin = req.body.pin;
