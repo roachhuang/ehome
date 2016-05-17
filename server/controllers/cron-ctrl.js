@@ -10,27 +10,34 @@ module.exports = function () {
 
     //////////////////////////////////////////////////////////////////////////
     function set(req, res) {
+        var cronTime, val = req.body.val, pin = req.body.pin;
+
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var cronJob = req.body.cron, val = req.body.val, pin = req.body.pin;
+        var cronTime = '0 '.concat(req.body.cron);
+
+        console.log(cronTime);
 
         // set cron job on server
         try {
-            var job = new CronJob(cronJob, function () {
-                runTask(pin, val);
-                console.log('task ran');
+            var job = new CronJob(cronTime, function () {
+                //runTask(pin, val);
+                console.log(Date.now());
+                //res.sendStatus(200);
             }, null, true);
         } catch (ex) {
-            console.log('cron pattern not valid', cronJob);
-        }
-
+            console.log('invalid pattern');
+            res.sendStatus(500);
+       }
+/*
         var cb = function (res) {
             res.on('end', function () {
                 console.log('gpio end');
             });
         };
-    };
+*/
+    }
 
     //////////////////////////////////////////////////////////////////////////
     function runTask(pin, val) {

@@ -79,7 +79,7 @@
                 console.log(data);
             });
             // job: off
-            req.data = { cron: data.off, val: '0' };
+            req.data = { cron: job.off, val: '0' };
             $http(req).then(function (data) {
                 console.log(data);
             });
