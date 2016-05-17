@@ -99,7 +99,7 @@
     };
 
     Device.prototype.setStatus = function () {
-        this.status ^= 1;   // toogle btw 0 and 1
+        this.status = this.status ^ 1;   // toogle btw 0 and 1
         this.gpio.outPut(this.status, this.pin);
         //this.status = val;
     };

@@ -30,7 +30,7 @@ module.exports = function () {
                 console.log('gpio end');
             });
         };
-    };
+    }
 
     function runTask(req) {
         var val = req.body.val;

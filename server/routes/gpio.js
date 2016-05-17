@@ -17,8 +17,16 @@ var gpioController = require('../controllers/gpio-controller')();
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+// check if user has signed in
+router.use('/', function (req, res, next) {
+    if (!req.user) {
+        res.redirect('/login');
+    }
+    next();
+});
+
 router.route('/:pin')
-    .get(gpioController.get)  
+    .get(gpioController.get)
     .post(gpioController.post);
 
 module.exports = router;

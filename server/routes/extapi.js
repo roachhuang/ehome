@@ -5,7 +5,7 @@ var express = require('express');
 var nasa = require('../controllers/nasaController');
 var yahoo = require('../controllers/yahooController');
 var email = require('../controllers/emailController');
-var oauth2 = require('../controllers/oauth2Controller');
+//var oauth2 = require('../controllers/oauth2Controller');
 //console.log(gdrive.token);
 var router = express.Router();
 
