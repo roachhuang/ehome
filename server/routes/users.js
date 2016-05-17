@@ -13,7 +13,7 @@ router.use('/', function(req, res, next) {
 router.get('/', function (req, res) {
     //res.render('users', {user: {name: req.user.displayName,
     //                                  image: req.user.image}});
-    res.sendFile(config.rootPath + '/public/views/users.html');
+    //res.sendFile(config.rootPath + '/public/views/users.html');
 });
 
 module.exports = router;

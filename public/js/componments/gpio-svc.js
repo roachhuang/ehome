@@ -31,7 +31,9 @@
         }
 
         function inPut(pin) {
-            $http.get('/gpio/' + pin);
+            $http.get('/gpio/' + pin).then(function (res) {
+                return res.data;    // inside data there is an object val
+            });
         }
     }
 })();

@@ -7,7 +7,7 @@ module.exports = function (passport, config) {
         clientID: config.clientId,
         clientSecret: config.clientSecret,
         callbackURL: config.callbackURL},
-        function(req, accessToken, refreshToken, done) {
+        function(accessToken, refreshToken, params, profile, done) {
             var user = {};
             //user.email = profile.emails[0].value;
             //user.image = profile._json.image.url;
@@ -18,7 +18,9 @@ module.exports = function (passport, config) {
             //either save the token to a database, or send it back to the client to save.
 			//CloudBalance sends it back to the client as a json web token, 
 			//and the client saves the token into sessionStorage
+            console.log(params.expires_in);
             user.google.token = accessToken;
+            user.google.refreshToken = refreshToken;
             
             // get data from google
             done(null, user);  

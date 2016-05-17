@@ -17,7 +17,7 @@ router.route('/google/callback')
 
 router.route('/google')
 	.get(passport.authenticate('google', {
-		/* scope tells google what data u want to access */
+		/* scope tells google what data u want to access; 'profile' is a must scope and must enable google+ api */
 		scope: ['https://www.googleapis.com/auth/drive.file',
 				'profile']
 	}));

@@ -67,19 +67,19 @@
         };
 
         //////////////////////////////////////////////////////
-        function callServerCron(data) {
+        function callServerCron(job) {
             var req = {
                 method: 'POST',
                 url: '/cron',
                 //transformRequest: transformRequestAsFormPost,
-                data: { cron: data.on, val: '1' } // to do: '1' or 1 or can use false
+                data: { cron: job.on, val: 1 } // to do: '1' or 1 or can use false
             };
             // job: on
             $http(req).then(function (data) {
                 console.log(data);
             });
             // job: off
-            req.data = { cron: data.off, val: '0' };
+            req.data = { cron: job.off, val: '0' };
             $http(req).then(function (data) {
                 console.log(data);
             });
