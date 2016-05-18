@@ -29,14 +29,15 @@ module.exports = function () {
         } catch (ex) {
             console.log('invalid pattern');
             res.sendStatus(500);
-       }
-/*
-        var cb = function (res) {
-            res.on('end', function () {
-                console.log('gpio end');
-            });
-        };
-*/
+        }
+        /*
+                var cb = function (res) {
+                    res.on('end', function () {
+                        console.log('gpio end');
+                    });
+                };
+        */
+
     }
 
     //////////////////////////////////////////////////////////////////////////
