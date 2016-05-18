@@ -24,6 +24,7 @@ section.col-sm-4 {
 	width: 85%;
 }
 
+/*
 @media all and (max-width:768px) {
 	.pdsa-sn-wrapper {
 		left: -13em;
@@ -32,18 +33,15 @@ section.col-sm-4 {
 		margin-left: 0em;
 	}
 }
+*/
 
-.fill-screen {
-	background-size: cover;
-	background-position: center;
-}
-
+/*
 .img-responsive {
-	display: inline;
-	height: 70%;
+	display: inline;	
 	border: 3px solid burlywood;
 	margin: 0px auto;
 }
+*/
 
 .pdsa-sn-wrapper {
 	-webkit-transition: left 0.3s linear;
@@ -109,6 +107,10 @@ section.col-sm-4 {
 	background-color: deepskyblue;
 }
 
+.summary-footer {
+	text-shadow: black;
+	color: black;
+}
 .summary-footer a {
 	color: white;
 }

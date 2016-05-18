@@ -115,16 +115,6 @@ a {
 	color: #00B7FF;
 }
 
-#painting {
-	background-color: #fff4db;
-	width: 400px;
-	height: 400px;
-	margin-top: 30px;
-	margin-left: auto;
-	margin-right: auto;
-	box-shadow: 10px 10px 0px #8d8d8d;
-}
-
 a.divLink {
 	position: absolute;
 	width: 100%;

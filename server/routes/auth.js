@@ -11,7 +11,7 @@ var router = express.Router();
 */
 router.route('/google/callback')
 	.get(passport.authenticate('google', {
-		successRedirect: '/api/yahoo/',		// go to users route to render a user profile page or whatever info to users.
+		successRedirect: '/users',		// go to users route to render a user profile page or whatever info to users.
 		failure: '/api/apod/'	// to do: erro route isn't set yet
 	}));
 
