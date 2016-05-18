@@ -23,9 +23,14 @@ door.on("open", function () {
 
 window.on("open", function () {
     if (alarm.state == "on") {
+        // turn on spot light
+        // activate alarm
         // email subject: intrudor
         email.sendEmail;
-        // to do: send text msg and start recording video or capture video image 10 times (one time per sec)
+        // send text msg
+        // start recording video or capture video image 10 times (one time per sec)
+        // 7-eleven call police
+        // more ...
     } else {
         lights.switchOn();
         voice.speak("Welcome home");
