@@ -8,10 +8,10 @@
     deviceService.$inject = ['$http', 'gpioService'];
     function deviceService($http, gpioService) {
         var devices = [], i;
-
+        // physical pin 11 = GPIO17
         devices.push(new Device('bedRoom', 17));
-        devices.push(new Device('livingRoom', 2));
-        devices.push(new Device('kitchen', 3));
+        devices.push(new Device('livingRoom', 18));
+        devices.push(new Device('kitchen', 17));
         for (i = 0; i < devices.length; i++) {
             //angular.extend(devices[i].gpio, gpioService);
             //devices[i].gpio = new Gpio(devices[i].pin);
@@ -74,7 +74,7 @@
         }
     };
     // save cronjobs to local storage (data will still exist if )
-    Device.prototype.saveCronData = function () {
+    Device.prototype.saveJobs2LocalStorage = function () {
         //this.isCronGetUpdated = !this.isCronGetUpdated;
         if (localStorage != null && JSON != null) {
             // save all jobs at once
@@ -95,13 +95,13 @@
     };
 
     Device.prototype.getStatus = function () {
-        //return this.gpio.inPut(this.pin);
-        return false;
+        return this.gpio.inPut(this.pin);
     };
 
-    Device.prototype.setStatus = function (val) {
-        this.gpio.outPut(val, this.pin);
-        this.status = val;
+    Device.prototype.setStatus = function () {
+        this.status = this.status ^ 1;   // toogle btw 0 and 1
+        this.gpio.outPut(this.status, this.pin);
+        //this.status = val;
     };
     // reset cronjob
     Device.prototype.resetCron = function () {

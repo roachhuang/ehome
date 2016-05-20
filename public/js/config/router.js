@@ -9,7 +9,7 @@ angular.module('myApp')
 				controller: 'widgetsCtrl',
 				templateUrl: '../js/widgets.html'
 			})
-			.when('/cameraView', {
+			.when('/camera', {
 				templateUrl: '../js/camera/cameraview.html',
 				controller: 'cameraCtrl'
 				/*

@@ -34,7 +34,7 @@ module.exports = function (app, config) {
     // will print stacktrace
     app.use(function (err, req, res, next) {
         // Do logging and user-friendly error message display
-        console.error(err);
+        //console.error(err);
         res.status(500).send('internal server error: ' + err);
-    })
-}
+    });
+};

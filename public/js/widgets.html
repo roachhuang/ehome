@@ -1,95 +1,84 @@
 <div class="row">
 	<section class='col-sm-4'>
-		<div class='pdsa-summary-block'>
-			<a ng-href='#/camera'>
-				<iframe class='embed-responsive-item' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
-						<p>Your browser does not support iframes. It, however, works on Chrome</p>
-						<!--
-					<iframe width='220px' height='200px' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
-						<p>Your browser does not support iframes. It, however, works on Chrome</p>-->
-					</iframe>
-
-				<!-- 4:3 aspect ratio 
-					<div class="embed-responsive embed-responsive-4by3">
-    				<iframe class="embed-responsive-item" src="//www.youtube.com/embed/ePbKGoIGAXY"></iframe>
-					-->
-			</a>
-		</div>		
+		<div id='nasaImg' style='background-image: url(http://ubuy.asuscomm.com:8080/video.cgi)'>
+			<a href='#/camera' class='divLink'>Camera view</a>
+		</div>
 	</section>
-	
+
 	<section class='col-sm-4'>
-		<div class='pdsa-summary-block pdsa-block-primary'>
-			<div class="summary-bg">
-				<span>
+		<a ng-href='#/devivesControl'>
+			<div class='pdsa-summary-block pdsa-block-success'>
+				<div class="summary-bg">
+					<span>
 					<i class="fa fa-plug fa-3x">&nbsp;&nbsp</i>
 					<i class="fa fa-lightbulb-o fa-3x"></i><br>
 					&nbsp;&nbsp;&nbsp;&nbsp<i class="fa fa-power-off fa-3x"></i>
 				</span>
-			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>Smart Home</div>
-				<div class='summary-line-2'>家電控制</div>
-			</div>
-			<div class="summary-footer">
-				<a href='#/devivesControl'>Smart Home & icon</a>
-			</div>
-		</div>
-	</section>
-	<section class='col-sm-4'>
-		<div class='pdsa-summary-block pdsa-block-primary'>
-			<div class="summary-bg">
-				<i class="fa fa-registered fa-5x"></i>
-			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>公司簡介
+				</div>
+				<div class='summary-body'>
+					<div class='summary-line-1'><h2>Smart Home</h2></div>
+					<div class='summary-line-2'><h3>家電控制</h3></div>
+				</div>
+				<div class="summary-footer">
+					<h4><em>智能開關控制</em></h4>
 				</div>
 			</div>
-			<div class="summary-footer">
-				<a href='#'>Smart Home & icon</a>
+		</a>
+	</section>
+	<section class='col-sm-4'>
+		<a href='#'>
+			<div class='pdsa-summary-block pdsa-block-info'>
+				<div class="summary-bg">
+					<i class="fa fa-registered fa-5x"></i>
+				</div>
+				<div class='summary-body'>
+					<div class='summary-line-1'><h3>公司簡介</h3>
+					</div>
+				</div>
+				<div class="summary-footer">
+					<h4><em>聯絡我們</em></h4>
+				</div>
 			</div>
-		</div>
+		</a>
 	</section>
 </div>
 
 <div class="row">
 	<section class='col-sm-4'>
-		<div class='pdsa-summary-block pdsa-block-info'>
-			<div class="summary-bg">
-				<i class="fa fa-cogs fa-5x fa-spin"></i>
+		<a ng-href='#/settings'>
+			<div class='pdsa-summary-block pdsa-block-primary'>
+				<div class="summary-bg">
+					<i class="fa fa-cogs fa-5x fa-spin"></i>
+				</div>
+				<div class='summary-body'>
+					<div class='summary-line-1'><h3>設定</h3></div>					
+				</div>
+				<div class="summary-footer">
+					<h4><em>定時 啓動/關閉 家電</em></h4>
+				</div>
 			</div>
-			<div class='summary-body'>
-				<div class='summary-line-1'>設定</div>
-				<a class='divLink' href='#/settings'></a>
+		</a>
+	</section>
+	
+	<section class='col-sm-4'>
+		<a href='#'>
+			<div class='pdsa-summary-block pdsa-block-danger'>
+				<div class="summary-bg">
+					<i class="fa fa-tachometer fa-5x"></i>
+				</div>
+				<div class='summary-body divLink'>
+					<div class='summary-line-1'><h3>感應數據讀取</h3></div>
+					<div class='summary-line-2'>15</div>
+				</div>
+				<div class="summary-footer">
+					<h4><em>感應器狀態<em></h4>
+				</div>
 			</div>
-			<div class="summary-footer">
-				<a href='#/settings'>Settings & icon</a>
-			</div>
-		</div>
+		</a>
 	</section>
 	<section class='col-sm-4'>
-		<div class='pdsa-summary-block pdsa-block-warning'>
-			<div class="summary-bg">
-				<i class="fa fa-tachometer fa-5x"></i>
-			</div>
-			<div class='summary-body divLink'>
-				<div class='summary-line-1'>感應數據讀取</div>
-				<div class='summary-line-2'>15</div>
-			</div>
-			<div class="summary-footer">
-				<a href='#'>Settings & icon</a>
-			</div>
-		</div>
-	</section>
-	<section class='col-sm-4'>
-		<div class='fill-screen' style='background-image: url({{apod.url}})'>
-			<!--
-			<a ng-href='#/nasa'>
-				<img class="img-responsive" ng-src="{{apod.url}} height:70%">
-			</a>
-			-->
-		</div>
-		<div class="summary-footer">
-			<a href='#'>NASA 每日一圖</a>
+		<div id='nasaImg' style='background-image: url({{apod.url}}'>
+			<a href='#/nasa' class='divLink'>NASA 每日一圖</a>
 		</div>
 	</section>
 </div>
