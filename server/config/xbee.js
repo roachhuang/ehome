@@ -2,16 +2,16 @@
 'use strict';
 
 //var util = require('util');
-var SerialPort = require('serialport').SerialPort;
+//var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('xbee-api');
 var sensors = require('../controllers/sensors');
 
 module.exports = function () {
     var C = xbee_api.constants;
-    var xbeeAPI = new xbee_api.XBeeAPI({
-        api_mode: 1
-    });
+    //var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 1});
+    var xbeeAPI = new xbee_api.XBeeAPI();
 
+    /* ls /dev/ttyAMA0 to make suer it is exist.
     var serialport = new SerialPort('/dev/ttyAMA0', {
         baudrate: 9600,
         parser: xbeeAPI.rawParser()
@@ -34,7 +34,7 @@ module.exports = function () {
         console.log('data received: ' + data);
 
     });
-
+*/
     // All frames parsed by the XBee will be emitted here
     xbeeAPI.on('frame_object', function (frame) {
         console.log('>>', frame);
@@ -42,6 +42,24 @@ module.exports = function () {
         // i/o data received
 
     });
+/*
+{
+	type: 0x92, // xbee_api.constants.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX
+	remote64: "0013a20040522baa",
+	remote16: "7d84",
+	receiveOptions: 0x01,
+	numSamples: 1,
+	digitalSamples: {
+		"DIO2": 1,
+		"DIO3": 0,
+		"DIO4": 1
+	},
+	analogSamples: {
+		"AD1": 644
+	}
+}
+*/
+
 
     /* simple example: query ATD0 on remote xbee module.
     var remote64 = [0x00,0x13,0xa2,0x00,0x40,0x7a,0x1f,0x95];  // <-- you'll need to replace this with the 64-bit hex address of your module
