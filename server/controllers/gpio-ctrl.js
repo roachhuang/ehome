@@ -1,6 +1,6 @@
 'use strict';
 /*
-The Raspberry Pi's GPIO pins require you to be root to access them. 
+The Raspberry Pi's GPIO pins require you to be root to access them.
 That's totally unsafe for several reasons. To get around this problem,
 you should use the excellent gpio-admin.
 
@@ -19,7 +19,7 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 for pi-gpio lib, pin = physical pin number
 */
 
-module.exports = function () {
+module.exports = function (req, res) {
     //var gpio = require("pi-gpio");
     var gpio = {};
 

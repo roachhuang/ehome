@@ -21,7 +21,7 @@ module.exports = function () {
         var frame_obj = {
             type: 0x10,
             id: 0x01,
-            destination64: '0013A200407A25B5',
+            destination64: '0013A20040EB5559',
             broadcastRadius: 0x00,
             options: 0x00,
             data: 'Hello world'
@@ -39,16 +39,16 @@ module.exports = function () {
     xbeeAPI.on('frame_object', function (frame) {
         console.log('>>', frame);
         sensors.window.getStatus();
-        // i/o data received 
+        // i/o data received
 
     });
 
     /* simple example: query ATD0 on remote xbee module.
     var remote64 = [0x00,0x13,0xa2,0x00,0x40,0x7a,0x1f,0x95];  // <-- you'll need to replace this with the 64-bit hex address of your module
     var remote16 = [0xff,0xfe]; // <-- put the 16 bit address of remote module here, if known. Otherwise use [0xff, 0xfe]
-    
+
     RemoteAT('D0', null, remote64, remote16);
-    
+
     void setRemoteState(int value) { // pass either a 0x4 or 0x5 to turn the pin on/off
     Serial.print(0x7E, BYTE); // start byte
     Serial.print(0x0, BYTE); // high part of length (always zero)
@@ -82,7 +82,7 @@ module.exports = function () {
     delay(10); // safety pause to avoid overwhelming the
     // serial port (if this function is not implemented properly)
     }
-    
+
     // execute an AT command on the local xbee module
     function AT(cmd, val) {      // e.g. 'ID' or '%V'
         var atc = new xbee.ATCommand();
@@ -92,7 +92,7 @@ module.exports = function () {
         serial_xbee.write(b);
         //console.log('Wrote bytes to serial port', b);
     }
-    
+
     // execute an AT command on a remote xbee module
     function RemoteAT(cmd, val, remote64, remote16) {
         var atc = new xbee.RemoteATCommand();
@@ -104,7 +104,7 @@ module.exports = function () {
         serial_xbee.write(b);
         //console.log('Wrote bytes to serial port', b);
     }
-    
+
     */
 
 }
