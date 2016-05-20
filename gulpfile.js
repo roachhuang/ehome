@@ -24,7 +24,7 @@ function errorLog(error) {
 }
 
 
-var jsFiles = ['*.js', './public/js/**/*.js'];
+var jsFiles = ['*.js', './public/js/**/*.js', './server/**/*.js'];
 var cssFiles = ['*.css', './public/css/*.css'];
 
 gulp.task('style', function () {
@@ -60,11 +60,11 @@ gulp.task('inject', function () {
     var inject = require('gulp-inject');
 
     var injectSrc = gulp.src(['./public/css/*.css',
-                              './public/js/**/*.js'], {
-        read: false
-    }, {
-        relative: true
-    });
+        './public/js/**/*.js'], {
+            read: false // we just need the filename, so don't read the files.
+        }, {
+            relative: true
+        });
 
     var injectOptions = {
         // coz we have set 'public' as root path of the site by app.use(express.static(config.rootPath + 'public'));
@@ -73,12 +73,12 @@ gulp.task('inject', function () {
 
     var options = {
         bowerJson: require('./bower.json'),
-        directory: './public/lib',
-        ignorePath: '../../public'
+        directory: './public/lib',  // the dir is specified in bowerrc file
+        ignorePath: '../../public'  // we do not want ../../public injected into index.html
     };
     /* change to *.jade if you are using jade instead of html */
     return gulp.src('./public/views/index.html')
-        .pipe(wiredep(options))
+        .pipe(wiredep(options)) // wiredep looks up bower.json file
         .pipe(inject(injectSrc, injectOptions))
         .pipe(gulp.dest('./public/views'));
 });
@@ -87,10 +87,12 @@ gulp.task('inject', function () {
 gulp.task('serve', ['style', 'inject'], function () {
     var options = {
         script: 'app.js',
+        ext: 'js',
         dealyTime: 1,
         env: {
-            "PORT": 3000
+            'PORT': 3000
         },
+        ignore: ['./node_modules/**'],
         watch: jsFiles
     };
     return nodemon(options)
