@@ -9,17 +9,17 @@ module.exports = function () {
         events.EventEmitter.call(this);
     }
     Sensor.prototype = new events.EventEmitter();
-    Sensor.prototype.getIoData = function (iOdata) {
+    Sensor.prototype.getStatus = function (iOdata) {
         var vm = this;
-        if (mask === D4) {
+        //if (mask === D4) {
             vm.emit('open');
-        }
+        //}
     };
 
     var window = new Sensor(D4);
     var door = new Sensor(D3);
 
-
+/*
     door.on('open', function () {
         if (alarm.state === 'on') {
             alarm.sound();
@@ -29,7 +29,7 @@ module.exports = function () {
             voice.speak('Welcome home');
         }
     });
-
+*/
     window.on('open', function () {
         if (alarm.state === 'on') {
             // turn on spot light
@@ -39,10 +39,10 @@ module.exports = function () {
             // send text msg
             // start recording video or capture video image 10 times (one time per sec)
             // 7-eleven call police
-            // more ...
+            // alert.window = true;
         } else {
-            lights.switchOn();
-            voice.speak('Welcome home');
+            //lights.switchOn();
+            //voice.speak('Welcome home');
         }
     });
 
