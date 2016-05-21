@@ -15,7 +15,7 @@ module.exports = function () {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var cronTime = '0 '.concat(req.body.cron);
+        cronTime = '0 '.concat(req.body.cron);
 
         console.log(cronTime);
 
