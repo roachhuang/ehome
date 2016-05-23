@@ -4,7 +4,7 @@
 //var util = require('util');
 var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('xbee-api');
-var sensors = require('../controllers/sensors')();
+var sensors = require('../controllers/sensors-ctrl')();
 
 module.exports = function () {
     var C = xbee_api.constants;

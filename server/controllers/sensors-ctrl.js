@@ -6,15 +6,20 @@ module.exports = function () {
 
     function Sensor(pin) {
         this.pin = pin;
+        this.status = false;    // normal state (closed)
         events.EventEmitter.call(this);
     }
     Sensor.prototype = new events.EventEmitter();
     // parse frame from xbee-api
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
-        if (frame.digitalSamples.DIO4 === 1) {
+        if (frame.digitalSamples.DIO4 === 0) {
+            vm.status = false;
+        }
+        else if (frame.digitalSamples.DIO4 === 1 && vm.status === false) {
+            vm.status = true;     // triggered
             // window get opened
-            vm.emit('open');
+            vm.emit('open');    // emit once if it gets opened coz we don't want to keep sending email.
         }
     };
 
@@ -34,20 +39,24 @@ module.exports = function () {
     */
     window.on('open', function () {
         //if (alarm.state === 'on') {
-        // turn on spot light
-        // activate alarm
-        // there should be a limit of sending email and txt msg.
-        email.sendEmail();
-        // send text msg
-        // start recording video or capture video image 10 times (one time per sec)
-        // 7-eleven call police
-        // alert.window = true;
-        //} else {
-        //lights.switchOn();
-        //voice.speak('Welcome home');
-        // }
+        // send alert message every 3s for 5 times
+        var times = 0;
+        var actions = setInterval(function () {
+            if (times < 5) {
+                times++;
+                email.sendEmail();
+                // send text msg
+                // start recording video or capture video image 10 times (one time per sec)
+                // 7-eleven call police
+                // alert.window = true;
+                //} else {
+                //lights.switchOn();
+                //voice.speak('Welcome home');
+            } else {
+                clearInterval(actions);
+            }
+        }, 3000);
     });
-
 
     /* Remove the binding of listner1 function
     eventEmitter.removeListener('connection', listner1);
