@@ -1,7 +1,8 @@
 'use strict';
 var email = require('./emailController');
-var xbee = require('../config/xbee');
+var xbee = require('../config/xbee')();
 
+// sensor is passed in from app.js
 module.exports = function (sensors) {
     xbee.serialport.on('open', function () {
         console.log('port opened.');
@@ -13,7 +14,7 @@ module.exports = function (sensors) {
 
     // All frames parsed by the XBee will be emitted here
     xbee.API.on('frame_object', function (frame) {
-        console.log('>>', frame);
+        //console.log('>>', frame);
         sensors.window.getStatus(frame);
         // i/o data received
     });
@@ -33,7 +34,7 @@ module.exports = function (sensors) {
         //voice.speak('Welcome home');
         // }
     });
-    
+
      /*
         door.on('open', function () {
             if (alarm.state === 'on') {

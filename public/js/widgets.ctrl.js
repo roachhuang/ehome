@@ -5,29 +5,39 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$scope', '$http'];
-	function widgetsCtrl($scope, $http) {
-		var vm = $scope;
+	widgetsCtrl.$inject = ['$http'];
+	function widgetsCtrl($http) {
+		var vm = this;
+		vm.sensors = [];
+		var i = readSensor();
 
 		////////////////
-
 		function readSensor() {
 			$http.get('/sensors/').then(function (res) {
-                return res.data.sensors;    // inside data there is an object sensors
-            });
+                vm.sensors = res.data.sensors;    // inside data there is an object sensors
+				return (vm.sensors.window.status === true);
+            }, function (res) {
+				console.log(res.err);
+			});
 		}
-		function AnyAlarm() {
+
+
+	}
+})();
+
+		/*
+		vm.anyAlarm = function () {
 			vm.anyAlarm = false;
-			vm.sensors = readSesnors();
-			for (key in vm.sensors) {
+			readSensor();
+			for (var key in vm.sensors) {
 				if (!vm.sensors.hasOwnProperty(key)) {
 					continue;
 				}
-				var obj = vm.sensor(key);
+				var obj = vm.sensors(key);
 				vm.anyAlarm = vm.anyAlarm || obj.status;
 			}
 			return vm.anyAlarm;
-		}
-	}
-})();
+		};
+		*/
+
 

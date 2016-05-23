@@ -1,7 +1,8 @@
 'use strict';
 var events = require('events');
+var request = require('request');
 
-module.exports = function (req, res) {
+module.exports = function () {
 
     function Sensor(pin, name) {
         this.pin = pin;
@@ -15,14 +16,27 @@ module.exports = function (req, res) {
         var vm = this;
         if (frame.digitalSamples.DIO4 === 1) {
             // window get opened
+            this.status = true;
             vm.emit('open');
-            res.redirect('/');  //todo: this is for go / to readSensors but not knowing if it'll work.
+            /*
+            request.get('http://localhost:3000/', function(err, res, body){
+                if (err) {
+                    console.log(err);
+                } else {
+                    //console.log(res);
+                }
+            });
+            */
+        } else {
+            this.status = false;
         }
     };
-      
+    var window = new Sensor('DIO4', 'in the living room');
+    var door = new Sensor('DIO3', 'main gate');
+
     return {
-        window: new Sensor('DIO4', 'in the living room'),
-        door: new Sensor('DIO3', 'main gate')
+        window: window,
+        door: door
     };
 
     /* Remove the binding of listner1 function

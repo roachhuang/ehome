@@ -9,8 +9,8 @@ var express = require('express');
 var app = express();
 var config = require('./server/config/config')[env];
 // activate sensors
-//var sensors = require('../config/sensors');
-//require('./server/controllers/xbee-ctrl')(sensors);
+var sensors = require('./server/config/sensors')();
+require('./server/controllers/xbee-ctrl')(sensors);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);

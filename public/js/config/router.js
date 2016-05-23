@@ -47,7 +47,7 @@ angular.module('myApp')
 				controller: 'loginCtrl'
 			})
 			.otherwise({
-				controller: 'widgetsCtrl',
+				controller: 'widgetsCtrl as vm',
 				templateUrl: '../js/widgets.html'
 			});
 	});
