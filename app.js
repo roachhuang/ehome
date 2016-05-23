@@ -8,8 +8,9 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has t
 var express = require('express');
 var app = express();
 var config = require('./server/config/config')[env];
-
-var xbee = require('./server/config/xbee')();
+// activate sensors
+//var sensors = require('../config/sensors');
+//require('./server/controllers/xbee-ctrl')(sensors);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
@@ -25,6 +26,7 @@ var cron = require('./server/routes/cron.js');
 var gpio = require('./server/routes/gpio');
 var users = require('./server/routes/users');
 var auth = require('./server/routes/auth');
+var sensors = require('./server/routes/sensors')(sensors);
 
 // router is mounted in a particular root url
 app.use('/api', extapi);
@@ -32,6 +34,7 @@ app.use('/cron', cron);
 app.use('/gpio', gpio);
 app.use('/users', users);
 app.use('/auth', auth);
+app.use('/sensors', sensors);
 
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');

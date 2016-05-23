@@ -1,14 +1,14 @@
 angular.module('myApp')
     .controller('nasaCtrl', function ($scope, $http) {
         var vm = this;
-        $scope.yahoo = {};
+        vm.yahoo = {};
         $http.get('/api/yahoo').then(function (res) {
-            $scope.yahoo = res.data.query.results.channel;
-            console.log($scope.yahoo.item.forcast);
+           vm.yahoo = res.data.query.results.channel;
+            console.log(vm.yahoo.item.forcast);
         });
 
-        $scope.apod = {};
+        vm.apod = {};
         $http.get('/api/apod').then(function (res) {
-            $scope.apod = res.data;
+            vm.apod = res.data;
         });
     });

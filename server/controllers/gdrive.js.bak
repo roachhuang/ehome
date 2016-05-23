@@ -1,0 +1,113 @@
+var fs = require('fs');
+var google = require('googleapis');
+var readline = require('readline');
+//var googleAuth = require('google-auth-library');
+var OAuth2 = google.auth.OAuth2;
+
+
+// You can find these pieces of information by going to https://code.google.com/apis/console, clicking your project-- > APIs & auth-- > credentials.
+var CLIENT_ID = '596295171202-r2c90o7dqbtecold0f2qq2bfd84jjbl2.apps.googleusercontent.com';
+var CLIENT_SECRET = 'c1g61BBIgNyUqF_HBxBlOoLg';
+var REDIRECT_URL = 'http://ubuy.asuscomm.com:3000/api/oauth2callback';
+// create a service client object used to make google API calls.
+var oauth2Client = new OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
+var SCOPES = [
+  'https://www.googleapis.com/auth/*',
+  'https://www.googleapis.com/auth/drive.metadata.readonly'
+];
+var authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: SCOPES
+});
+/* Create the drive service client and configure it to use the OAuth2 Client for authorization
+ ** You can set the auth as a global or service-level option so you don't need to specify it every request.
+ */
+var drive = google.drive({
+    version: 'v2',
+    auth: oauth2Client //Setting a service-level auth option.
+});
+console.log(drive);
+//Lastly, set the credentials of the OAuth2 Client to make valid Google API requests
+//oauth2Client.setCredentials({
+//    access_token: accessToken
+//});
+
+
+
+function get_id() {
+    var newDate = new Date();
+    return ' ' + parseInt(newDate.getMonth() + 1) + '-' + newDate.getDate() + '-' + newDate.getFullYear() + '-' + newDate.getTime()
+}
+
+/**
+ * Get and store new token after prompting for user authorization, and then
+ * execute the given callback with the authorized OAuth2 client.
+ *
+ * @param {google.auth.OAuth2} oauth2Client The OAuth2 client to get token for.
+ * @param {getEventsCallback} callback The callback to call with the authorized
+ *     client.
+ */
+function getNewToken(oauth2Client, callback) {
+  
+  console.log('Authorize this app by visiting this url: ', authUrl);
+  var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.question('Enter the code from that page here: ', function(code) {
+    rl.close();
+    oauth2Client.getToken(code, function(err, token) {
+      if (err) {
+        console.log('Error while trying to retrieve access token', err);
+        return;
+      }
+      oauth2Client.credentials = token;
+      //storeToken(token);
+      callback(oauth2Client);
+    });
+  });
+}
+function listFiles(auth) {
+  var service = google.drive('v3');
+  service.files.list({
+    auth: auth,
+    pageSize: 10,
+    fields: "nextPageToken, files(id, name)"
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    var files = response.files;
+    if (files.length == 0) {
+      console.log('No files found.');
+    } else {
+      console.log('Files:');
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        console.log('%s (%s)', file.name, file.id);
+      }
+    }
+  });
+}
+
+exports.saveImage = function() {
+    console.log('capture');
+    getNewToken(oauth2Client, listFiles)
+	//console.log(drive.about.get());
+/*   
+    drive.files.insert({
+        resource: {
+            title: get_id() + '.jpg',
+            mimeType: 'image/jpg'
+        },
+        media: {
+            mimeType: 'image/jpg',
+            
+            //body: fs.createReadStream('http://ubuy.asuscomm.com:8080/image.jpg') // read streams are awesome!
+        }
+
+    });
+*/   
+}
+*/
