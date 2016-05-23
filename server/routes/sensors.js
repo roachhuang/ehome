@@ -1,9 +1,13 @@
 'use strict';
 var express = require('express');
-var router = express.Router();
-var sensorsCtrl = require('../controllers/sensors-ctrl')();
 
-router.route('/:sensor')
-    .get(sensorsCtrl.get)
+module.exports = function (sensors) {
+    var router = express.Router();
 
-module.exports = router;
+    router.route('/')
+        .get(function (req, res) {
+            res.json(200, { sensors: sensors });
+        });
+
+    return router;
+};

@@ -4,7 +4,6 @@
 //var util = require('util');
 var SerialPort = require('serialport').SerialPort;
 var xbee_api = require('xbee-api');
-var sensors = require('../controllers/sensors-ctrl')();
 
 module.exports = function () {
     var C = xbee_api.constants;
@@ -18,6 +17,12 @@ module.exports = function () {
         parser: xbeeAPI.rawParser()
     });
 
+    return {
+        API: xbeeAPI,
+        serialport: serialport
+    };
+
+/*
     serialport.on('open', function () {
         console.log('port opened.');
     });
@@ -46,7 +51,7 @@ module.exports = function () {
         };
         serialport.write(xbeeAPI.buildFrame(frame_obj));
     });
-    */
+
 
     serialport.on('data', function (data) {
         console.log('data received: ' + data);
