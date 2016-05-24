@@ -10,6 +10,7 @@ var router = express.Router();
 ** Google will redirect the page to the redirect URL you have provided with a code query parameter.
 */
 router.route('/google/callback')
+	// /google/callback?code=xxxxxxx
 	.get(passport.authenticate('google', {
 		successRedirect: '/users',		// go to users route to render a user profile page or whatever info to users.
 		failure: '/api/apod/'	// to do: erro route isn't set yet
@@ -18,7 +19,8 @@ router.route('/google/callback')
 router.route('/google')
 	.get(passport.authenticate('google', {
 		/* scope tells google what data u want to access; 'profile' is a must scope and must enable google+ api */
-		scope: ['https://www.googleapis.com/auth/drive.file',
+		access_type: 'offline',
+		scope: ['https://www.googleapis.com/auth/drive',					
 				'profile']
 	}));
 

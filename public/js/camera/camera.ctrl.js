@@ -6,7 +6,7 @@ angular.module('myApp')
 		});
 
 		$scope.snapShot = function () {
-			$http.get('/api/saveimage').then(function (res) {
+			$http.get('/users/saveimage').then(function (res) {
 				console.log('img captured');
 			});
 		};

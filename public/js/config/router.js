@@ -46,6 +46,9 @@ angular.module('myApp')
 				templateUrl: '../js/login/login.html',
 				controller: 'loginCtrl'
 			})
+			.when('/about', {				
+				templateUrl: '../views/about.html'				
+			})
 			.otherwise({
 				controller: 'widgetsCtrl as vm',
 				templateUrl: '../js/widgets.html'
