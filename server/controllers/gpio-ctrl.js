@@ -38,7 +38,7 @@ module.exports = function (req, res) {
 
         gpio.open(pin, 'output', function (err) {
             gpio.write(pin, val, function () {
-                gpio.close(pin);
+                //gpio.close(pin);
                 res.send(200);
             });
         });
@@ -50,7 +50,7 @@ module.exports = function (req, res) {
             // just read it w/o opening it as input, so its status won't be reset after reading.
             //gpio.open(pin, 'input', function (err) {
                 gpio.read(pin, function (err, value) {
-                    gpio.close(pin);
+                    //gpio.close(pin);
                     if (err) {
                         res.status(500).send(err);
                     } else {
