@@ -12,11 +12,11 @@
         devices.push(new Device('bedRoom', 17));
         devices.push(new Device('livingRoom', 18));
         devices.push(new Device('kitchen', 17));
-        for (i = 0; i < devices.length; i++) {
+        //for (i = 0; i < devices.length; i++) {
             //angular.extend(devices[i].gpio, gpioService);
             //devices[i].gpio = new Gpio(devices[i].pin);
-            devices[i].gpio = gpioService;  // point to the same gpioService object
-        }
+            //devices[i].gpio = gpioService;  // point to the same gpioService object
+        //}
         return devices;
 
         ////////////////
@@ -31,7 +31,7 @@
             this.name = name;
             this.status = false;
             this.pin = GpioPin;
-            this.gpio = {};
+            this.gpio = {};     // will be set as gpioService
             this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing
@@ -93,16 +93,7 @@
         // save changes to local storage
         this.saveCronData();
     };
-
-    Device.prototype.getStatus = function () {
-        return this.gpio.inPut(this.pin);
-    };
-
-    Device.prototype.setStatus = function () {
-        this.status = this.status ^ 1;   // toogle btw 0 and 1
-        this.gpio.outPut(this.status, this.pin);
-        //this.status = val;
-    };
+  
     // reset cronjob
     Device.prototype.resetCron = function () {
         this.cron = [];

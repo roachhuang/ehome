@@ -44,7 +44,7 @@ module.exports = function () {
         var io, value, pin = req.params.pin;
         if (pin > 0 && pin < 28) {
             console.log(pin);
-            //io = new Gpio(pin, 'in');
+            //io = new Gpio(pin, 'in');     // this will reset the
             value = io.readSync();
             //io.unexport();
             res.json(200, { value: value });

@@ -9,8 +9,8 @@ var express = require('express');
 var app = express();
 var config = require('./server/config/config')[env];
 // activate sensors
-var sensors = require('./server/config/sensors')();
-require('./server/controllers/xbee-ctrl')(sensors);
+var sensorObj = require('./server/config/sensor-obj')();
+//require('./server/controllers/xbee-ctrl')(sensors);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
@@ -26,7 +26,7 @@ var cron = require('./server/routes/cron.js');
 var gpio = require('./server/routes/gpio');
 var users = require('./server/routes/users');
 var auth = require('./server/routes/auth');
-var sensors = require('./server/routes/sensors')(sensors);
+var sensors = require('./server/routes/sensors')(sensorObj);
 
 // router is mounted in a particular root url
 app.use('/api', extapi);

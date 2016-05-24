@@ -48,7 +48,8 @@ module.exports = function (req, res) {
         var pin = req.params.pin;
         if (pin > 0 && pin < 20) {
             console.log(pin);
-            gpio.open(pin, 'input', function (err) {
+            // just read it w/o opening it as input, so its status won't be reset after reading.
+            //gpio.open(pin, 'input', function (err) {
                 gpio.read(pin, function (err, value) {
                     gpio.close(pin);
                     if (err) {
@@ -57,7 +58,7 @@ module.exports = function (req, res) {
                         res.json(200, { value: value });
                     }
                 });
-            });
+            //});
         }
     };
 
