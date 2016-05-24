@@ -16,9 +16,10 @@
         function activate() {
             vm.devices = [];
             // physical pin 11 = GPIO17
-            vm.devices.push(new Device('bedRoom', 17));
-            vm.devices.push(new Device('livingRoom', 18));
-            vm.devices.push(new Device('kitchen', 17));
+            // pi-gpio chose to use physical pin
+            vm.devices.push(new Device('bedRoom', 11));
+            vm.devices.push(new Device('livingRoom', 12));
+            vm.devices.push(new Device('kitchen', 11));
 
             vm.devices.forEach(function (device) {
                 device.status = gpioService.inPut(device.pin);
@@ -99,7 +100,7 @@
             }
             /////////////////////////////
         }
-        
+
         vm.onOff = function (device) {
             // toogle btw 0 and 1
             device.status = device.status ^ 1;
