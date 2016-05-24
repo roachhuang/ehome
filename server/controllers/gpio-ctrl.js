@@ -19,10 +19,9 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 for pi-gpio lib, pin = physical pin number
 */
 
-//var gpio = require("pi-gpio");
+var gpio = require("pi-gpio");
+//var gpio = {};
 module.exports = function (req, res) {
-
-    var gpio = {};
 
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
