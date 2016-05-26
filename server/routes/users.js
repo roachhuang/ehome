@@ -29,9 +29,7 @@ router.get('/', function (req, res) {
     //res.sendFile(config.rootPath + '/public/views/users.html');
 });
 
-router.get('/saveimage', function () {
-    
-    
+router.get('/saveimage', function () { 
     var options = {
         url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media',
         method: 'POST',
