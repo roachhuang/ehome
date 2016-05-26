@@ -1,17 +1,24 @@
+var vm={};
 function AnyAlarm() {
 	vm.anyAlarm = false;
-	vm.sensors = {
-		foo: { status: true },
-		bar: { status: true }
-	};
-	for (key in vm.sensors) {
-		if (!vm.sensors.hasOwnProperty(key)) {
-			continue;
-		}
-		var obj = vm.sensor(key);
-		vm.anyAlarm = vm.anyAlarm || obj.status;
+	vm.sensors = [
+		{ status: true, name:'you' },
+		{ status: false, name:'me' }
+	];
+	var i = 0;
+	Object.keys(vm.sensors).forEach(function(key){	
+		vm.sensors[key].status = 'kk';
+		i++;
+		console.log(key);
+		console.log(vm.sensors[key].status);			
+	});
+	
+	for(var i=0; i < vm.sensors.length; i++) {
+		console.log(vm.sensors[i]);
+		console.log(vm.sensors[i].status);
 	}
-	return vm.anyAlarm;
 }
 
 AnyAlarm();
+
+ 

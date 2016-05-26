@@ -5,20 +5,15 @@
         .module('myApp')
         .factory('deviceService', deviceService);
 
-    deviceService.$inject = ['$http', 'gpioService'];
-    function deviceService($http, gpioService) {
-        var devices = [], i;
+    deviceService.$inject = [];
+    function deviceService() {
+        var devices = [];
         // physical pin 11 = GPIO17
-        devices.push(new Device('bedRoom', 17));
-        devices.push(new Device('livingRoom', 18));
-        devices.push(new Device('kitchen', 17));
-        //for (i = 0; i < devices.length; i++) {
-            //angular.extend(devices[i].gpio, gpioService);
-            //devices[i].gpio = new Gpio(devices[i].pin);
-            //devices[i].gpio = gpioService;  // point to the same gpioService object
-        //}
+        devices.push(new Device('bedRoom', 11));
+        devices.push(new Device('livingRoom', 12));
+        devices.push(new Device('kitchen', 11));       
         return devices;
-
+        
         ////////////////
         //function exposedFn() { }
     }
@@ -30,8 +25,7 @@
             this.id = nextId++;
             this.name = name;
             this.status = false;
-            this.pin = GpioPin;
-            this.gpio = {};     // will be set as gpioService
+            this.pin = GpioPin; 
             this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing

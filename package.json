@@ -10,7 +10,6 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "fs": "0.0.2",
-    "google-drive": "0.0.6",
     "gql": "^1.1.0",
     "mod-aspsms": "^1.0.0",
     "morgan": "^1.7.0",

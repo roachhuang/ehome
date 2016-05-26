@@ -62,7 +62,7 @@
 
 	<section class='col-sm-4'>
 		<a href='#'>
-			<div ng-class="{'pdsa-summary-block pdsa-block-danger': vm.sensors.window.status, 'pdsa-summary-block pdsa-block-default':vm.sensors.window.status === false}">
+			<div ng-class="{'pdsa-summary-block pdsa-block-danger': vm.anyAlarm, 'pdsa-summary-block pdsa-block-default':vm.anyAlarm != false}">
 				<div class="summary-bg">
 					<i class="fa fa-tachometer fa-5x"></i>
 				</div>

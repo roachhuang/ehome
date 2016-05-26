@@ -13,7 +13,7 @@ var gpioController = require('../controllers/gpio-ctrl')();
 */
 
 router.route('/:pin')
-    .get(gpioController.get)
+    .get(gpioController.get)    // return 0 or 1
     .post(gpioController.post);
 
     module.exports = router;

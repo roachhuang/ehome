@@ -32,7 +32,7 @@
 
         function inPut(pin) {
             $http.get('/gpio/' + pin).then(function (res) {
-                return res.data;    // inside data there is an object val
+                return res.data.value;    // inside data there is an object value
             });
         }
     }

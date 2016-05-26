@@ -9,19 +9,21 @@
 	function widgetsCtrl($http) {
 		var vm = this;
 		vm.sensors = [];
-		var i = readSensor();
+		vm.anyAlarm = false;
+		readSensor();
 
 		////////////////
 		function readSensor() {
 			$http.get('/sensors/').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
-				return (vm.sensors.window.status === true);
+				var i;
+				for (i = 0; i < vm.sensors.length; i++) {
+					vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+				}
             }, function (res) {
 				console.log(res.err);
 			});
 		}
-
-
 	}
 })();
 
