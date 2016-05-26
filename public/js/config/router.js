@@ -41,13 +41,17 @@ angular.module('myApp')
 				templateUrl: '../js/cron/cron.html',
 				controller: 'cronCtrl'
 			})
+			.when('/sensors', {				
+				templateUrl: '../js/sensors/sensors.html',
+				//controller: 'loginCtrl'
+			})
 			.when('/login', {
 				// set cronjob by devId
 				templateUrl: '../js/login/login.html',
 				controller: 'loginCtrl'
 			})
-			.when('/about', {				
-				templateUrl: '../views/about.html'				
+			.when('/about', {
+				templateUrl: '../views/about.html'
 			})
 			.otherwise({
 				controller: 'widgetsCtrl as vm',

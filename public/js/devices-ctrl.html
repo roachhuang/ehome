@@ -3,7 +3,7 @@
 	<p>
 		<div ng-repeat='device in devices'>
 			<!-- passing in param (device) into the url -->
-			<button type="button" ng-click='onOff(device)' ng-class="device.status===1? 'btn btn-md btn-block btn-danger' : 'btn btn-md btn-block btn-success'"><h4 class='text-left'>
+			<button type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-md btn-block btn-danger' : 'btn btn-md btn-block btn-success'"><h4 class='text-left'>
 				<i class="fa fa-power-off fa" aria-hidden="true"></i>
 				&nbsp; {{device.name}}</h4></button>
 		</div>
