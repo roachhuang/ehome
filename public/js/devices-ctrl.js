@@ -22,6 +22,7 @@
                     vm.devices[i].status = vm.pinStatus(vm.devices[i].pin);
                 }
             //}, 500); // setInterval to .5s
+
         }
 
         vm.onOff = function (device) {

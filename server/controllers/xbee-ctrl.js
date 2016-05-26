@@ -14,7 +14,7 @@ module.exports = function (sensors) {
 
     // All frames parsed by the XBee will be emitted here
     xbee.API.on('frame_object', function (frame) {
-        //console.log('>>', frame);
+        console.log('>>', frame);
         sensors.window.getStatus(frame);
         // i/o data received
     });
