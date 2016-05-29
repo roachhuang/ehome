@@ -4,12 +4,19 @@
 // port defined in server/config/env/*.js file
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has to be before config coz config reads it
+var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE);
+//    '/.credentials/';
+var TOKEN_PATH = 'token.json';
+
+
 
 var express = require('express');
 var app = express();
+
 var config = require('./server/config/config')[env];
 // activate sensors
 var sensorObj = require('./server/config/sensor-obj')();
+var token;
 //require('./server/controllers/xbee-ctrl')(sensors);
 
 require('./server/config/express')(app, config);
@@ -39,3 +46,4 @@ app.use('/sensors', sensors);
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');
 });
+

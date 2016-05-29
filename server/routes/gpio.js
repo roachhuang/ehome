@@ -11,9 +11,23 @@ var gpioController = require('../controllers/gpio-ctrl')();
 * create application/x-www-form-urlencoded parser
 *  var urlencodedParser = bodyParser.urlencoded({ extended: false })
 */
+/*
+var fs = require('fs');
+
+router.all('*', function (req, res, next) {
+    fs.readFile('token.json', function (err, token) {
+        if (err) {
+            res.redirect('http://localhost:3000/auth/google/');
+        } else {
+            token = token.toString();
+            next();
+        }
+    });
+})
+*/
 
 router.route('/:pin')
-    .get(gpioController.get)    // return 0 or 1
-    .post(gpioController.post);
+        .get(gpioController.get)    // return 0 or 1
+        .post(gpioController.post);
 
-    module.exports = router;
+module.exports = router;

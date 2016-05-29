@@ -10,8 +10,7 @@
     mainCtrl.$inject = ['$scope', '$http'];
     function mainCtrl($scope, $http) {
         var vm = $scope;
-        vm.apod = {};
-        vm.yahoo = {};
+        vm.apod = {}, vm.yahoo = {}, vm.hasAuthorized;
         //vm.devices = [];
 
         activate();
@@ -19,20 +18,19 @@
         ////////////////
 
         function activate() {
-            /*
-            vm.d1 = new Device('bedRoom', 1);
-            vm.d2 = new Device('livingRoom', 2);
-            vm.d3 = new Device('kitchen', 3);
-            vm.devices.push(vm.d1);
-            vm.devices.push(vm.d2);
-            vm.devices.push(vm.d3);
-            */
+            $http.get('/users/token').then(function (res) {
+                if (res.data.token != null) {
+                    vm.hasAuthorized = true;
+                } else {
+                    vm.hasAuthorized = false;
+                }
+            });
             /*
             vm.$route = $route;
             vm.$location = $location;
             vm.$routeParams = $routeParams;
             */
-            
+
             $http.get('/api/yahoo').then(function (res) {
                 vm.yahoo = res.data.query.results.channel;
             });
