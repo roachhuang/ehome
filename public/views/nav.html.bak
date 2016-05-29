@@ -1,0 +1,32 @@
+<nav>
+    <ul>
+        <li><a href='#/'>Services</a>
+            <span class='additional'>Offerings and prices</span>
+        </li>
+        <li><a href='#/'>Services</a>
+            <span class='additional'>Offerings and prices</span>
+        </li>
+        <li><a href='#/'>Services</a>
+            <span class='additional'>Offerings and prices</span>
+        </li>
+        <li><a href='#/'>Services</a>
+            <span class='additional'>Offerings and prices</span>
+        </li>
+    </ul>
+</nav>
+<!-- mobile ver -->
+<nav class='nav navbar navbar-default navbar-static role=navigation'>
+    <div class="container">
+        <div class='navbar-header'>
+            <a ng-href="#" class='navbar-brand'>Horizontal navbar</a>
+        </div>
+        <ul class='nav navbar-nav'>
+            <li><a ng-href="template">Home</a></li>
+            <li><a ng-href="template">Home</a></li>
+            <li><a ng-href="template">Home</a></li>
+        </ul>
+        <ul class='nav navbar-nav navbar-right'>
+            <li><a ng-href="#/template">Log in</a></li>
+        </ul>
+    </div>
+</nav>
