@@ -1,10 +1,12 @@
 var express = require('express');
 var morgan = require('morgan');
+// parse body into json obj and save it to res.body
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 module.exports = function (app, config) {
+    // bodyParser looks at the body & see if it has any json obj in it. if so, take the json obj & add it to res.body.
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
         extended: true

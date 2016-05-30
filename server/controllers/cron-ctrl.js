@@ -3,10 +3,40 @@ var CronJob = require('cron').CronJob;
 var request = require('request');
 
 module.exports = function () {
+    crons = [];
 
     return {
-        set: set
+        set: set,
+        get: get,
+        getById: getById,
+        post: post,
+        put: put,
+        delete: deleteById
     };
+
+    function get(req, res) {
+        res.json(crons);
+    }
+    function getById(req, res) {
+        var id = req.params.id;
+        res.send(crons[id]);
+    }
+    function post(req, res) {
+        crons.push(req.body);
+        res.status(201).send(crons);
+
+    }
+    // update
+    function put(req, res) {
+        var id = req.params.id;
+        crons[id] = req.body;
+        res.json(crons);
+    }
+    function deleteById(req, res) {
+        var id = req.params.id;
+        crons.splice(id, 1);
+        res.status(204).send('removed');
+    }
 
     //////////////////////////////////////////////////////////////////////////
     function set(req, res) {
