@@ -8,8 +8,6 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPRO
 //    '/.credentials/';
 var TOKEN_PATH = 'token.json';
 
-
-
 var express = require('express');
 var app = express();
 

@@ -23,7 +23,9 @@ module.exports = function () {
     }
     function post(req, res) {
         crons.push(req.body);
-        res.status(201).send(crons);
+        // convert array to json obj
+        //res.status(201).send(JSON.stringify(crons));
+        res.status(201).send('saved');
 
     }
     // update
