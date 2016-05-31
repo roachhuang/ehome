@@ -17,7 +17,7 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.route('/')
-    .set(cronCtrl.set)
+    //.set(cronCtrl.set)
     .post(cronCtrl.post)
     .get(cronCtrl.get)
 /*    

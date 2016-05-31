@@ -7,16 +7,33 @@
 
     cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService', '$http'];
     function cronCtrl($scope, $routeParams, deviceService, $http) {
-        var vm = $scope;
-        var itemName;
-
+        var vm = $scope, itemName;
+        /*
+                $scope.cron = Cron.get({id: $routeParams.id});
+                $scope.crons = Cron.query();
+                cron.$save(cronjob);
+                cron.$remove(id); 
+                cron.$update(cron);
+        */
         activate();
 
         ////////////////
 
         function activate() {
+            vm.cronJobs = [];
+            //vm.cronJobs[0] = {'id': 1, 'on':'', 'off':''};
+            //vm.cronJobs[1] = {'id': 2, 'on':'', 'off':''};
+            //vm.cronJobs[2] = {'id': 3, 'on':'', 'off':''};
+            //read cronjobs from localstorage.
+            vm.selectedDevice = deviceService[$routeParams.deviceId];
+            //vm.selectedDevice.cronJobs = [];
+            itemName = vm.selectedDevice.name;
+            console.log(localStorage.getItem(itemName));
+            vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
+            //$scope.getJobs();
+            // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {
-                count: 0,
+                id: 0,
                 on: '',
                 off: ''
             };
@@ -30,27 +47,29 @@
                 }
             };
             //selected device for setting up cronjob
-
-            vm.selectedDevice = deviceService[$routeParams.deviceId];
-            //vm.selectedDevice.cronJobs = [];
-            itemName = vm.selectedDevice.name;
-            // save all to local and read all from local
-            vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
-            //vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(vm.selectedDevice.name));
             console.log(vm.selectedDevice);
-
         }
 
-        vm.saveEdit = function (data) {
+        // data is from cron.html (tmpJob)
+        vm.addJob = function (job) {
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
-            angular.extend(vm.selectedDevice.cronJobs[data.count], data);
-            vm.selectedDevice.saveJobs2LocalStorage();
-            callServerCron(data);
+            //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
+            vm.cronJobs.push(job);
+            localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
+            //vm.tmpJob.on = vm.tmpJob.off = '';
+            //vm.selectedDevice.saveJobs2LocalStorage();
+            //callServerCron(job);
         };
 
-        vm.cancelEdit = function (device) {
-            //vm.count = 0;
+        vm.removeJob = function (job) {
+            vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
+            var json = JSON.parse(localStorage["itemName"]);
+            for (i = 0; i < json.length; i++)
+                if (json[i].id == 'job') json.splice(i, 1);
+            //localStorage["itemName"] = JSON.stringify(json);
+            localStorage.removeItem(itemName);
+            //localStorage[itemName].splice(localStorage[itemName].indexOf(job), 1);
         };
 
         vm.addNextCronJob = function (data) {
@@ -60,13 +79,13 @@
                 angular.extend(vm.selectedDevice.cronJobs[data.count], data);
                 vm.selectedDevice.saveJobs2LocalStorage();
                 vm.tmpJob.count++;
-                callServerCron(data);
+                //callServerCron(data);
             } else {
                 console.error(data.count);    // need to take care
             }
         };
 
-        //////////////////////////////////////////////////////
+        /*
         function callServerCron(job) {
             var req = {
                 method: 'POST',
@@ -84,5 +103,6 @@
                 console.log(data);
             });
         }
+        */
     }
 })();

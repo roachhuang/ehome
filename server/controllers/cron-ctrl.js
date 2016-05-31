@@ -3,7 +3,7 @@ var CronJob = require('cron').CronJob;
 var request = require('request');
 
 module.exports = function () {
-    crons = [];
+    var crons = [];
 
     return {
         set: set,
@@ -23,7 +23,9 @@ module.exports = function () {
     }
     function post(req, res) {
         crons.push(req.body);
-        res.status(201).send(crons);
+        // convert array to json obj
+        //res.status(201).send(JSON.stringify(crons));
+        res.status(201).send('saved');
 
     }
     // update

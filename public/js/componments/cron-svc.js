@@ -7,7 +7,7 @@
 
     Cron.$inject = ['$resource'];
     function Cron($resource) {
-        return $resource('/cron/:id', {}, {
+        return $resource('/cron/:id', {id: '@id'}, {
             update: {
                 method: 'PUT'
             }
