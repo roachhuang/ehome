@@ -3,7 +3,7 @@ var CronJob = require('cron').CronJob;
 var request = require('request');
 
 module.exports = function () {
-    crons = [];
+    var crons = [];
 
     return {
         set: set,

@@ -14,10 +14,10 @@ var express = require('express');
 var app = express();
 
 var config = require('./server/config/config')[env];
-// activate sensors
+// create sensor objects - window and door
 var sensorObj = require('./server/config/sensor-obj')();
 var token;
-//require('./server/controllers/xbee-ctrl')(sensors);
+require('./server/controllers/xbee-ctrl')(sensorObj);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
