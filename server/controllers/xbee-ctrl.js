@@ -1,9 +1,10 @@
 'use strict';
 var email = require('./emailController');
+
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbeeObj = require('../config/xbee-obj')();
 
-// sensor is passed in from app.js
+// sensor object is passed in from app.js
 module.exports = function (sensors) {
     xbee.serialport.on('open', function () {
         console.log('port opened.');

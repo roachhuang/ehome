@@ -9,11 +9,12 @@
     function deviceService() {
         var devices = [];
         // physical pin 11 = GPIO17
+        // pi-gpio is using pin number instead of GPIO pin.
         devices.push(new Device('bedRoom', 11));
         devices.push(new Device('livingRoom', 12));
-        devices.push(new Device('kitchen', 11));       
+        devices.push(new Device('kitchen', 11));
         return devices;
-        
+
         ////////////////
         //function exposedFn() { }
     }
@@ -25,7 +26,7 @@
             this.id = nextId++;
             this.name = name;
             this.status = false;
-            this.pin = GpioPin; 
+            this.pin = GpioPin;
             this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing
@@ -87,7 +88,7 @@
         // save changes to local storage
         this.saveCronData();
     };
-  
+
     // reset cronjob
     Device.prototype.resetCron = function () {
         this.cron = [];
