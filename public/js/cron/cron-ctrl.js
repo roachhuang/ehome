@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('cronCtrl', cronCtrl);
 
-    cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService', '$http'];
-    function cronCtrl($scope, $routeParams, deviceService, $http) {
+    cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService'];
+    function cronCtrl($scope, $routeParams, deviceService) {
         var vm = $scope, itemName;
         /*
                 $scope.cron = Cron.get({id: $routeParams.id});
@@ -20,7 +20,7 @@
         ////////////////
 
         function activate() {
-            vm.cronJobs = [];  
+            vm.cronJobs = [];
             //read cronjobs from localstorage.
             vm.selectedDevice = deviceService[$routeParams.deviceId];
             //vm.selectedDevice.cronJobs = [];
@@ -29,11 +29,7 @@
             vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
-            vm.tmpJob = {
-                id: 0,
-                on: '',
-                off: ''
-            };
+            vm.tmpJob = {};
             //vm.tmpJob.count = 0;
             vm.myConfig = {
                 options: {
@@ -49,10 +45,11 @@
 
         // data is from cron.html (tmpJob)
         vm.addJob = function (job) {
+            var myJob = JSON.parse(JSON.stringify(job));
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
             //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
-            vm.cronJobs.push(job);
+            vm.cronJobs.push(myJob);
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
@@ -61,12 +58,12 @@
 
         vm.removeJob = function (job) {
             vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
-            var json = JSON.parse(localStorage["itemName"]);
-            for (i = 0; i < json.length; i++)
-                if (json[i].id == 'job') json.splice(i, 1);
-            //localStorage["itemName"] = JSON.stringify(json);
-            localStorage.removeItem(itemName);
-            //localStorage[itemName].splice(localStorage[itemName].indexOf(job), 1);
+            
+            localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
+            
+            //var json = JSON.parse(localStorage[itemName]);
+            //json.splice(json.indexOf(job), 1);         
+            //localStorage[itemName] = JSON.stringify(json);
         };
 
         vm.addNextCronJob = function (data) {

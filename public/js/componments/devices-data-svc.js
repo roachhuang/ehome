@@ -27,7 +27,7 @@
             this.name = name;
             this.status = false;
             this.pin = GpioPin;
-            this.cronJobs = [{ count: 0, on: '', off: '' }];
+            //this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing
             //this.readCronJobs();

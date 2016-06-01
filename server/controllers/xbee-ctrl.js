@@ -2,7 +2,7 @@
 var email = require('./emailController');
 
 // init xbee - setup baud rate, com port,  mode, etc.
-var xbeeObj = require('../config/xbee-obj')();
+var xbee = require('../config/xbee-obj')();
 
 // sensor object is passed in from app.js
 module.exports = function (sensors) {
