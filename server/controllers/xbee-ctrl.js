@@ -1,6 +1,7 @@
 'use strict';
 var email = require('./emailController');
-var xbee = require('../config/xbee')();
+// init xbee - setup baud rate, com port,  mode, etc.
+var xbeeObj = require('../config/xbee-obj')();
 
 // sensor is passed in from app.js
 module.exports = function (sensors) {

@@ -4,18 +4,15 @@
 // port defined in server/config/env/*.js file
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has to be before config coz config reads it
-var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE);
-//    '/.credentials/';
-var TOKEN_PATH = 'token.json';
 
 var express = require('express');
 var app = express();
 
 var config = require('./server/config/config')[env];
-// activate sensors
+// init sensor object - window and door
 var sensorObj = require('./server/config/sensor-obj')();
-var token;
-//require('./server/controllers/xbee-ctrl')(sensors);
+
+//require('./server/controllers/xbee-ctrl')(sensorsObj);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);

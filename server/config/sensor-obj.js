@@ -17,6 +17,7 @@ module.exports = function () {
         if (frame.digitalSamples.DIO4 === 1) {
             // window get opened
             this.status = true;
+            // fire open event
             vm.emit('open');
             /*
             request.get('http://localhost:3000/', function(err, res, body){

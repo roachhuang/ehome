@@ -20,10 +20,7 @@
         ////////////////
 
         function activate() {
-            vm.cronJobs = [];
-            //vm.cronJobs[0] = {'id': 1, 'on':'', 'off':''};
-            //vm.cronJobs[1] = {'id': 2, 'on':'', 'off':''};
-            //vm.cronJobs[2] = {'id': 3, 'on':'', 'off':''};
+            vm.cronJobs = [];  
             //read cronjobs from localstorage.
             vm.selectedDevice = deviceService[$routeParams.deviceId];
             //vm.selectedDevice.cronJobs = [];

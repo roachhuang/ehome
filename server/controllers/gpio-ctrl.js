@@ -39,9 +39,13 @@ module.exports = function (req, res) {
         gpio.open(pin, 'output', function (err) {
 
             gpio.write(pin, val, function (err) {
-                if (err) throw err;
-                gpio.close(pin);
-                res.send(200);
+                if (err) {
+                    gpio.close(pin);
+                    res.status(500).send(err);
+                } else {
+                    gpio.close(pin);
+                    res.send(200);
+                }
             });
         });
     };
@@ -82,7 +86,6 @@ module.exports = function (req, res) {
         post: post,
         get: get
     };
-
 
 };
 
