@@ -10,9 +10,9 @@
         var devices = [];
         // physical pin 11 = GPIO17
         // pi-gpio is using pin number instead of GPIO pin.
-        devices.push(new Device('bedRoom', 11));
-        devices.push(new Device('livingRoom', 12));
-        devices.push(new Device('kitchen', 11));
+        devices.push(new Device('bedRoom', 17));
+        devices.push(new Device('livingRoom', 18));
+        devices.push(new Device('kitchen', 17));
         return devices;
 
         ////////////////

@@ -17,12 +17,13 @@
             // deviceService is a singleton
             vm.devices = deviceService;
             var i, pin;
-            //setInterval(function () {
+
+            setTimeout(function () {
                 for (i in vm.devices) {
                     pin = vm.devices[i].pin;
                     vm.devices[i].status = pinStatus(pin);
                 }
-            //}, 500); // setInterval to .5s
+            }, 500); // setInterval to .5s
 
         }
 
