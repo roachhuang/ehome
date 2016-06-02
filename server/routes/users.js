@@ -82,7 +82,8 @@ router.get('/saveimage', function (req, res) {
             });
             // send email w/ ipcma img attachment
             //todo: can't set headers after they are sent
-            res.redirect('/api/email');
+            // move email addr to config file?
+            res.redirect('/api/email/');
 
         }
 
