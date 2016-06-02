@@ -87,6 +87,7 @@ section.col-sm-4 {
 }
 
 .pdsa-summary-block .summary-body .summary-line-2 {
+	color: whilte;
 	text-align: right;
 	font-size: medium;
 }
@@ -109,7 +110,7 @@ section.col-sm-4 {
 
 .summary-footer {
 	text-shadow: black;
-	color: black;
+	color: white;
 }
 .summary-footer a {
 	color: white;
@@ -121,7 +122,7 @@ section.col-sm-4 {
 }
 
 .pdsa-block-default {
-	color: #fff;
+	color: #fff; 
 	background-color: #333;
 }
 
