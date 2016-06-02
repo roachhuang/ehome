@@ -22,6 +22,7 @@ for pi-gpio lib, pin = physical pin number
 var Gpio = require('onoff').Gpio;
 //var Gpio = require('pi-gpio');
 module.exports = function () {
+    var myIo = [];
 
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
@@ -34,17 +35,18 @@ module.exports = function () {
         console.log(pin);
         console.log(val);
         //console.log(req.body.val);
-
         io = new Gpio(pin, 'out');
+        myIo[pin.toString] = io;
         io.writeSync(val);
         //io.unexport();
-        res.send(200);
+        res.send(200); 
     };
     var get = function (req, res) {
         var io, value, pin = req.params.pin;
         if (pin > 0 && pin < 28) {
             console.log(pin);
-            //io = new Gpio(pin, 'in');     // this will reset the
+            //io = new Gpio(pin, 'in');     // this will reset the output
+            io = myIo[pin.toString];
             value = io.readSync();
             //io.unexport();
             res.json(200, { value: value });

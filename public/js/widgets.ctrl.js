@@ -23,7 +23,7 @@
 			$http.get('/sensors').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
 				var i;
-				for (i = 0; i < vm.sensors.length; i++) {
+				for (i in vm.sensors) {
 					vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
 				}
             }, function (res) {

@@ -27,6 +27,7 @@ router.get('/apod', nasa.pixDaily);
 // sends failure Login state back to angular
 router.get('/yahoo', yahoo.weather);
 
+//todo: no route for email is requried. remove it later.
 router.get('/email', email.sendEmail);
 
 router.get('/saveimage', function () {

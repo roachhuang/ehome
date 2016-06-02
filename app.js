@@ -19,6 +19,10 @@ require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
 // require(./server/config/mongoose')(config);
 
+// test purpose
+var sms = require('./server/controllers/sms-ctrl');
+sms();
+
 // render index.html
 app.get('/', function (req, res) {
     res.sendFile(config.rootPath + '/public/views/index.html');

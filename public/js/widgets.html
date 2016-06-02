@@ -68,7 +68,9 @@
 				</div>
 				<div class='summary-body divLink'>
 					<div class='summary-line-1'><h3>感應數據讀取</h3></div>
-					<div class='summary-line-2'>{{vm.sensors.window.name}}-&nbsp{{vm.sensors.window.status}}</div>
+					<div class='summary-line-2' ng-repeat='sensor in sensors'>
+						{{sensor.name}}: {{sensor.status}}
+					</div>
 				</div>
 				<div class="summary-footer">
 					<h4><em>感應器狀態<em></h4>
