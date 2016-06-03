@@ -22,6 +22,7 @@
                 for (i in vm.devices) {
                     pin = vm.devices[i].pin;
                     vm.devices[i].status = pinStatus(pin);
+                    console.log(pin.toString() + ':' + vm.devices[i].status);
                 }
             }, 500); // setInterval to .5s
 

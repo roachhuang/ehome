@@ -36,17 +36,18 @@ module.exports = function () {
         console.log(val);
         //console.log(req.body.val);
         io = new Gpio(pin, 'out');
-        myIo[pin.toString] = io;
+        //Object.assign(myIo[pin.toString()], io);
         io.writeSync(val);
         //io.unexport();
-        res.send(200); 
+        res.send(200);
     };
     var get = function (req, res) {
         var io, value, pin = req.params.pin;
         if (pin > 0 && pin < 28) {
             console.log(pin);
             //io = new Gpio(pin, 'in');     // this will reset the output
-            io = myIo[pin.toString];
+            io = myIo[pin.toString()];
+            console.log(io);
             value = io.readSync();
             //io.unexport();
             res.json(200, { value: value });
