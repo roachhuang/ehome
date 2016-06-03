@@ -24,6 +24,16 @@ var Gpio = require('pi-gpio');
 module.exports = function () {
     var myIo = [];
 
+    var initIo = function (req, res) {
+        pin = req.params.pin
+        try {
+            myIo[pin] = new Gpio(pin, 'in');
+            res.send(200);
+        } catch (err) {
+            res.send(500, err);
+        }
+    }
+
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
@@ -39,14 +49,14 @@ module.exports = function () {
         myIo[pin.toString] = io;
         io.writeSync(val);
         //io.unexport();
-        res.send(200); 
+        res.send(200);
     };
     var get = function (req, res) {
         var io, value, pin = req.params.pin;
         if (pin > 0 && pin < 28) {
             console.log(pin);
             //io = new Gpio(pin, 'in');     // this will reset the output
-            io = myIo[pin.toString];
+            io = myIo[pin];
             value = io.readSync();
             //io.unexport();
             res.json(200, { value: value });
@@ -55,7 +65,8 @@ module.exports = function () {
 
     return {
         post: post,
-        get: get
+        get: get,
+        initIo: initIo
     };
 };
 

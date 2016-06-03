@@ -9,14 +9,19 @@
     function gpioService($http) {
         var service = {
             inPut: inPut,
-            outPut: outPut
+            outPut: outPut,
+            initIo: initIo
         };
 
         return service;
 
         //////////////////////////////////////////////////
         //  GPIO class
-
+        function initIo(pin) {
+            $http.get('/gpio/initIo' + pin).then(function(res) {
+                return true;
+            })
+        }
         function outPut(value, pin) {
             var val = value;
             var req = {
