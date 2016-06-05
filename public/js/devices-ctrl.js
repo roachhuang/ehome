@@ -15,17 +15,22 @@
 
         function activate() {
             // deviceService is a singleton
-            vm.devices = deviceService;
             var i, pin;
+            vm.devices = deviceService;
+            for (i in vm.devices) {
+                pin = vm.devices[i].pin;
+                gpioService.initIo(pin);
+            }
 
             setTimeout(function () {
                 for (i in vm.devices) {
                     pin = vm.devices[i].pin;
-                    vm.devices[i].status = pinStatus(pin);
+                    gpioService.inPut(pin).then(function (value) {
+                        vm.devices[i].status = value;
+                    });
                     console.log(pin.toString() + ':' + vm.devices[i].status);
                 }
-            }, 500); // setInterval to .5s
-
+            }, 100); // setInterval to .5s
         }
 
         vm.onOff = function (device) {
@@ -33,12 +38,6 @@
             device.status = device.status ^ 1;
             gpioService.outPut(device.status, device.pin);
         };
-        //////////////////
-        function pinStatus(pin) {
-            var value;
-            // return 0 or 1
-            value =  gpioService.inPut(pin);
-            return value;
-        };
+
     }
 })();

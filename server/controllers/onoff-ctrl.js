@@ -24,6 +24,21 @@ var Gpio = require('onoff').Gpio;
 module.exports = function () {
     var myIo = [];
 
+    var initIo = function (req, res) {
+        var pin = req.params.pin;
+        if (typeof (myIo[pin]) != 'object') {
+            myIo[pin] = new Gpio(pin, 'in');
+            console.log('pin in server' + pin);
+            console.log(myIo.length);
+            console.log('process on sigint');
+            process.on('SIGINT', function () {
+                myIo[17].unexport();
+                myIo[18].unexport();
+            });
+        }
+        res.send(200);
+    }
+
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
@@ -38,7 +53,6 @@ module.exports = function () {
         io = new Gpio(pin, 'out');
         //Object.assign(myIo[pin.toString()], io);
         io.writeSync(val);
-        //io.unexport();
         res.send(200);
     };
     var get = function (req, res) {
@@ -46,18 +60,19 @@ module.exports = function () {
         if (pin > 0 && pin < 28) {
             console.log(pin);
             //io = new Gpio(pin, 'in');     // this will reset the output
-            io = myIo[pin.toString()];
-            console.log(io);
+
+            io = myIo[pin];
             value = io.readSync();
-            //io.unexport();
-            res.json(200, { value: value });
+            res.status(200).send({ value: value });
         }
     };
 
     return {
         post: post,
-        get: get
+        get: get,
+        initIo: initIo
     };
+
 };
 
 

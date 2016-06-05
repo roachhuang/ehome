@@ -25,7 +25,7 @@
         return function Device(name, GpioPin) {
             this.id = nextId++;
             this.name = name;
-            this.status = false;
+            this.status = 0;    //toto: 0 or null (init state?)
             this.pin = GpioPin;
             //this.cronJobs = [{ count: 0, on: '', off: '' }];
 

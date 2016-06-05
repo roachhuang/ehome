@@ -20,8 +20,8 @@ require('./server/config/my-passport')(app, config);
 // require(./server/config/mongoose')(config);
 
 // test purpose
-var sms = require('./server/controllers/sms-ctrl');
-sms();
+//var sms = require('./server/controllers/sms-ctrl');
+//sms();
 
 // render index.html
 app.get('/', function (req, res) {
