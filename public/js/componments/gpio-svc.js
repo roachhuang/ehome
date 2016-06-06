@@ -4,10 +4,10 @@
     angular
         .module('app.gpio', [])
         .factory('gpioService', gpioService);
-
-    gpioService.$inject = ['$http'];
-    function gpioService($http) {
+    gpioService.$inject = ['$http', '$q'];
+    function gpioService($http, $q) {
         var service = {
+            value: '',
             inPut: inPut,
             outPut: outPut,
             initIo: initIo
@@ -18,9 +18,11 @@
         //////////////////////////////////////////////////
         //  GPIO class
         function initIo(pin) {
-            $http.get('/gpio/initIo' + pin).then(function(res) {
-                return true;
-            })
+            $http.get('/gpio/initIo/' + pin).then(function (res) {
+                return res.status;
+            }, function (res) {
+                return res.status;
+            });
         }
         function outPut(value, pin) {
             var val = value;
@@ -36,9 +38,20 @@
         }
 
         function inPut(pin) {
-            $http.get('/gpio/' + pin).then(function (res) {
-                return res.data.value;    // inside data there is an object value
+            var def = $q.defer();
+
+            $http.get('/gpio/' + pin).success(function (res) {
+                service.value = res.value;
+                def.resolve(res.value);
+            }).error(function () {
+                def.reject('failed to get IO status');
             });
+            return def.promise;
         }
+        /*
+        $http.get('/gpio/' + pin).then(function (res) {
+            return res.data.value;
+        });
+*/
     }
 })();

@@ -19,8 +19,8 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 for pi-gpio lib, pin = physical pin number
 */
 
-//var gpio = require("pi-gpio");
-var gpio = {};
+var gpio = require("pi-gpio");
+//var gpio = {};
 module.exports = function (req, res) {
 
     var post = function (req, res) {
@@ -43,7 +43,7 @@ module.exports = function (req, res) {
                     gpio.close(pin);
                     res.status(500).send(err);
                 } else {
-                    gpio.close(pin);
+                    //gpio.close(pin);
                     res.send(200);
                 }
             });
@@ -54,19 +54,20 @@ module.exports = function (req, res) {
         if (pin > 0 && pin < 20) {
             // just read it w/o opening it as input, so its status won't be reset after reading.
             //gpio.open(pin, 'input', function (err) {
+                //if (err) throw err;
+                gpio.read(pin, function (err, value) {
+                    //gpio.close(pin);
+                    if (err) {
+                        res.status(500).send(err);
+                    } else {
+                        console.log('read pin ' + pin + ' value = ' + value);
+                        res.json(200, { value: value });
+                    }
+                });
 
-            gpio.read(pin, function (err, value) {
-                // gpio.close(pin);
-                if (err) {
-                    res.status(500).send(err);
-                } else {
-                    console.log('read pin ' + pin + ' value = ' + value);
-                    res.json(200, { value: value });
-                }
-            });
-        }
-    };
-
+            //});
+        };
+    }
     process.on('SIGINT', function () {
         var i;
 

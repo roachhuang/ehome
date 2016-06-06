@@ -19,19 +19,24 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 (sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
-//var Gpio = require('onoff').Gpio;
-var Gpio = require('pi-gpio');
+var Gpio = require('onoff').Gpio;
+//var Gpio = require('pi-gpio');
 module.exports = function () {
     var myIo = [];
 
     var initIo = function (req, res) {
-        pin = req.params.pin
-        try {
+        var pin = req.params.pin;
+        if (typeof (myIo[pin]) != 'object') {
             myIo[pin] = new Gpio(pin, 'in');
-            res.send(200);
-        } catch (err) {
-            res.send(500, err);
+            console.log('pin in server' + pin);
+            console.log(myIo.length);
+            console.log('process on sigint');
+            process.on('SIGINT', function () {
+                myIo[17].unexport();
+                myIo[18].unexport();
+            });
         }
+        res.send(200);
     }
 
     var post = function (req, res) {
@@ -46,9 +51,8 @@ module.exports = function () {
         console.log(val);
         //console.log(req.body.val);
         io = new Gpio(pin, 'out');
-        myIo[pin.toString] = io;
+        //Object.assign(myIo[pin.toString()], io);
         io.writeSync(val);
-        //io.unexport();
         res.send(200);
     };
     var get = function (req, res) {
@@ -56,10 +60,10 @@ module.exports = function () {
         if (pin > 0 && pin < 28) {
             console.log(pin);
             //io = new Gpio(pin, 'in');     // this will reset the output
+
             io = myIo[pin];
             value = io.readSync();
-            //io.unexport();
-            res.json(200, { value: value });
+            res.status(200).send({ value: value });
         }
     };
 
@@ -68,6 +72,7 @@ module.exports = function () {
         get: get,
         initIo: initIo
     };
+
 };
 
 
