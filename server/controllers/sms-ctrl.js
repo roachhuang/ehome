@@ -1,23 +1,10 @@
 'use strict';
-var config = {
-    "disable": true,
-    "userkey": "EPT34QUZU30U",
-    "password": "0916@tpe",
-    "originator": "222607",
-    // Optional: 
-    //"deliveryNotificationUrl": "http://example.com/success",
-    //"nonDeliveryNotificationUrl": "http://example.com/failure"
-};
 
-var sms = require('mod-aspsms')(config);
+var TMClient = require('textmagic-rest-client');
 
 module.exports = function () {
-    /*
-    var msg = 'Test SMS from NodeJs';
-    var addressBook = ['+886922719061'];
-    for (var i = 0; i < addressBook.length; i++) {
-        sms.send(addressBook[i], msg);
-    }
-*/
-
+    var c = new TMClient('markhuang', 'g4sxO6FrzpOordGvKJNVcgjX45f0sy');
+    c.Messages.send({ text: '客廳窗戶被開啓!', phones: '886922719061' }, function (err, res) {
+        console.log('Messages.send()', err, res);
+    });
 }
