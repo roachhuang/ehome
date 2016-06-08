@@ -1,5 +1,5 @@
 'use strict';
-var CronJob = require('cron').CronJob;
+var cron = require('crontab');
 var request = require('request');
 
 module.exports = function () {
@@ -42,34 +42,26 @@ module.exports = function () {
 
     //////////////////////////////////////////////////////////////////////////
     function set(req, res) {
-        var cronTime, val = req.body.val, pin = req.body.pin;
+        var job = req.body.job, pin = req.body.pin;
+        var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
 
         if (!req.body) {
             return res.sendStatus(400);
         }
-        cronTime = '0 '.concat(req.body.cron);
 
-        console.log(cronTime);
+        console.log(job.on);
 
         // set cron job on server
-        try {
-            var job = new CronJob(cronTime, function () {
-                //runTask(pin, val);
-                console.log(Date.now());
-                //res.sendStatus(200);
-            }, null, true);
-        } catch (ex) {
-            console.log('invalid pattern');
-            res.sendStatus(500);
-        }
-        /*
-                var cb = function (res) {
-                    res.on('end', function () {
-                        console.log('gpio end');
-                    });
-                };
-        */
 
+        cron.load(function (err, crontab) {
+            var job0 = crontab.create(cmd0, job.off);
+            var job1 = crontab.create(cmd1, job.on);
+            crontab.save(function(err, crontab){
+                console.log(err);
+            })
+        })
+        res.sendStatus(200);
     }
 
     //////////////////////////////////////////////////////////////////////////

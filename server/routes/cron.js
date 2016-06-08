@@ -18,7 +18,7 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 
 router.route('/')
     //.set(cronCtrl.set)
-    .post(cronCtrl.post)
+    .post(cronCtrl.set)
     .get(cronCtrl.get)
 /*
 router.use('/:id', function(req, res, next){

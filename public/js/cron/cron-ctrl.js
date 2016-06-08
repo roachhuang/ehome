@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('cronCtrl', cronCtrl);
 
-    cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService'];
-    function cronCtrl($scope, $routeParams, deviceService) {
+    cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService', '$http'];
+    function cronCtrl($scope, $routeParams, deviceService, $http) {
         var vm = $scope, itemName;
         /*
                 $scope.cron = Cron.get({id: $routeParams.id});
@@ -53,7 +53,7 @@
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            //callServerCron(job);
+            callServerCron(job, vm.selectedDevice.pin);
         };
 
         vm.removeJob = function (job) {
@@ -79,24 +79,25 @@
             }
         };
 
-        /*
-        function callServerCron(job) {
+        
+        function callServerCron(job, pin) {
             var req = {
                 method: 'POST',
                 url: '/cron',
                 //transformRequest: transformRequestAsFormPost,
-                data: { cron: job.on, val: 1 } // to do: '1' or 1 or can use false
+                data: { job: job, pin: pin} // to do: '1' or 1 or can use false
             };
             // job: on
             $http(req).then(function (data) {
                 console.log(data);
             });
-            // job: off
+            /* job: off
             req.data = { cron: job.off, val: '0' };
             $http(req).then(function (data) {
                 console.log(data);
             });
+            */
         }
-        */
+       
     }
 })();
