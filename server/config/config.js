@@ -8,7 +8,12 @@ module.exports = {
 		port: process.env.PORT || 3000,
 		clientId: '899860195119-vtv54rldfqcisk2c9mcqcv6um9jppacf.apps.googleusercontent.com',
 		clientSecret: '3mcYjSf-XBPy4ZB9KPffNTzP',
-		callbackURL: 'http://ubuy.asuscomm.com:3000/auth/google/callback'
+		callbackURL: 'http://ubuy.asuscomm.com:3000/auth/google/callback',
+		textMagic: {
+			key: 'g4sxO6FrzpOordGvKJNVcgjX45f0sy',
+			appName: 'ehome',
+			username: 'markhuang'
+		}
 	},
 	production: {
 		db: '',
