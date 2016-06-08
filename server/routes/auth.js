@@ -20,7 +20,8 @@ router.route('/google')
 	.get(passport.authenticate('google', {
 		/* scope tells google what data u want to access; 'profile' is a must scope and must enable google+ api */
 		access_type: 'offline',
-		scope: ['https://www.googleapis.com/auth/drive',					
+		scope: ['https://www.googleapis.com/auth/drive.file',
+				'https://www.googleapis.com/auth/userinfo.email',					
 				'profile']
 	}));
 

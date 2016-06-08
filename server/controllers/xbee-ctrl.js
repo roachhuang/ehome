@@ -1,5 +1,6 @@
 'use strict';
 var email = require('./emailController');
+//var sms = require('./);
 
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbee = require('../config/xbee-obj')();
@@ -26,8 +27,9 @@ module.exports = function (sensors) {
         // turn on spot light
         // activate alarm
         // there should be a limit of sending email and txt msg.
-        email.sendEmail();
+        email.sendEmail();            
         // send text msg
+        // sms(); 
         // start recording video or capture video image 10 times (one time per sec)
         // 7-eleven call police
         // alert.window = true;
