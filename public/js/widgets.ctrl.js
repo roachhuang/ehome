@@ -9,7 +9,7 @@
 	function widgetsCtrl($scope, $http, $window) {
 		// use $scope so we can inherit $scope from mainCtrl
 		var vm = $scope;
-		vm.sensors = [], vm.anyAlarm = false;
+		vm.sensors = [];
 
 		activate();
 
@@ -19,17 +19,23 @@
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			};
-
-			$http.get('/sensors').then(function (res) {
-                vm.sensors = res.data.sensors;    // inside data there is an object sensors
-				var i;
-				for (i in vm.sensors) {
-					vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
-				}
-            }, function (res) {
-				console.log(res.err);
-			});
+			// read sensors data every 2s
+			vm.myReading = setInterval(function () {
+				vm.anyAlarm = false;
+				$http.get('/sensors').then(function (res) {
+					vm.sensors = res.data.sensors;    // inside data there is an object sensors
+					var i;
+					for (i in vm.sensors) {
+						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+					}
+				}, function (res) {
+					console.log(res.err);
+				});
+			}, 2000);
 		}
+		vm.$on('$locationChangeStart', function (event) {
+			clearInterval(vm.myReading);
+		});
 	}
 })();
 
