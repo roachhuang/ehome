@@ -36,13 +36,13 @@ var storeToken = function (token) {
     try {
         fs.mkdirSync(TOKEN_DIR);
     } catch (err) {
-        if (err.code != 'EEXIST') {
+        if (err.code !== 'EEXIST') {
             throw err;
         }
     }
     fs.writeFile(TOKEN_PATH, JSON.stringify(token));
     console.log('Token stored to ' + TOKEN_PATH);
-}
+};
 
 router.get('/token', function (req, res) {
     var token;
@@ -75,7 +75,7 @@ router.get('/saveimage', function (req, res) {
                 },
                 body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
                 title: '1.jpg'
-            }
+            };
             request.post(options, function (err, res, body) {
                 if (err) throw err;
                 console.log('successful');

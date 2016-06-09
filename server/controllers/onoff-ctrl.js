@@ -27,7 +27,7 @@ module.exports = function () {
 
     var initIo = function (req, res) {
         var pin = req.params.pin;
-        if (typeof (myIo[pin]) != 'object') {
+        if (typeof (myIo[pin]) !== 'object') {
             myIo[pin] = new Gpio(pin, 'in');
             console.log('pin in server' + pin);
             console.log(myIo.length);
@@ -38,7 +38,7 @@ module.exports = function () {
             });
         }
         res.send(200);
-    }
+    };
 
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control

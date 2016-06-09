@@ -37,7 +37,7 @@ section.col-sm-4 {
 
 /*
 .img-responsive {
-	display: inline;	
+	display: inline;
 	border: 3px solid burlywood;
 	margin: 0px auto;
 }
@@ -108,7 +108,7 @@ section.col-sm-4 {
 	background-color: deepskyblue;
 }
 
-.summary-footer {
+.summary-footer#p {
 	text-shadow: black;
 	color: white;
 }
@@ -122,7 +122,7 @@ section.col-sm-4 {
 }
 
 .pdsa-block-default {
-	color: #fff; 
+	color: #fff;
 	background-color: #333;
 }
 
@@ -159,4 +159,3 @@ pdsa-summary-block:hover {
 	background-image: no-repeat;
 	margin: 2.1px 4.2px;
 }
-	

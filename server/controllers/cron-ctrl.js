@@ -57,10 +57,10 @@ module.exports = function () {
         cron.load(function (err, crontab) {
             var job0 = crontab.create(cmd0, job.off);
             var job1 = crontab.create(cmd1, job.on);
-            crontab.save(function(err, crontab){
+            crontab.save(function (err, crontab) {
                 console.log(err);
-            })
-        })
+            });
+        });
         res.sendStatus(200);
     }
 

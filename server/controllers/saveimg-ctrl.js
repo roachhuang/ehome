@@ -1,6 +1,7 @@
 'use strict';
 var TOKEN_PATH = 'token.json';
 var request = require('request');
+var fs = require('fs');
 
 module.exports = function () {
 
@@ -17,7 +18,7 @@ module.exports = function () {
                 uploadIpCamImgToCloude(token);
             }
         });
-    }
+    };
 
     var uploadIpCamImgToCloude = function (token) {
         var options = {
@@ -36,10 +37,10 @@ module.exports = function () {
             if (err) throw err;
             console.log('successful');
         });
-    }
+    };
 
     return {
         get: get
-    }
+    };
 
-}
+};
