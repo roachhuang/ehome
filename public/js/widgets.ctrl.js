@@ -18,7 +18,7 @@
 			if (vm.hasAuthorized === false) {
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
-			};
+			}
 			// read sensors data every 2s
 			vm.myReading = setInterval(function () {
 				vm.anyAlarm = false;
