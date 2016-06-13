@@ -6,17 +6,22 @@ module.exports = function () {
     var crons = [];
 
     return {
-        set: set,
         get: get,
-        getById: getById,
+        //getById: getById,
         post: post,
-        put: put,
+        //put: put,
         delete: deleteById
     };
 
     function get(req, res) {
-        res.json(crons);
+        cron.load(function (err, crontab) {
+            var jobs = crontab.jobs();
+            res.json(jobs);
+        });
+        //res.json(crons);
     }
+
+    /*
     function getById(req, res) {
         var id = req.params.id;
         res.send(crons[id]);
@@ -28,21 +33,30 @@ module.exports = function () {
         res.status(201).send('saved');
 
     }
-    // update
+    
     function put(req, res) {
         var id = req.params.id;
         crons[id] = req.body;
         res.json(crons);
     }
+    */
+
     function deleteById(req, res) {
-        var id = req.params.id;
-        crons.splice(id, 1);
+        var id = req.params.id.toString();
+        //var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        //var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+
+        cron.load(function (err, crontab) {
+            // cmd, time, comment
+            crontab.remove({ comment: /id+'off'/ });
+            crontab.remove({ comment: /id+'on'/ });
+        });
+        // crons.splice(id, 1);
         res.status(204).send('removed');
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    function set(req, res) {
-        var job = req.body.job, pin = req.body.pin;
+    function post(req, res) {
+        var job = req.body.job, pin = req.body.pin, id = req.body.id.toString();
         var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
         var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
 
@@ -50,35 +64,16 @@ module.exports = function () {
             return res.sendStatus(400);
         }
 
-        console.log(job.on);
-
         // set cron job on server
-
         cron.load(function (err, crontab) {
-            var job0 = crontab.create(cmd0, job.off);
-            var job1 = crontab.create(cmd1, job.on);
+            // cmd, time, comment
+            var job0 = crontab.create(cmd0, job.off, id + 'off');
+            var job1 = crontab.create(cmd1, job.on, id + 'on');
             crontab.save(function (err, crontab) {
                 console.log(err);
             });
         });
         res.sendStatus(200);
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-    function runTask(pin, val) {
-        var options = {
-            url: 'http://localhost:3000/gpio/:' + pin,
-            method: 'POST',
-            json: { val: val }
-        };
-
-        // Start the request
-        request(options, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                // Print out the response body
-                console.log(body);
-            }
-        });
     }
 };
 

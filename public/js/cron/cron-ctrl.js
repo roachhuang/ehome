@@ -29,8 +29,7 @@
             vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
-            vm.tmpJob = {};
-            //vm.tmpJob.count = 0;
+            vm.tmpJob = {};            
             vm.myConfig = {
                 options: {
                     allowMinute: false,
@@ -44,7 +43,8 @@
         }
 
         // data is from cron.html (tmpJob)
-        vm.addJob = function (job) {
+        vm.addJob = function (job, id) {
+            //hmmm... do i really need parse and stringify???
             var myJob = JSON.parse(JSON.stringify(job));
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
@@ -53,51 +53,39 @@
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            callServerCron(job, vm.selectedDevice.pin);
+            addCronTab(job, id, vm.selectedDevice.pin);
         };
 
-        vm.removeJob = function (job) {
+        vm.removeJob = function (job, id) {
             vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
-            
+
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
-            
+            delCronTab(job, id);
             //var json = JSON.parse(localStorage[itemName]);
             //json.splice(json.indexOf(job), 1);         
             //localStorage[itemName] = JSON.stringify(json);
         };
 
-        vm.addNextCronJob = function (data) {
-            if (data.count < 6) {
-                vm.selectedDevice.cronJobs[data.count] = vm.selectedDevice.cronJobs[data.count] || {};
-                // cannot use objA = objB in this case coz objA will point to objB
-                angular.extend(vm.selectedDevice.cronJobs[data.count], data);
-                vm.selectedDevice.saveJobs2LocalStorage();
-                vm.tmpJob.count++;
-                //callServerCron(data);
-            } else {
-                console.error(data.count);    // need to take care
-            }
-        };
-
-        
-        function callServerCron(job, pin) {
+        function addCronTab(job, id, pin) {
             var req = {
                 method: 'POST',
                 url: '/cron',
                 //transformRequest: transformRequestAsFormPost,
-                data: { job: job, pin: pin} // to do: '1' or 1 or can use false
+                data: { job: job, id: id, pin: pin } // to do: '1' or 1 or can use false
             };
-            // job: on
             $http(req).then(function (data) {
                 console.log(data);
             });
-            /* job: off
-            req.data = { cron: job.off, val: '0' };
-            $http(req).then(function (data) {
-                console.log(data);
-            });
-            */
         }
-       
+
+        function delCronTab(id) {
+            var req = {
+                method: 'DELETE',
+                url: '/cron/' + id,    
+            };
+            $http(req).then(function (data) {
+                console.log(data);
+            });
+        }
     }
 })();
