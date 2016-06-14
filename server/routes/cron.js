@@ -16,7 +16,8 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-router.route('/') 
+
+router.route('/')
     .post(cronCtrl.post)
     .get(cronCtrl.get);
 /*
@@ -30,7 +31,6 @@ router.use('/:id', function(req, res, next){
 */
 
 router.route('/:id')
-    .get(cronCtrl.getById)    
     .delete(cronCtrl.delete);
 
 module.exports = router;

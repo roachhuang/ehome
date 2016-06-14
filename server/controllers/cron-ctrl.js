@@ -34,7 +34,7 @@ module.exports = function () {
         res.status(201).send('saved');
 
     }
-    
+
     function put(req, res) {
         var id = req.params.id;
         crons[id] = req.body;
@@ -57,14 +57,16 @@ module.exports = function () {
     }
 
     function post(req, res) {
-        var job = req.body.job, pin = req.body.pin, id = req.body.id.toString();
+        var job = req.body.job, pin = req.body.pin, id = req.body.id;
+        console.log(id);
+        id = id.toString();
         var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
         var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
 
         if (!req.body) {
             return res.sendStatus(400);
         }
-
+        console.log(id + 'off');
         // set cron job on server
         cron.load(function (err, crontab) {
             // cmd, time, comment

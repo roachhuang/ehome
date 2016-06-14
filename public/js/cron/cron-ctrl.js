@@ -12,7 +12,7 @@
                 $scope.cron = Cron.get({id: $routeParams.id});
                 $scope.crons = Cron.query();
                 cron.$save(cronjob);
-                cron.$remove(id); 
+                cron.$remove(id);
                 cron.$update(cron);
         */
         activate();
@@ -29,7 +29,7 @@
             vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
-            vm.tmpJob = {};            
+            vm.tmpJob = {};
             vm.myConfig = {
                 options: {
                     allowMinute: false,
@@ -43,12 +43,13 @@
         }
 
         // data is from cron.html (tmpJob)
-        vm.addJob = function (job, id) {
+        vm.addJob = function (job) {
             //hmmm... do i really need parse and stringify???
             var myJob = JSON.parse(JSON.stringify(job));
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
             //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
+            var id = vm.cronJobs.length;
             vm.cronJobs.push(myJob);
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
@@ -60,9 +61,9 @@
             vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
 
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
-            delCronTab(job, id);
+            delCronTab(id);
             //var json = JSON.parse(localStorage[itemName]);
-            //json.splice(json.indexOf(job), 1);         
+            //json.splice(json.indexOf(job), 1);
             //localStorage[itemName] = JSON.stringify(json);
         };
 
@@ -81,7 +82,7 @@
         function delCronTab(id) {
             var req = {
                 method: 'DELETE',
-                url: '/cron/' + id,    
+                url: '/cron/' + id,
             };
             $http(req).then(function (data) {
                 console.log(data);
