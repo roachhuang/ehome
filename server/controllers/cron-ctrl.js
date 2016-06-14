@@ -7,7 +7,7 @@ module.exports = function () {
 
     return {
         get: get,
-        //getById: getById,
+        getById: getById,
         post: post,
         //put: put,
         delete: deleteById
@@ -21,11 +21,12 @@ module.exports = function () {
         //res.json(crons);
     }
 
-    /*
+    
     function getById(req, res) {
         var id = req.params.id;
         res.send(crons[id]);
     }
+    /*
     function post(req, res) {
         crons.push(req.body);
         // convert array to json obj

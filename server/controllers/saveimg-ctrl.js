@@ -26,12 +26,14 @@ module.exports = function () {
             method: 'POST',
             headers: {
                 // query: {uploadType: media},
-                'Content-Type': 'image/jpeg',
+                // 'Content-Type': 'image/jpeg',
+                'Content-Type': 'video/h264',
                 'authorization': 'Bearer ' + token,
-                'title': '1.jpg'
+                'title': '1.mp4'
             },
-            body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
-            title: '1.jpg'
+            // body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
+            body: request('http://ubuy.asuscomm.com:8080/video.cgi/'),
+            title: '1.mp4'
         };
         request.post(options, function (err, res, body) {
             if (err) throw err;
