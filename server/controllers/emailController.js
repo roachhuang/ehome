@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 
-exports.sendEmail = function () {
+exports.sendEmail = function (req, res) {
     var smtpConfig = {
         service: 'gmail',
         auth: {
@@ -34,5 +34,6 @@ exports.sendEmail = function () {
             return console.log(error);
         }
         console.log('Message sent: ' + info.response);
+        res.send(200);
     });
 };

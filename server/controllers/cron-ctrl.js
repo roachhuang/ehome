@@ -49,8 +49,8 @@ module.exports = function () {
 
         cron.load(function (err, crontab) {
             // cmd, time, comment
-            crontab.remove({ comment: /id+'off'/ });
-            crontab.remove({ comment: /id+'on'/ });
+            crontab.remove({ comment:/id+'off'/ });
+            crontab.remove({ comment:/id+'on'/ });
         });
         // crons.splice(id, 1);
         res.status(204).send('removed');
