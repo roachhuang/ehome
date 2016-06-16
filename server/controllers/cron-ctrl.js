@@ -16,7 +16,10 @@ module.exports = function () {
     function get(req, res) {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-            res.json(jobs);
+            for (var prop in jobs) {
+                console.log("jobs" + prop + " = " + jobs[prop]);
+            }
+            res.json(200, { jobs: jobs });
         });
         //res.json(crons);
     }
@@ -42,14 +45,32 @@ module.exports = function () {
     */
 
     function deleteById(req, res) {
-        var id = req.params.id.toString();
+        //var id = req.params.id.toString();
+        var id = req.params.id;
+        console.log('id:' + id);
         //var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
         //var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
 
         cron.load(function (err, crontab) {
             // cmd, time, comment
-            crontab.remove({ comment: /id+'off'/ });
-            crontab.remove({ comment: /id+'on'/ });
+            var jobs = crontab.jobs();
+           // console.log(jobs[0]);
+           //console.log(jobs[1]);
+
+            for (var prop in jobs) {
+                if (jobs.hasOwnProperty(prop))
+                    console.info('value: '+jobs[prop]); // value
+                console.info('key: '+prop); // key name
+            }
+
+            //crontab.remove(jobs[id]);
+            var comment = id + 'off';
+            crontab.remove({ comment: comment });
+            var comment = id + 'on';
+            crontab.remove({ comment: comment });
+            crontab.save(function (err, crontab) {
+                console.log(err);
+            });
         });
         // crons.splice(id, 1);
         res.status(204).send('removed');
