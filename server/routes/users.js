@@ -71,24 +71,21 @@ router.get('/saveimage', function (req, res) {
                 headers: {
                     'Content-Type': 'image/jpeg',
                     'authorization': 'Bearer ' + token,
-                    'title': '1.jpg'
-                },
+                    'title': 'my file'
+                },                
                 body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
-                title: '1.jpg'
+                title: 'cat.jpg'
             };
             request.post(options, function (err, res, body) {
                 if (err) throw err;
-                console.log('successful');
+                console.log('image saved');
             });
             // send email w/ ipcma img attachment
             //todo: can't set headers after they are sent
             // move email addr to config file?
             res.redirect('/api/email/');
-
         }
-
     });
-
 });
 
 module.exports = router;

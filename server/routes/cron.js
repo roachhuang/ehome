@@ -19,6 +19,7 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 
 router.route('/')
     .post(cronCtrl.post)
+    .delete(cronCtrl.deleteAll)
     .get(cronCtrl.get);
 /*
 router.use('/:id', function(req, res, next){
@@ -31,6 +32,6 @@ router.use('/:id', function(req, res, next){
 */
 
 router.route('/:id')
-    .delete(cronCtrl.delete);
+    .delete(cronCtrl.deleteById);
 
 module.exports = router;

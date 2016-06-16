@@ -7,21 +7,20 @@ module.exports = function () {
 
     return {
         get: get,
-        getById: getById,
         post: post,
-        //put: put,
-        delete: deleteById
+        deleteById: deleteById,
+        deleteAll: deleteAll
     };
 
     function get(req, res) {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-            res.json(jobs);
+            res.json(200, { jobs: jobs });
         });
         //res.json(crons);
     }
 
-    
+
     function getById(req, res) {
         var id = req.params.id;
         res.send(crons[id]);
@@ -41,6 +40,16 @@ module.exports = function () {
         res.json(crons);
     }
     */
+    function deleteAll(req, res) {
+        cron.load(function (err, crontab) {
+            var jobs = crontab.jobs();
+            crontab.remove(jobs);
+            crontab.save(function (err, crontab) {
+                console.log(err);
+                res.status(204).send('all jobs deleted');
+            });
+        });
+    }
 
     function deleteById(req, res) {
         var id = req.params.id.toString();
@@ -49,11 +58,15 @@ module.exports = function () {
 
         cron.load(function (err, crontab) {
             // cmd, time, comment
-            crontab.remove({ comment:/id+'off'/ });
-            crontab.remove({ comment:/id+'on'/ });
+            var comment = id + 'off';
+            crontab.remove({ comment: comment });
+            crontab.remove({ comment: /id+'on'/ });
+            crontab.save(function (err, crontab) {
+                console.log(err);
+                res.status(204).send('removed');
+            });
         });
         // crons.splice(id, 1);
-        res.status(204).send('removed');
     }
 
     function post(req, res) {

@@ -27,6 +27,7 @@
             itemName = vm.selectedDevice.name;
             console.log(localStorage.getItem(itemName));
             vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
+            //vm.cronJobs = $http.get('/cron');
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {};
@@ -65,6 +66,12 @@
             //var json = JSON.parse(localStorage[itemName]);
             //json.splice(json.indexOf(job), 1);
             //localStorage[itemName] = JSON.stringify(json);
+        };
+
+        vm.deleteAllJobs = function(){
+            $http.delete('/cron', null).then(function(res){
+                console.log(res.data);    
+            });
         };
 
         function addCronTab(job, id, pin) {
