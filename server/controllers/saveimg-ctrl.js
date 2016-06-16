@@ -27,15 +27,18 @@ module.exports = function () {
             headers: {
                 // query: {uploadType: media},
                 'Content-Type': 'image/jpeg',
+                //'Content-Type': 'video/h264',
                 'authorization': 'Bearer ' + token,
                 'title': '1.jpg'
             },
             body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
+            //body: request('http://ubuy.asuscomm.com:8080/video.cgi/'),
             title: '1.jpg'
         };
         request.post(options, function (err, res, body) {
             if (err) throw err;
             console.log('successful');
+            res.send(200);
         });
     };
 
