@@ -7,15 +7,15 @@ module.exports = function () {
 
     return {
         get: get,
+        //getById: getById,
         post: post,
-        deleteById: deleteById,
-        deleteAll: deleteAll
+        //put: put,
+        delete: deleteById
     };
 
     function get(req, res) {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-
             for (var prop in jobs) {
                 console.log("jobs" + prop + " = " + jobs[prop]);
             }
@@ -24,12 +24,11 @@ module.exports = function () {
         //res.json(crons);
     }
 
-
+    /*
     function getById(req, res) {
         var id = req.params.id;
         res.send(crons[id]);
     }
-    /*
     function post(req, res) {
         crons.push(req.body);
         // convert array to json obj
@@ -44,20 +43,10 @@ module.exports = function () {
         res.json(crons);
     }
     */
-    function deleteAll(req, res) {
-        cron.load(function (err, crontab) {
-            var jobs = crontab.jobs();
-            crontab.remove(jobs);
-            crontab.save(function (err, crontab) {
-                console.log(err);
-                res.status(204).send('all jobs deleted');
-            });
-        });
-    }
 
     function deleteById(req, res) {
-        //var id = req.params.id.toString();
-        var id = req.params.id;
+        // each job has 2 cmd - on and off
+        var id = req.params.id * 2;
         console.log('id:' + id);
         //var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
         //var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
@@ -65,9 +54,11 @@ module.exports = function () {
         cron.load(function (err, crontab) {
             // cmd, time, comment
             var jobs = crontab.jobs();
-           // console.log(jobs[0]);
-           //console.log(jobs[1]);
-
+            crontab.remove(jobs[id]);
+            id += 1;
+            console.log('id:' + id);
+            crontab.remove(jobs[id]);
+/*
             for (var prop in jobs) {
                 if (jobs.hasOwnProperty(prop))
                     console.info('value: '+jobs[prop]); // value
@@ -79,12 +70,13 @@ module.exports = function () {
             crontab.remove({ comment: comment });
             var comment = id + 'on';
             crontab.remove({ comment: comment });
+            */
             crontab.save(function (err, crontab) {
                 console.log(err);
-                res.status(204).send('removed');
             });
         });
         // crons.splice(id, 1);
+        res.status(204).send('removed');
     }
 
     function post(req, res) {

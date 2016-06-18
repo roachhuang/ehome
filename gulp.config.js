@@ -16,12 +16,12 @@ module.exports = function () {
 
         css: temp + '*.css',
         fonts: clientApp + 'lib/font-awesome/fonts/**/*/*',
-        images: clientApp + 'images/**/*.*',
+        images: clientApp + 'assets/**/*.*',
         index: clientApp + 'views/index.html',
         js: [
             //client + '*.js'
-            clientApp + 'js/**/*.js' // in angular app we need 2 load any file that starts w/ module.js
-            //'!' + clientApp + 'lib' // exclude lib files
+            clientApp + 'js/**/*.js', // in angular app we need 2 load any file that starts w/ module.js
+            '!' + clientApp + 'lib' // exclude lib files
         ],
         server: server,
         temp: temp,
