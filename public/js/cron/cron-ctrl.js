@@ -50,17 +50,16 @@
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
             //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
-            var id = vm.cronJobs.length;
             vm.cronJobs.push(myJob);
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            addCronTab(job, id, vm.selectedDevice.pin);
+            addCronTab(job, vm.selectedDevice.pin);
         };
 
-        vm.removeJob = function (job, id) {
-            vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
-
+        vm.removeJob = function (id) {
+            //vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
+            vm.cronJobs.splice(id, 1);
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             delCronTab(id);
             //var json = JSON.parse(localStorage[itemName]);
@@ -70,16 +69,16 @@
 
         vm.deleteAllJobs = function(){
             $http.delete('/cron', null).then(function(res){
-                console.log(res.data);    
+                console.log(res.data);
             });
         };
 
-        function addCronTab(job, id, pin) {
+        function addCronTab(job, pin) {
             var req = {
                 method: 'POST',
                 url: '/cron',
                 //transformRequest: transformRequestAsFormPost,
-                data: { job: job, id: id, pin: pin } // to do: '1' or 1 or can use false
+                data: { job: job, pin: pin } // to do: '1' or 1 or can use false
             };
             $http(req).then(function (data) {
                 console.log(data);

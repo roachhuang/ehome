@@ -48,9 +48,6 @@ module.exports = function () {
         // each job has 2 cmd - on and off
         var id = req.params.id * 2;
         console.log('id:' + id);
-        //var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-        //var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-
         cron.load(function (err, crontab) {
             // cmd, time, comment
             var jobs = crontab.jobs();
@@ -58,19 +55,19 @@ module.exports = function () {
             id += 1;
             console.log('id:' + id);
             crontab.remove(jobs[id]);
-/*
-            for (var prop in jobs) {
-                if (jobs.hasOwnProperty(prop))
-                    console.info('value: '+jobs[prop]); // value
-                console.info('key: '+prop); // key name
-            }
+            /*
+                        for (var prop in jobs) {
+                            if (jobs.hasOwnProperty(prop))
+                                console.info('value: '+jobs[prop]); // value
+                            console.info('key: '+prop); // key name
+                        }
 
-            //crontab.remove(jobs[id]);
-            var comment = id + 'off';
-            crontab.remove({ comment: comment });
-            var comment = id + 'on';
-            crontab.remove({ comment: comment });
-            */
+                        //crontab.remove(jobs[id]);
+                        var comment = id + 'off';
+                        crontab.remove({ comment: comment });
+                        var comment = id + 'on';
+                        crontab.remove({ comment: comment });
+                        */
             crontab.save(function (err, crontab) {
                 console.log(err);
             });
@@ -80,21 +77,18 @@ module.exports = function () {
     }
 
     function post(req, res) {
-        var job = req.body.job, pin = req.body.pin, id = req.body.id;
-        console.log(id);
-        id = id.toString();
+        var job = req.body.job, pin = req.body.pin;
         var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
         var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
 
         if (!req.body) {
             return res.sendStatus(400);
         }
-        console.log(id + 'off');
         // set cron job on server
         cron.load(function (err, crontab) {
             // cmd, time, comment
-            var job0 = crontab.create(cmd0, job.off, id + 'off');
-            var job1 = crontab.create(cmd1, job.on, id + 'on');
+            var job1 = crontab.create(cmd1, job.on);
+            var job0 = crontab.create(cmd0, job.off);
             crontab.save(function (err, crontab) {
                 console.log(err);
             });
