@@ -10,7 +10,8 @@ module.exports = function () {
         //getById: getById,
         post: post,
         //put: put,
-        delete: deleteById
+        deleteById: deleteById,
+        deleteAll: deleteAll
     };
 
     function get(req, res) {
@@ -43,6 +44,13 @@ module.exports = function () {
         res.json(crons);
     }
     */
+    function deleteAll(req, res) {
+        cron.load(function (err, crontab) {
+            var jobs = crontab.jobs();
+            crontab.remove(jobs);
+            res.send(200);
+        });
+    }
 
     function deleteById(req, res) {
         // each job has 2 cmd - on and off
@@ -61,7 +69,7 @@ module.exports = function () {
                                 console.info('value: '+jobs[prop]); // value
                             console.info('key: '+prop); // key name
                         }
-
+ 
                         //crontab.remove(jobs[id]);
                         var comment = id + 'off';
                         crontab.remove({ comment: comment });
@@ -76,6 +84,7 @@ module.exports = function () {
         res.status(204).send('removed');
     }
 
+    // set cronjob
     function post(req, res) {
         var job = req.body.job, pin = req.body.pin;
         var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
