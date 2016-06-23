@@ -53,10 +53,16 @@ router.get('/token', function (req, res) {
             res.json({ token: null });
         } else {
             token = JSON.parse(token);
-            console.log('token read from file: '+ token);
+            console.log('token read from file: ' + token);
             res.json({ token: token });
         }
     });
+});
+
+router.get('/saveVideo', function (req, res) {
+    var writeStream = fs.createWriteStream('./output.avi');
+    request('http://ubuy.asuscomm.com:8080/video.cgi').pipe(fs.createWriteStream('./output.avi'));
+    setTimeout(writeStream.end(), 10000);
 });
 
 router.get('/saveimage', function (req, res) {
@@ -72,7 +78,7 @@ router.get('/saveimage', function (req, res) {
                     'Content-Type': 'image/jpeg',
                     'authorization': 'Bearer ' + token,
                     'title': 'my file'
-                },                
+                },
                 body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
                 title: 'cat.jpg'
             };

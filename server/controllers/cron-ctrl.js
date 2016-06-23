@@ -10,7 +10,8 @@ module.exports = function () {
         //getById: getById,
         post: post,
         //put: put,
-        delete: deleteById
+        deleteById: deleteById,
+        deleteAll: deleteAll
     };
 
     function get(req, res) {
@@ -43,57 +44,64 @@ module.exports = function () {
         res.json(crons);
     }
     */
-
-    function deleteById(req, res) {
-        // each job has 2 cmd - on and off
-        var id = req.params.id * 2;
-        console.log('id:' + id);
+    function deleteAll(req, res) {
         cron.load(function (err, crontab) {
-            // cmd, time, comment
             var jobs = crontab.jobs();
-            crontab.remove(jobs[id]);
-            id += 1;
+            crontab.remove(jobs);
+            res.sendStatus(204);
+        });
+    }
+
+        function deleteById(req, res) {
+            // each job has 2 cmd - on and off
+            var id = req.params.id * 2;
             console.log('id:' + id);
-            crontab.remove(jobs[id]);
-            /*
-                        for (var prop in jobs) {
-                            if (jobs.hasOwnProperty(prop))
-                                console.info('value: '+jobs[prop]); // value
-                            console.info('key: '+prop); // key name
-                        }
+            cron.load(function (err, crontab) {
+                // cmd, time, comment
+                var jobs = crontab.jobs();
+                crontab.remove(jobs[id]);
+                id += 1;
+                console.log('id:' + id);
+                crontab.remove(jobs[id]);
+                /*
+                            for (var prop in jobs) {
+                                if (jobs.hasOwnProperty(prop))
+                                    console.info('value: '+jobs[prop]); // value
+                                console.info('key: '+prop); // key name
+                            }
 
-                        //crontab.remove(jobs[id]);
-                        var comment = id + 'off';
-                        crontab.remove({ comment: comment });
-                        var comment = id + 'on';
-                        crontab.remove({ comment: comment });
-                        */
-            crontab.save(function (err, crontab) {
-                console.log(err);
+                            //crontab.remove(jobs[id]);
+                            var comment = id + 'off';
+                            crontab.remove({ comment: comment });
+                            var comment = id + 'on';
+                            crontab.remove({ comment: comment });
+                            */
+                crontab.save(function (err, crontab) {
+                    console.log(err);
+                });
             });
-        });
-        // crons.splice(id, 1);
-        res.status(204).send('removed');
-    }
-
-    function post(req, res) {
-        var job = req.body.job, pin = req.body.pin;
-        var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-        var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-
-        if (!req.body) {
-            return res.sendStatus(400);
+            // crons.splice(id, 1);
+            res.status(204).send('removed');
         }
-        // set cron job on server
-        cron.load(function (err, crontab) {
-            // cmd, time, comment
-            var job1 = crontab.create(cmd1, job.on);
-            var job0 = crontab.create(cmd0, job.off);
-            crontab.save(function (err, crontab) {
-                console.log(err);
+
+        function post(req, res) {
+            var job = req.body.job, pin = req.body.pin;
+            var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+            var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+
+            if (!req.body) {
+                return res.sendStatus(400);
+            }
+            // set cron job on server
+            cron.load(function (err, crontab) {
+                // cmd, time, comment
+                var job1 = crontab.create(cmd1, job.on);
+                var job0 = crontab.create(cmd0, job.off);
+                crontab.save(function (err, crontab) {
+                    console.log(err);
+                });
             });
-        });
-        res.sendStatus(200);
-    }
-};
+            res.sendStatus(200);
+        }
+    };
 
