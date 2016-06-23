@@ -10,6 +10,7 @@
     "crontab": "^1.1.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "file-on-write": "^1.1.1",
     "fs": "0.0.2",
     "gql": "^1.1.0",
     "mod-aspsms": "^1.0.0",
@@ -28,6 +29,7 @@
     "yql": "^1.0.2"
   },
   "devDependencies": {
+    "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-inject": "^4.0.0",
     "gulp-jscs": "^3.0.2",

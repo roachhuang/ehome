@@ -26,18 +26,18 @@ module.exports = function () {
     var myIo = [];
 
     var initIo = function (req, res) {
-        var pin = req.params.pin;
-        if (typeof (myIo[pin]) !== 'object') {
-            myIo[pin] = new Gpio(pin, 'in');
-            console.log('pin in server' + pin);
-            console.log(myIo.length);
-            console.log('process on sigint');
-            process.on('SIGINT', function () {
-                myIo[17].unexport();
-                myIo[18].unexport();
-            });
-        }
-        res.send(200);
+        var pin = req.params.pin, gpioObj;
+
+        gpioObj = new Gpio(pin, 'in');
+        console.log('pin in server' + pin);
+        //console.log(myIo.length);
+        //console.log('process on sigint');
+        process.on('SIGINT', function () {
+            myIo[17].unexport();
+            myIo[18].unexport();
+        });
+
+        res.send(gpioObj);
     };
 
     var post = function (req, res) {
@@ -56,14 +56,14 @@ module.exports = function () {
         io.writeSync(val);
         res.send(200);
     };
+
     var get = function (req, res) {
-        var io, value, pin = req.params.pin;
+        var value, pin = req.params.pin, gpioObj = req.params.gpioObj;
         if (pin > 0 && pin < 28) {
-            console.log(pin);
+            console.log('gpioObj: ' + gpioObj);
             //io = new Gpio(pin, 'in');     // this will reset the output
 
-            io = myIo[pin];
-            value = io.readSync();
+            value = gpioObj.readSync();
             res.status(200).send({ value: value });
         }
     };

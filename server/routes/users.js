@@ -2,6 +2,8 @@
 var fs = require('fs');
 var request = require('request');
 var express = require('express');
+//var mjpegcamera = require('mjpeg-camera');
+//var FileOnWrite = require('file-on-write');
 // coz windows and linux's path are diff, so we don't specify /.credentitals subfolder here.
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE);
 //    '/.credentials/';
@@ -58,6 +60,98 @@ router.get('/token', function (req, res) {
         }
     });
 });
+/*
+router.get('/saveVideo', function (req, res) {
+    // Create a writable stream to generate files
+    var fileWriter = new FileOnWrite({
+        path: './frames',
+        ext: '.jpeg',
+        filename: function (frame) {
+            return frame.name + '-' + frame.time;
+        },
+        transform: function (frame) {
+            return frame.data;
+        }
+    });
+
+    // Create an MjpegCamera instance
+    var camera = new MjpegCamera({
+        name: 'backdoor',
+        //user: 'admin',
+        //password: 'wordup',
+        url: 'http://ubuy.asuscomm.com:8080/video.cgi',
+        motion: true
+    });
+
+    // Pipe frames to our fileWriter so we gather jpeg frames into the /frames folder
+    camera.pipe(fileWriter);
+
+    // Start streaming
+    camera.start();
+
+    // Stop recording after an hour
+    setTimeout(function () {
+
+        // Stahp
+        camera.stop();
+
+        // Get one last frame
+        // Will open a connection long enough to get a single frame and then
+        // immediately close the connection
+        camera.getScreenshot(function (err, frame) {
+            fs.writeFile('final.jpeg', frame, process.exit);
+        });
+
+    }, 3 * 60 * 1000);
+});
+*/
+router.get('/saveimage', function (req, res) {
+    var d = new Date();
+    var fileName = d.toLocaleString();
+
+    fs.readFile(TOKEN_PATH, function (err, token) {
+        if (err) {
+            res.redirect('/auth/google');
+        } else {
+            var options = {
+                url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media',
+                qs: {
+                    //request module adds "boundary" and "Content-Length" automatically.
+                    'uploadType': 'multipart'
+                },
+                headers: {
+                    'Content-Type': 'image/jpeg',
+                    'authorization': 'Bearer ' + token
+                },
+                'multipart': [
+                    {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'body': JSON.stringify({'title': fileName})
+                    },
+                    {
+                        'Content-Type': 'image/jpg',
+                        'body': request('http://ubuy.asuscomm.com:8080/image.jpg')
+                    }
+                ]
+            };
+            request.post(options, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log('image saved ' + body);
+                    res.sendStatus(200);
+                }
+                else {
+                    console.error(err + response.statusCode);
+                }
+            });
+            // send email w/ ipcma img attachment
+            //todo: can't set headers after they are sent
+            // move email addr to config file?
+            //res.redirect('/api/email/');
+        }
+    });
+});
+
+
 
 router.get('/saveVideo', function (req, res) {
     var writeStream = fs.createWriteStream('./output.avi');
@@ -65,8 +159,8 @@ router.get('/saveVideo', function (req, res) {
     setTimeout(writeStream.end(), 10000);
 });
 
+/*
 router.get('/saveimage', function (req, res) {
-
     fs.readFile(TOKEN_PATH, function (err, token) {
         if (err) {
             res.redirect('/auth/google');
@@ -77,21 +171,27 @@ router.get('/saveimage', function (req, res) {
                 headers: {
                     'Content-Type': 'image/jpeg',
                     'authorization': 'Bearer ' + token,
-                    'title': 'my file'
+                    'title': '1.jpg'
                 },
-                body: request('http://ubuy.asuscomm.com:8080/image.jpg/'),
-                title: 'cat.jpg'
+                body: request('http://ubuy.asuscomm.com:8080/image.jpg'),
+                title: '1.jpg'
             };
-            request.post(options, function (err, res, body) {
-                if (err) throw err;
-                console.log('image saved');
+            request.post(options, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log('image saved ' + body);
+                    res.sendStatus(200);
+                }
+                else{
+                    console.error(err + response.statusCode);
+                }
             });
             // send email w/ ipcma img attachment
             //todo: can't set headers after they are sent
             // move email addr to config file?
-            res.redirect('/api/email/');
+            //res.redirect('/api/email/');
         }
     });
 });
+*/
 
 module.exports = router;

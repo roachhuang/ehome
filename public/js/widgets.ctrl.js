@@ -5,7 +5,7 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$scope', '$http', '$window'];
+	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$rootScope'];
 	function widgetsCtrl($scope, $http, $window) {
 		// use $scope so we can inherit $scope from mainCtrl
 		var vm = $scope;
@@ -32,10 +32,11 @@
 					console.log(res.err);
 				});
 			}, 2000);
+
+			vm.$on('$locationChangeStart', function (event, next, current) {
+				clearInterval(vm.myReading);
+			});
 		}
-		vm.$on('$locationChangeStart', function (event) {
-			clearInterval(vm.myReading);
-		});
 	}
 })();
 

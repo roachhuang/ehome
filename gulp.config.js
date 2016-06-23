@@ -3,12 +3,15 @@ module.exports = function () {
     var clientApp = client + 'public/';
     var server = './server/';
     var temp = clientApp + 'css/';
+
     var config = {
         client: client,
         clientApp: clientApp,
         // all js to vet
         alljs: [
-            clientApp + 'js/**/*.js' // ** means zero or more directories
+            clientApp + 'js/**/*.js',  // ** means zero or more directories
+            server + '/**/*.js',
+            './*.js'
         ], // no base is specified so by default it is set as './src/'
 
         build: './prod/', // production folder, not dev folder

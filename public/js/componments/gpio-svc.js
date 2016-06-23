@@ -20,8 +20,8 @@
         function initIo(pin) {
             $http.get('/gpio/initIo/' + pin).then(function (res) {
                 return res.status;
-            }, function (res) {
-                return res.status;
+            //}, function (res) {
+            //    return res.status;
             });
         }
         function outPut(value, pin) {
@@ -37,10 +37,10 @@
             });
         }
 
-        function inPut(pin) {
+        function inPut(pin, gpioObj) {
             var def = $q.defer();
 
-            $http.get('/gpio/' + pin).success(function (res) {
+            $http.get('/gpio/' + pin + '/' + gpioObj).success(function (res) {
                 service.value = res.value;
                 def.resolve(res.value);
             }).error(function () {

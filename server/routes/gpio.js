@@ -26,7 +26,7 @@ router.all('*', function (req, res, next) {
 })
 */
 
-router.route('/:pin')
+router.route('/:pin/:gpioObj')
     .get(gpioController.get)    // return 0 or 1
     .post(gpioController.post);
 

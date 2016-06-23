@@ -48,60 +48,57 @@ module.exports = function () {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
             crontab.remove(jobs);
-            res.sendStatus(204);
+            res.send(200);
         });
     }
 
-        function deleteById(req, res) {
-            // each job has 2 cmd - on and off
-            var id = req.params.id * 2;
+    function deleteById(req, res) {
+        // each job has 2 cmd - on and off
+        var id = req.params.id * 2;
+        console.log('id:' + id);
+        cron.load(function (err, crontab) {
+            var jobs = crontab.jobs();
+            crontab.remove(jobs[id]);
+            id += 1;
             console.log('id:' + id);
-            cron.load(function (err, crontab) {
-                // cmd, time, comment
-                var jobs = crontab.jobs();
-                crontab.remove(jobs[id]);
-                id += 1;
-                console.log('id:' + id);
-                crontab.remove(jobs[id]);
-                /*
-                            for (var prop in jobs) {
-                                if (jobs.hasOwnProperty(prop))
-                                    console.info('value: '+jobs[prop]); // value
-                                console.info('key: '+prop); // key name
-                            }
-
-                            //crontab.remove(jobs[id]);
-                            var comment = id + 'off';
-                            crontab.remove({ comment: comment });
-                            var comment = id + 'on';
-                            crontab.remove({ comment: comment });
-                            */
-                crontab.save(function (err, crontab) {
-                    console.log(err);
-                });
-            });
+            crontab.remove(jobs[id]);
             // crons.splice(id, 1);
-            res.status(204).send('removed');
-        }
+            /*
+                        for (var prop in jobs) {
+                            if (jobs.hasOwnProperty(prop))
+                                console.info('value: '+jobs[prop]); // value
+                            console.info('key: '+prop); // key name
+                        }
 
-        function post(req, res) {
-            var job = req.body.job, pin = req.body.pin;
-            var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-            var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-
-            if (!req.body) {
-                return res.sendStatus(400);
-            }
-            // set cron job on server
-            cron.load(function (err, crontab) {
-                // cmd, time, comment
-                var job1 = crontab.create(cmd1, job.on);
-                var job0 = crontab.create(cmd0, job.off);
-                crontab.save(function (err, crontab) {
-                    console.log(err);
-                });
+                        */
+            crontab.save(function (err, crontab) {
+                console.log(err);
+                res.status(204).send('removed');
             });
-            res.sendStatus(200);
+        });
+    }
+
+
+    // save a cron job
+    function post(req, res) {
+        var job = req.body.job, pin = req.body.pin;
+        var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+
+        if (!req.body) {
+            return res.sendStatus(400);
         }
-    };
+        // set cron job on server
+        cron.load(function (err, crontab) {
+            // cmd, time, comment
+            var job1 = crontab.create(cmd1, job.on);
+            var job0 = crontab.create(cmd0, job.off);
+            crontab.save(function (err, crontab) {
+                res.sendStatus(200);
+                console.log(err);
+            });
+        });
+    }
+};
+
 
