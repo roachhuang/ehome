@@ -70,6 +70,7 @@
         vm.deleteAllJobs = function(){
             $http.delete('/cron', null).then(function(res){
                 console.log(res.data);
+                localStorage.removeItem(itemName);
             });
         };
 
