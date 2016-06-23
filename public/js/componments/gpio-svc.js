@@ -10,16 +10,16 @@
             value: '',
             inPut: inPut,
             outPut: outPut,
-            initIo: initIo
+            getGpioObj: getGpioObj
         };
 
         return service;
 
         //////////////////////////////////////////////////
         //  GPIO class
-        function initIo(pin) {
-            $http.get('/gpio/initIo/' + pin).then(function (res) {
-                return res.status;
+        function getGpioObj(pin) {
+            $http.get('/gpio/getGpioObj/' + pin).then(function (res) {
+                return res.data;
             //}, function (res) {
             //    return res.status;
             });
