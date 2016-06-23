@@ -100,9 +100,9 @@ module.exports = function () {
             var job0 = crontab.create(cmd0, job.off);
             crontab.save(function (err, crontab) {
                 console.log(err);
+                res.sendStatus(200);
             });
         });
-        res.sendStatus(200);
     }
 };
 

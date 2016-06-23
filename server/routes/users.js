@@ -105,7 +105,54 @@ router.get('/saveVideo', function (req, res) {
     }, 3 * 60 * 1000);
 });
 */
+router.get('/saveimage', function (req, res) {
+    var d = new Date();
+    var fileName = d.toLocaleString();
 
+    fs.readFile(TOKEN_PATH, function (err, token) {
+        if (err) {
+            res.redirect('/auth/google');
+        } else {
+            var options = {
+                url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media',
+                qs: {
+                    //request module adds "boundary" and "Content-Length" automatically.
+                    'uploadType': 'multipart'
+                },
+                headers: {
+                    'Content-Type': 'image/jpeg',
+                    'authorization': 'Bearer ' + token
+                },
+                'multipart': [
+                    {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'body': JSON.stringify({'title': fileName})
+                    },
+                    {
+                        'Content-Type': 'image/jpg',
+                        'body': request('http://ubuy.asuscomm.com:8080/image.jpg')
+                    }
+                ]               
+            };
+            request.post(options, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log('image saved ' + body);
+                    res.sendStatus(200);
+                }
+                else {
+                    console.error(err + response.statusCode);
+                }
+            });
+            // send email w/ ipcma img attachment
+            //todo: can't set headers after they are sent
+            // move email addr to config file?
+            //res.redirect('/api/email/');
+        }
+    });
+});
+
+
+/*
 router.get('/saveimage', function (req, res) {
 
     fs.readFile(TOKEN_PATH, function (err, token) {
@@ -123,16 +170,22 @@ router.get('/saveimage', function (req, res) {
                 body: request('http://ubuy.asuscomm.com:8080/image.jpg'),
                 title: '1.jpg'
             };
-            request.post(options, function (err, res, body) {
-                if (err) throw err;
-                console.log('image saved');
+            request.post(options, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log('image saved ' + body);
+                    res.sendStatus(200);
+                }
+                else{
+                    console.error(err + response.statusCode);
+                }
             });
             // send email w/ ipcma img attachment
             //todo: can't set headers after they are sent
             // move email addr to config file?
-            res.redirect('/api/email/');
+            //res.redirect('/api/email/');
         }
     });
 });
+*/
 
 module.exports = router;
