@@ -57,34 +57,29 @@ module.exports = function () {
         var id = req.params.id * 2;
         console.log('id:' + id);
         cron.load(function (err, crontab) {
-            // cmd, time, comment
             var jobs = crontab.jobs();
             crontab.remove(jobs[id]);
             id += 1;
             console.log('id:' + id);
             crontab.remove(jobs[id]);
+            // crons.splice(id, 1);
             /*
                         for (var prop in jobs) {
                             if (jobs.hasOwnProperty(prop))
                                 console.info('value: '+jobs[prop]); // value
                             console.info('key: '+prop); // key name
                         }
- 
-                        //crontab.remove(jobs[id]);
-                        var comment = id + 'off';
-                        crontab.remove({ comment: comment });
-                        var comment = id + 'on';
-                        crontab.remove({ comment: comment });
+
                         */
             crontab.save(function (err, crontab) {
                 console.log(err);
+                res.status(204).send('removed');
             });
         });
-        // crons.splice(id, 1);
-        res.status(204).send('removed');
     }
 
-    // set cronjob
+
+    // save a cron job
     function post(req, res) {
         var job = req.body.job, pin = req.body.pin;
         var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
@@ -99,10 +94,11 @@ module.exports = function () {
             var job1 = crontab.create(cmd1, job.on);
             var job0 = crontab.create(cmd0, job.off);
             crontab.save(function (err, crontab) {
-                console.log(err);
                 res.sendStatus(200);
+                console.log(err);
             });
         });
     }
 };
+
 

@@ -28,9 +28,11 @@ router.all('*', function (req, res, next) {
 
 router.route('/:pin/:gpioObj')
     .get(gpioController.get)    // return 0 or 1
-    .post(gpioController.post);
 
-router.route('/initIo/:pin')
-    .get(gpioController.initIo);
+router.route('/:pin')
+    .post(gpioController.post)
+
+router.route('/getGpioObj/:pin')
+    .get(gpioController.getGpioObj)
 
 module.exports = router;

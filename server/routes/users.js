@@ -62,7 +62,7 @@ router.get('/token', function (req, res) {
 });
 /*
 router.get('/saveVideo', function (req, res) {
-    // Create a writable stream to generate files 
+    // Create a writable stream to generate files
     var fileWriter = new FileOnWrite({
         path: './frames',
         ext: '.jpeg',
@@ -74,7 +74,7 @@ router.get('/saveVideo', function (req, res) {
         }
     });
 
-    // Create an MjpegCamera instance 
+    // Create an MjpegCamera instance
     var camera = new MjpegCamera({
         name: 'backdoor',
         //user: 'admin',
@@ -83,21 +83,21 @@ router.get('/saveVideo', function (req, res) {
         motion: true
     });
 
-    // Pipe frames to our fileWriter so we gather jpeg frames into the /frames folder 
+    // Pipe frames to our fileWriter so we gather jpeg frames into the /frames folder
     camera.pipe(fileWriter);
 
-    // Start streaming 
+    // Start streaming
     camera.start();
 
-    // Stop recording after an hour 
+    // Stop recording after an hour
     setTimeout(function () {
 
-        // Stahp 
+        // Stahp
         camera.stop();
 
-        // Get one last frame 
-        // Will open a connection long enough to get a single frame and then 
-        // immediately close the connection 
+        // Get one last frame
+        // Will open a connection long enough to get a single frame and then
+        // immediately close the connection
         camera.getScreenshot(function (err, frame) {
             fs.writeFile('final.jpeg', frame, process.exit);
         });
@@ -132,7 +132,7 @@ router.get('/saveimage', function (req, res) {
                         'Content-Type': 'image/jpg',
                         'body': request('http://ubuy.asuscomm.com:8080/image.jpg')
                     }
-                ]               
+                ]
             };
             request.post(options, function (err, response, body) {
                 if (!err && response.statusCode === 200) {
@@ -152,9 +152,15 @@ router.get('/saveimage', function (req, res) {
 });
 
 
+
+router.get('/saveVideo', function (req, res) {
+    var writeStream = fs.createWriteStream('./output.avi');
+    request('http://ubuy.asuscomm.com:8080/video.cgi').pipe(fs.createWriteStream('./output.avi'));
+    setTimeout(writeStream.end(), 10000);
+});
+
 /*
 router.get('/saveimage', function (req, res) {
-
     fs.readFile(TOKEN_PATH, function (err, token) {
         if (err) {
             res.redirect('/auth/google');

@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('devicesCtrl', devicesCtrl);
 
-    devicesCtrl.$inject = ['$scope', 'gpioService', 'deviceService'];
-    function devicesCtrl($scope, gpioService, deviceService) {
+    devicesCtrl.$inject = ['$scope', 'gpioService', 'deviceService', '$window'];
+    function devicesCtrl($scope, gpioService, deviceService, $window) {
         var vm = $scope;
 
         activate();
@@ -14,15 +14,16 @@
         ////////////////
 
         function activate() {
-            // deviceService is a singleton          
+            // deviceService is a singleton
             var i, pin, gpioObj;
             vm.devices = deviceService;
             for (i in vm.devices) {
                 pin = vm.devices[i].pin;
-                vm.devices[i].gpioObj = JSON.parse(localStorage.getItem(pin));
-                if (vm.devices[i].gpioObj === undefined) {
-                    vm.devices[i].gpioObj = gpioService.getPinInObj(pin);
+                if (localStorage.getItem(pin) === 'undefined') {
+                    vm.devices[i].gpioObj = gpioService.getGpioObj(pin);
                     localStorage.setItem(pin, JSON.stringify(vm.devices[i].gpioObj));
+                } else {
+                    vm.devices[i].gpioObj = JSON.parse(localStorage.getItem(pin));
                 }
             }
 
