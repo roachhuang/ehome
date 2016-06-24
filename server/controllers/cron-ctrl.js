@@ -18,7 +18,7 @@ module.exports = function () {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
             for (var prop in jobs) {
-                console.log("jobs" + prop + " = " + jobs[prop]);
+                console.log('jobs' + prop + '=' + jobs[prop]);
             }
             res.json(200, { jobs: jobs });
         });

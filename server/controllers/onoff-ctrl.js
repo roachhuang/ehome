@@ -19,8 +19,8 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 (sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
-var Gpio = require('onoff').Gpio;
-//var Gpio = {};
+//var Gpio = require('onoff').Gpio;
+var Gpio = {};
 module.exports = function () {
     var myIo = [];
 
@@ -28,13 +28,15 @@ module.exports = function () {
         var pin = req.params.pin, gpioObj;
 
         gpioObj = new Gpio(pin, 'in');
-        console.log('gpioObj: ' + gpioOBj);
+        console.log('gpioObj: ' + gpioObj);
         //console.log(myIo.length);
         //console.log('process on sigint');
+        /*
         process.on('SIGINT', function () {
             myIo[17].unexport();
             myIo[18].unexport();
         });
+        */
         res.send(gpioObj);
     };
 

@@ -81,8 +81,8 @@
                 //transformRequest: transformRequestAsFormPost,
                 data: { job: job, pin: pin } // to do: '1' or 1 or can use false
             };
-            $http(req).then(function (data) {
-                console.log(data);
+            $http(req).then(function (res) {
+                console.log(res.status);
             });
         }
 
@@ -91,8 +91,8 @@
                 method: 'DELETE',
                 url: '/cron/' + id,
             };
-            $http(req).then(function (data) {
-                console.log(data);
+            $http(req).then(function (res) {
+                console.log(res.status);
             });
         }
     }

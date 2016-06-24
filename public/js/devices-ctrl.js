@@ -20,8 +20,10 @@
             for (i in vm.devices) {
                 pin = vm.devices[i].pin;
                 if (localStorage.getItem(pin) === 'undefined') {
-                    vm.devices[i].gpioObj = gpioService.getGpioObj(pin);
-                    localStorage.setItem(pin, JSON.stringify(vm.devices[i].gpioObj));
+                    gpioService.getGpioObj(pin).then(function (res) {
+                        vm.devices[i].gpioObj = res.data;
+                        localStorage.setItem(pin, JSON.stringify(vm.devices[i].gpioObj));
+                    });
                 } else {
                     vm.devices[i].gpioObj = JSON.parse(localStorage.getItem(pin));
                 }
@@ -32,8 +34,8 @@
                 for (i in vm.devices) {
                     pin = vm.devices[i].pin;
                     gpioObj = vm.devices[i].gpioObj;
-                    gpioService.inPut(pin, gpioObj).then(function (value) {
-                        vm.devices[i].status = value;
+                    gpioService.inPut(pin, gpioObj).then(function (res) {
+                        vm.devices[i].status = res.data.value;
                     });
                     console.log(pin.toString() + ':' + vm.devices[i].status);
                 }
@@ -43,10 +45,10 @@
         }
 
         vm.onExit = function () {
-            for (i in vm.devices) {
+            for (var i in vm.devices) {
                 localStorage.removeItem(vm.devices[i].pin);
             }
-        }
+        };
 
         vm.onOff = function (device) {
             // toogle btw 0 and 1

@@ -18,12 +18,17 @@
         //////////////////////////////////////////////////
         //  GPIO class
         function getGpioObj(pin) {
-            $http.get('/gpio/getGpioObj/' + pin).then(function (res) {
-                return res.data;
-            //}, function (res) {
-            //    return res.status;
+            var def = $q.defer();
+
+            $http.get('/gpio/' + pin).success(function (data) {
+                service.value = data;
+                def.resolve(data);
+            }).error(function () {
+                def.reject('failed to get GPIO Obj');
             });
-        }
+            return def.promise;
+        } 
+
         function outPut(value, pin) {
             var val = value;
             var req = {
@@ -40,18 +45,13 @@
         function inPut(pin, gpioObj) {
             var def = $q.defer();
 
-            $http.get('/gpio/' + pin + '/' + gpioObj).success(function (res) {
-                service.value = res.value;
-                def.resolve(res.value);
+            $http.get('/gpio/' + pin + '/' + gpioObj).success(function (data) {
+                service.value = data.value;
+                def.resolve(data.value);
             }).error(function () {
                 def.reject('failed to get IO status');
             });
             return def.promise;
-        }
-        /*
-        $http.get('/gpio/' + pin).then(function (res) {
-            return res.data.value;
-        });
-*/
+        }      
     }
 })();

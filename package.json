@@ -24,6 +24,7 @@
     "request": "^2.69.0",
     "serialport": "^3.1.2",
     "textbelt": "^0.0.3",
+    "textmagic-rest-client": "0.0.5",
     "xbee-api": "^0.4.2",
     "yargs": "^4.7.0",
     "yql": "^1.0.2"
