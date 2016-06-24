@@ -31,7 +31,7 @@
 				}, function (res) {
 					console.log(res.err);
 				});
-			}, 2000);
+			}, 2500);
 
 			vm.$on('$locationChangeStart', function (event, next, current) {
 				clearInterval(vm.myReading);
