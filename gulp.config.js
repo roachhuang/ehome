@@ -3,12 +3,15 @@ module.exports = function () {
     var clientApp = client + 'public/';
     var server = './server/';
     var temp = clientApp + 'css/';
+
     var config = {
         client: client,
         clientApp: clientApp,
         // all js to vet
         alljs: [
-            clientApp + 'js/**/*.js' // ** means zero or more directories
+            clientApp + 'js/**/*.js',  // ** means zero or more directories
+            server + '/**/*.js',
+            './*.js'
         ], // no base is specified so by default it is set as './src/'
 
         build: './prod/', // production folder, not dev folder
@@ -16,12 +19,12 @@ module.exports = function () {
 
         css: temp + '*.css',
         fonts: clientApp + 'lib/font-awesome/fonts/**/*/*',
-        images: clientApp + 'images/**/*.*',
+        images: clientApp + 'assets/**/*.*',
         index: clientApp + 'views/index.html',
         js: [
             //client + '*.js'
-            clientApp + 'js/**/*.js' // in angular app we need 2 load any file that starts w/ module.js
-            //'!' + clientApp + 'lib' // exclude lib files
+            clientApp + 'js/**/*.js', // in angular app we need 2 load any file that starts w/ module.js
+            '!' + clientApp + 'lib' // exclude lib files
         ],
         server: server,
         temp: temp,

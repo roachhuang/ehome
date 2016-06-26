@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang='zh-Hant' ng-app='myApp'>
+
+<head>
+	<title>Smart Home</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Smart Home</title>
+
+	<!-- bower:css -->
+	<!-- endbower -->
+
+	<!-- bower:js -->
+	<!-- endbower -->
+
+	<!-- inject:css -->
+	<!-- endinject -->
+
+	<!-- inject:js -->
+	<!-- endinject -->
+</head>
+
+<body ng-controller="mainCtrl">
+	<header>
+		<nav class="navbar navbar-inverse role=navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#top"><img src='logo.png' /></a>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#/">Home</a></li>
+						<li><a href="#/cameraView">Camer View</a></li>
+						<li><a href="#/nasa">NASA</a></li>
+						<li><a href="#smarthome">Smart Home</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+
+	</header>
+
+	<div class='container-fluid'>
+		<div class='row'>
+			<header><a href='#'>whether</a></header>
+		</div>
+
+		<aside class="pdsa-sn-wrapper col-md-2 well">
+			<h3>{{yahoo.title}}</h3>
+			<div>
+				<h4>日出: {{yahoo.astronomy.sunrise}}， 日落: {{yahoo.astronomy.sunset}}</h4>
+			</div>
+			<div>
+				<h5>濕度: {{yahoo.atmosphere.humidity}}, 能見度：{{yahoo.atmosphere.visibility*1.6 |number:0}}km</h5>
+				<h6 ng-bind-html="yahoo.item.description"></h6>
+			</div>
+		</aside>
+	</div>
+
+	<div class='container body-content col-xs-10 col-lg-12'>
+		<ng-view></ng-view>
+		<hr/>
+	</div>
+	<footer>
+		<address>
+			<p>27F, No. 95, DunHua S. Rd.</p>
+			<p>Taipei, Taiwan 10664</p>					
+		</address>
+		<p><small>All content on site &copy; SmartHome Corporation</small></p>
+	</footer>
+</body>
+
+</html>

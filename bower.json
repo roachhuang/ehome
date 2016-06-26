@@ -29,14 +29,20 @@
   },
   "overrides": {
     "bootstrap": {
+<<<<<<< HEAD
       "main": [
         "dist/css/bootstrap.min.css"
       ]
+=======
+      "main": "dist/css/bootstrap.min.css",
+      "dist": "dist/js/bootstrap.js"      
+>>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
     },
     "font-awesome": {
       "main": [
         "css/font-awesome.min.css"
       ]
     }
-  }
+  } 
 }
+

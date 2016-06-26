@@ -1,10 +1,18 @@
 {
   "name": "angular-sanitize",
+<<<<<<< HEAD
   "version": "1.5.7",
+=======
+  "version": "1.5.6",
+>>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
   "license": "MIT",
   "main": "./angular-sanitize.js",
   "ignore": [],
   "dependencies": {
+<<<<<<< HEAD
     "angular": "1.5.7"
+=======
+    "angular": "1.5.6"
+>>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
   }
 }
