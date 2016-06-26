@@ -19,26 +19,23 @@
     "tests"
   ],
   "dependencies": {
-    "angular-route": "^1.5.3",
-    "angular-sanitize": "^1.5.5",
+    "angular-route": "^1.5.6",
+    "angular-sanitize": "^1.5.6",
     "bootstrap": "^3.3.6",
-    "angular": "^1.5.3",
-    "font-awesome": "^4.5.0",
-    "angular-cron-jobs": "^1.4.2"
+    "angular": "^1.5.6",
+    "font-awesome": "^4.6.3",
+    "angular-cron-jobs": "^1.4.2",
+    "angular-resource": "^1.5.6"
   },
   "overrides": {
     "bootstrap": {
       "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.min.css",
-        "less/bootstrap.less"
+        "dist/css/bootstrap.min.css"
       ]
     },
     "font-awesome": {
       "main": [
-        "less/font-awesome.less",
-        "css/font-awesome.min.css",
-        "scss/font-awesome.scss"
+        "css/font-awesome.min.css"
       ]
     }
   }

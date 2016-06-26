@@ -11,8 +11,8 @@ module.exports = function () {
     var xbeeAPI = new xbee_api.XBeeAPI();
 
     // ls /dev/ttyAMA0 to make suer it is exist.
-    // var serialport = new SerialPort('/dev/ttyAMA0', {
-    var serialport = new SerialPort('COM6', {
+    var serialport = new SerialPort('/dev/ttyAMA0', {
+    //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
         parser: xbeeAPI.rawParser()
     });

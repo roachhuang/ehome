@@ -3,14 +3,15 @@
  */
 angular.module('myApp')
 	.config(function ($routeProvider, $locationProvider, $httpProvider) {
-		//$locationProvider.html5Mode({ enabled: true, requireBase: false });
+		// base is set to public bah?
+		$locationProvider.html5Mode({ enabled: true, requireBase: false });
 		$routeProvider
 			.when('/', {
 				controller: 'widgetsCtrl',
-				templateUrl: '../js/widgets.html'
+				templateUrl: '/js/widgets.html'
 			})
 			.when('/camera', {
-				templateUrl: '../js/camera/cameraview.html',
+				templateUrl: '/js/camera/cameraview.html',
 				controller: 'cameraCtrl'
 				/*
 	controller: 'cameraCtrl',
@@ -25,29 +26,36 @@ angular.module('myApp')
 	*/
 			})
 			.when('/nasa', {
-				templateUrl: '../js/nasa.html',
+				templateUrl: '/js/nasa.html',
 				controller: 'nasaCtrl'
 			})
 			.when('/devivesControl', {
-				templateUrl: '../js/devices-ctrl.html',
+				templateUrl: '/js/devices-ctrl.html',
 				controller: 'devicesCtrl'
 			})
 			.when('/settings', {
-				templateUrl: '../js/cron/settings.html',
+				templateUrl: '/js/cron/settings.html',
 				controller: 'settingsCtrl'
 			})
 			.when('/settings/:deviceId', {
 				// set cronjob by devId
-				templateUrl: '../js/cron/cron.html',
+				templateUrl: '/js/cron/cron.html',
 				controller: 'cronCtrl'
+			})
+			.when('/sensors', {				
+				templateUrl: '/js/sensors/sensors.html',
+				//controller: 'loginCtrl'
 			})
 			.when('/login', {
 				// set cronjob by devId
 				templateUrl: '../js/login/login.html',
 				controller: 'loginCtrl'
 			})
+			.when('/about', {
+				templateUrl: '/views/about.html'
+			})
 			.otherwise({
 				controller: 'widgetsCtrl as vm',
-				templateUrl: '../js/widgets.html'
+				templateUrl: '/js/widgets.html'
 			});
 	});

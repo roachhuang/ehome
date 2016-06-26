@@ -5,23 +5,38 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$http'];
-	function widgetsCtrl($http) {
-		var vm = this;
+	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$rootScope'];
+	function widgetsCtrl($scope, $http, $window) {
+		// use $scope so we can inherit $scope from mainCtrl
+		var vm = $scope;
 		vm.sensors = [];
-		var i = readSensor();
+
+		activate();
 
 		////////////////
-		function readSensor() {
-			$http.get('/sensors/').then(function (res) {
-                vm.sensors = res.data.sensors;    // inside data there is an object sensors
-				return (vm.sensors.window.status === true);
-            }, function (res) {
-				console.log(res.err);
+		function activate() {
+			if (vm.hasAuthorized === false) {
+				// if use $http.get('/auth/google), we get same origin error
+				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
+			}
+			// read sensors data every 2s
+			vm.myReading = setInterval(function () {
+				vm.anyAlarm = false;
+				$http.get('/sensors').then(function (res) {
+					vm.sensors = res.data.sensors;    // inside data there is an object sensors
+					var i;
+					for (i in vm.sensors) {
+						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+					}
+				}, function (res) {
+					console.log(res.err);
+				});
+			}, 2500);
+
+			vm.$on('$locationChangeStart', function (event, next, current) {
+				clearInterval(vm.myReading);
 			});
 		}
-
-
 	}
 })();
 

@@ -1,5 +1,6 @@
 'use strict';
 var express = require('express');
+//var _ = require('loadash');
 var router = express.Router();
 
 var cronCtrl = require('../controllers/cron-ctrl')();
@@ -15,7 +16,22 @@ var cronCtrl = require('../controllers/cron-ctrl')();
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+
 router.route('/')
-    .post(cronCtrl.set);
+    .post(cronCtrl.post)
+    .delete(cronCtrl.deleteAll)
+    .get(cronCtrl.get);
+/*
+router.use('/:id', function(req, res, next){
+    var id = req.params.id
+    if (id > 5)
+        res.status(404).send('max id is 5');
+    else
+        req.cron = cron;
+});
+*/
+
+router.route('/:id')
+    .delete(cronCtrl.deleteById);
 
 module.exports = router;

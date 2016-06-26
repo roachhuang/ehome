@@ -7,10 +7,13 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has t
 
 var express = require('express');
 var app = express();
+
 var config = require('./server/config/config')[env];
-// activate sensors
+
+// create sensor objects - window and door
 var sensorObj = require('./server/config/sensor-obj')();
-//require('./server/controllers/xbee-ctrl')(sensors);
+// read API frame and fire open event if window gets opened.
+require('./server/controllers/xbee-ctrl')(sensorObj);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
@@ -39,3 +42,4 @@ app.use('/sensors', sensors);
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');
 });
+

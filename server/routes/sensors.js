@@ -6,7 +6,8 @@ module.exports = function (sensors) {
 
     router.route('/')
         .get(function (req, res) {
-            res.status(200).json({ sensors: sensors });
+            // sensors status: true or false
+            res.json({ sensors: sensors });
         });
 
     return router;
