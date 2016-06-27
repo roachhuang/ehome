@@ -10,6 +10,8 @@
         var devices = [];
         // physical pin 11 = GPIO17
         // pi-gpio is using pin number instead of GPIO pin.
+        // or DIO5?
+        devices.push(new Device('remote PWR outlet', 'D05'));
         devices.push(new Device('bedRoom', 17));
         devices.push(new Device('livingRoom', 18));
         devices.push(new Device('kitchen', 19));
@@ -27,7 +29,7 @@
             this.name = name;
             this.status = 0;    //toto: 0 or null (init state?)
             this.pin = GpioPin;
-            this.gpioObj = null;
+            //this.gpioObj = null;
             //this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing

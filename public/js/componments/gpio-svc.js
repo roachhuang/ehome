@@ -38,6 +38,7 @@
         } 
 >>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
 
+        // remote or local pin control 
         function outPut(value, pin) {
             var val = value;
             var req = {

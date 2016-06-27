@@ -103,6 +103,14 @@ module.exports = function () {
 
 =======
 'use strict';
+
+var xbee = require('../config/xbee-obj')();
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+    var nodeLocalStorage = require('node-localstorage').LocalStorage;
+}
+var localStorage = new nodeLocalStorage('./scratch');
+
 /*
 The Raspberry Pi's GPIO pins require you to be root to access them.
 That's totally unsafe for several reasons. To get around this problem,
@@ -123,10 +131,22 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 (sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
+var fs = require('fs');
 //var Gpio = require('onoff').Gpio;
+
 var Gpio = {};
 module.exports = function () {
-    var myIo = [];
+    //var myIo = [];
+    var frame_obj = {
+        type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST 
+        id: 0x01, // optional, nextFrameId() is called per default 
+        destination64: "0013a20040401122",
+        destination16: "fffe", // optional, "fffe" is default 
+        remoteCommandOptions: 0x02, // optional, 0x02 is default 
+        command: "D3",
+        // 0x04: low, 0x05: high
+        commandParameter: [0x01] // Can either be string or byte array. 
+    }
 
     var getGpioObj = function (req, res) {
         var pin = req.params.pin, gpioObj;
@@ -152,22 +172,41 @@ module.exports = function () {
             return res.sendStatus(400);
         }
         var io, pin = req.params.pin, val = req.body.val;
-        console.log(pin);
-        console.log(val);
-        //console.log(req.body.val);
-        io = new Gpio(pin, 'out');
-        //Object.assign(myIo[pin.toString()], io);
-        io.writeSync(val);
-        res.send(200);
+        //console.log('pin: '+pin+' val: '+val);
+
+        // check if it is local gpio pin or remote xbee pin 
+        if (typeof pin === 'number') {
+            io = new Gpio(pin, 'out');
+            io.writeSync(val);
+            // D0 ~ D7 on xbee
+        } else {
+            // we assume serialport has been opened. todo: check if it is opened
+            frame_obj.command = pin;
+            frame_obj.commandParameter = val? 0x05: 0x04;
+            serialport.write(xbeeAPI.buildFrame(frame_obj));
+        }
+        res.sendStatus(200);
     };
 
     var get = function (req, res) {
-        var value, pin = req.params.pin, gpioObj = req.params.gpioObj;
-        if (pin > 0 && pin < 28) {
-            console.log('gpioObj: ' + gpioObj);
-            //io = new Gpio(pin, 'in');     // this will reset the output
+        var value, io, pin = req.params.pin, strPin;
+        strPin = pin.toString();
 
-            value = gpioObj.readSync();
+        if (pin > 0 && pin < 28) {
+            io = JSON.parse(localStorage.getItem(strPin));
+            if (io === undefined || io === null) {
+                console.log('new io');
+                io = new Gpio(pin, 'in');     // this will reset the output
+                localStorage.setItem(strPin, JSON.stringify(io));
+            } else {
+                console.info('frm local: ' + io);
+                io.readSync = function () {
+                    console.log(this.readBuffer);
+                    fs.readSync(this.valueFd, this.readBuffer, 0, 1, 0);
+                    return this.readBuffer[0] === ONE[0] ? 1 : 0;
+                }
+            }
+            value = io.readSync();
             res.status(200).send({ value: value });
         }
     };
@@ -177,7 +216,6 @@ module.exports = function () {
         get: get,
         getGpioObj: getGpioObj
     };
-
 };
 
 
