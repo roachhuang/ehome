@@ -8,7 +8,7 @@ var xbee = require('../config/xbee-obj')();
 
 // sensor object is passed in from app.js
 module.exports = function (sensors) {
-    xbee.serialport.on('open', function () {
+    xbee.serialport.on('open', function () {        
         console.log('port opened.');
     });
 

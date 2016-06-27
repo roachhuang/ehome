@@ -18,6 +18,7 @@
         //////////////////////////////////////////////////
         //  GPIO class
 
+        // remote or local pin control
         function outPut(value, pin) {
             var val = value;
             var req = {
@@ -31,11 +32,9 @@
             });
         }
 
-
-        function inPut(pin) {
+        function inPut(pin, gpioObj) {
             var def = $q.defer();
-
-            $http.get('/gpio/' + pin).success(function (data) {
+            $http.get('/gpio/' + pin + '/' + gpioObj).success(function (data) {
 
                 service.value = data.value;
                 def.resolve(data.value);
@@ -45,6 +44,5 @@
             return def.promise;
 
         }
-
     }
 })();

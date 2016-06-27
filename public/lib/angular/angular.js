@@ -1,9 +1,5 @@
 /**
-<<<<<<< HEAD
  * @license AngularJS v1.5.7
-=======
- * @license AngularJS v1.5.6
->>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -61,11 +57,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-<<<<<<< HEAD
     message += '\nhttp://errors.angularjs.org/1.5.7/' +
-=======
-    message += '\nhttp://errors.angularjs.org/1.5.6/' +
->>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -2519,19 +2511,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-<<<<<<< HEAD
   full: '1.5.7',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 5,
   dot: 7,
   codeName: 'hexagonal-circumvolution'
-=======
-  full: '1.5.6',    // all of these placeholder strings will be replaced by grunt's
-  major: 1,    // package task
-  minor: 5,
-  dot: 6,
-  codeName: 'arrow-stringification'
->>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
 };
 
 

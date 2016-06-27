@@ -14,7 +14,7 @@ var config = require('./server/config/config')[env];
 var sensorObj = require('./server/config/sensor-obj')();
 // read API frame and fire open event if window gets opened.
 
-require('./server/controllers/xbee-ctrl')(sensorObj);
+require('./server/controllers/sensor-ctrl')(sensorObj);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
