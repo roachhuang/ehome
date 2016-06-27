@@ -9,8 +9,7 @@
         var service = {
             value: '',
             inPut: inPut,
-            outPut: outPut,
-            getGpioObj: getGpioObj
+            outPut: outPut
         };
 
         return service;

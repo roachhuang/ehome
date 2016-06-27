@@ -29,9 +29,9 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 for pi-gpio lib, pin = physical pin number
 */
 var fs = require('fs');
-//var Gpio = require('onoff').Gpio;
+var Gpio = require('onoff').Gpio;
 
-var Gpio = {};
+//var Gpio = {};
 module.exports = function () {
     //var myIo = [];
     var frame_obj = {
@@ -79,7 +79,7 @@ module.exports = function () {
         } else {
             // we assume serialport has been opened. todo: check if it is opened
             frame_obj.command = pin;
-            frame_obj.commandParameter = val? 0x05: 0x04;
+            frame_obj.commandParameter = val ? 0x05 : 0x04;
             serialport.write(xbeeAPI.buildFrame(frame_obj));
         }
         res.sendStatus(200);
@@ -91,16 +91,20 @@ module.exports = function () {
 
         if (pin > 0 && pin < 28) {
             io = JSON.parse(localStorage.getItem(strPin));
+            console.info('io read frm local: ' + io);
             if (io === undefined || io === null) {
-                console.log('new io');
                 io = new Gpio(pin, 'in');     // this will reset the output
+                console.log('new io: ' + io);
+                console.log(io.readBuffer);
                 localStorage.setItem(strPin, JSON.stringify(io));
             } else {
                 console.info('frm local: ' + io);
                 io.readSync = function () {
-                    console.log(this.readBuffer);
-                    fs.readSync(this.valueFd, this.readBuffer, 0, 1, 0);
-                    return this.readBuffer[0] === ONE[0] ? 1 : 0;
+                    var readBuffer = new Buffer(16);
+                    valueFd = fs.openSync(this.valuePath, 'r+');
+                    console.log(valueFd);
+                    fs.readSync(valueFd, readBuffer, 0, 1, 0);
+                    return readBuffer[0] === ONE[0] ? 1 : 0;
                 }
             }
             value = io.readSync();

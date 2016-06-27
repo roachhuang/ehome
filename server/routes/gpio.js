@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> b136d9116b2b992d8dd75a37f8e2b49632fe5119
 'use strict';
 var express = require('express');
 var router = express.Router();
@@ -38,7 +34,4 @@ router.route('/getGpioObj/:pin')
     .get(gpioController.getGpioObj);
 
 module.exports = router;
-<<<<<<< HEAD
-=======
 
->>>>>>> b136d9116b2b992d8dd75a37f8e2b49632fe5119
