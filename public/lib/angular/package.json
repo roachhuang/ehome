@@ -1,10 +1,6 @@
 {
   "name": "angular",
-<<<<<<< HEAD
   "version": "1.5.7",
-=======
-  "version": "1.5.6",
->>>>>>> 0ec0a1cc276d68b06f8d88c593512420174f7f19
   "description": "HTML enhanced for web apps",
   "main": "index.js",
   "scripts": {
