@@ -86,7 +86,7 @@ module.exports = function () {
     };
 
     var get = function (req, res) {
-        var value, io, pin = req.params.pin, strPin;
+        var value, io, pin = req.params.pin, strPin, ONE = new Buffer('1');
         strPin = pin.toString();
 
         if (pin > 0 && pin < 28) {
