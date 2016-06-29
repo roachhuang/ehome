@@ -2,11 +2,7 @@
 'use strict';
 
 var xbee = require('../config/xbee-obj')();
-
-if (typeof localStorage === "undefined" || localStorage === null) {
-    var nodeLocalStorage = require('node-localstorage').LocalStorage;
-}
-var localStorage = new nodeLocalStorage('./scratch');
+var exec = require('child_process').exec;
 
 /*
 The Raspberry Pi's GPIO pins require you to be root to access them.
@@ -28,13 +24,12 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 (sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
-var fs = require('fs');
+
 var Gpio = require('onoff').Gpio;
 
 //var Gpio = {};
-module.exports = function () {
-    //var myIo = [];
-    var frame_obj = {
+module.exports = function () { 
+    var frameObj = {
         type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
         id: 0x01, // optional, nextFrameId() is called per default
         destination64: "0013a20040401122",
@@ -43,22 +38,6 @@ module.exports = function () {
         command: "D3",
         // 0x04: low, 0x05: high
         commandParameter: [0x01] // Can either be string or byte array.
-    }
-
-    var getGpioObj = function (req, res) {
-        var pin = req.params.pin, gpioObj;
-
-        gpioObj = new Gpio(pin, 'in');
-        console.log('gpioObj: ' + gpioObj);
-        //console.log(myIo.length);
-        //console.log('process on sigint');
-        /*
-        process.on('SIGINT', function () {
-            myIo[17].unexport();
-            myIo[18].unexport();
-        });
-        */
-        res.send(gpioObj);
     };
 
     var post = function (req, res) {
@@ -72,50 +51,42 @@ module.exports = function () {
         //console.log('pin: '+pin+' val: '+val);
 
         // check if it is local gpio pin or remote xbee pin
-        if (typeof pin === 'number') {
+        if (typeof pin !== 'number') {
+            console.log('pin is number');
             io = new Gpio(pin, 'out');
             io.writeSync(val);
             // D0 ~ D7 on xbee
         } else {
+            console.info(typeof pin);
             // we assume serialport has been opened. todo: check if it is opened
-            frame_obj.command = pin;
-            frame_obj.commandParameter = val ? 0x05 : 0x04;
-            serialport.write(xbeeAPI.buildFrame(frame_obj));
+            frameObj.command = pin;
+            frameObj.commandParameter = val ? 0x05 : 0x04;
+            //serialport.write(xbeeAPI.buildFrame(frameObj));
         }
         res.sendStatus(200);
     };
 
     var get = function (req, res) {
-        var value, io, pin = req.params.pin, strPin, ONE = new Buffer('1');
-        strPin = pin.toString();
-
-        if (pin > 0 && pin < 28) {
-            io = JSON.parse(localStorage.getItem(strPin));
-            console.info('io read frm local: ' + io);
-            if (io === undefined || io === null) {
+        var value, io, pin = req.params.pin, strPin;
+        strPin = pin.toString();   
+        //if (pin > 0 && pin < 28) {
+        
+        exec('cat /sys/class/gpio/gpio' + strPin+'/value', function (err, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            value = parseInt(stdout);
+            console.log('stderr: ' + stderr);
+            if (err !== null) {
                 io = new Gpio(pin, 'in');     // this will reset the output
-                console.log('new io: ' + io);
-                console.log(io.readBuffer);
-                localStorage.setItem(strPin, JSON.stringify(io));
-            } else {
-                console.info('frm local: ' + io);
-                io.readSync = function () {
-                    var readBuffer = new Buffer(16);
-                    valueFd = fs.openSync(this.valuePath, 'r+');
-                    console.log(valueFd);
-                    fs.readSync(valueFd, readBuffer, 0, 1, 0);
-                    return readBuffer[0] === ONE[0] ? 1 : 0;
-                }
-            }
-            value = io.readSync();
+                console.log('new io: ' + io);             
+                value = io.readSync();
+            }      
             res.status(200).send({ value: value });
-        }
+        });
     };
 
     return {
         post: post,
         get: get,
-        getGpioObj: getGpioObj
     };
 };
 

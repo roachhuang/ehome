@@ -43,4 +43,3 @@ app.use('/sensors', sensors);
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');
 });
-

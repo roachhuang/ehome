@@ -15,21 +15,8 @@
 
         function activate() {
             // deviceService is a singleton
-            var i, pin, gpioObj;
-            vm.devices = deviceService;
-            /*
-            for (i in vm.devices) {
-                pin = vm.devices[i].pin;
-                if (localStorage.getItem(pin) === 'undefined') {
-                    gpioService.getGpioObj(pin).then(function (res) {
-                        vm.devices[i].gpioObj = res.data;
-                        localStorage.setItem(pin, JSON.stringify(vm.devices[i].gpioObj));
-                    });
-                } else {
-                    vm.devices[i].gpioObj = JSON.parse(localStorage.getItem(pin));
-                }
-            }
-            */
+            var i, pin;
+            vm.devices = deviceService;        
 
             // read devices status
             //setTimeout(function () {

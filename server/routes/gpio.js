@@ -5,7 +5,7 @@ var router = express.Router();
 // gpiocontroller is a func; in order to have it returns an object back to us, we need to execute it by following "()"
 
 var gpioController = require('../controllers/onoff-ctrl')();
-//var gpioController = require('../controllers/gpio-ctrl')();
+//var gpioController = require('../controllers/rpi-gpio-ctrl')();
 /* boday-parser is included in app.js, so no need to do it here.
 * it is alreay apply to express
 * create application/x-www-form-urlencoded parser
@@ -29,9 +29,6 @@ router.all('*', function (req, res, next) {
 router.route('/:pin')
     .get(gpioController.get)   // return 0 or 1
     .post(gpioController.post);
-
-router.route('/getGpioObj/:pin')
-    .get(gpioController.getGpioObj);
 
 module.exports = router;
 
