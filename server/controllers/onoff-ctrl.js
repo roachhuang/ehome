@@ -26,9 +26,9 @@ for pi-gpio lib, pin = physical pin number
 */
 
 var Gpio = require('onoff').Gpio;
+//var r Gpio = {};
 
-//var Gpio = {};
-module.exports = function () { 
+module.exports = function () {
     var frameObj = {
         type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
         id: 0x01, // optional, nextFrameId() is called per default
@@ -51,13 +51,14 @@ module.exports = function () {
         //console.log('pin: '+pin+' val: '+val);
 
         // check if it is local gpio pin or remote xbee pin
-        if (typeof pin !== 'number') {
-            console.log('pin is number');
+        console.info(typeof pin);
+        if (pin[0] !== 'D') {
+            console.log('local devices');
             io = new Gpio(pin, 'out');
             io.writeSync(val);
             // D0 ~ D7 on xbee
         } else {
-            console.info(typeof pin);
+            console.info('remote devices');
             // we assume serialport has been opened. todo: check if it is opened
             frameObj.command = pin;
             frameObj.commandParameter = val ? 0x05 : 0x04;
@@ -68,20 +69,24 @@ module.exports = function () {
 
     var get = function (req, res) {
         var value, io, pin = req.params.pin, strPin;
-        strPin = pin.toString();   
+        strPin = pin.toString();
         //if (pin > 0 && pin < 28) {
-        
-        exec('cat /sys/class/gpio/gpio' + strPin+'/value', function (err, stdout, stderr) {
-            console.log('stdout: ' + stdout);
-            value = parseInt(stdout);
-            console.log('stderr: ' + stderr);
-            if (err !== null) {
-                io = new Gpio(pin, 'in');     // this will reset the output
-                console.log('new io: ' + io);             
-                value = io.readSync();
-            }      
-            res.status(200).send({ value: value });
-        });
+        console.info(typeof pin);
+        if (pin[0] === 'D') {
+            res.status(200).send({ value: 0 });
+        } else {
+            exec('cat /sys/class/gpio/gpio' + strPin + '/value', function (err, stdout, stderr) {
+                console.log('stdout: ' + stdout);
+                value = parseInt(stdout);
+                console.log('stderr: ' + stderr);
+                if (err !== null) {
+                    io = new Gpio(pin, 'in');     // this will reset the output
+                    console.log('new io: ' + io);
+                    value = io.readSync();
+                }
+                res.status(200).send({ value: value });
+            });
+        }
     };
 
     return {

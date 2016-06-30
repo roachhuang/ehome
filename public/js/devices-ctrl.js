@@ -41,9 +41,8 @@
         */
         vm.onOff = function (device) {
             // toogle btw 0 and 1
-            device.status = device.status ^ 1;
+            device.status = device.status ^ 1;            
             gpioService.outPut(device.status, device.pin);
         };
-
     }
 })();
