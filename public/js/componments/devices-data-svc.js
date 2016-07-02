@@ -12,7 +12,7 @@
         // physical pin 12 = GPIO18
         // rpi-gpio is using pin number instead of GPIO pin; while onoff uses GPIO pin number.
         // or DIO5?
-        devices.push(new Device('remote PWR outlet', 'D05'));
+        devices.push(new Device('remote PWR outlet', 'D0'));
         //devices.push(new Device('bedRoom', 7));
         devices.push(new Device('livingRoom', 23));
         devices.push(new Device('kitchen', 24));
@@ -29,7 +29,7 @@
             this.id = nextId++;
             this.name = name;
             this.status = 0;    //toto: 0 or null (init state?)
-            this.pin = GpioPin;     
+            this.pin = GpioPin;
             //this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing

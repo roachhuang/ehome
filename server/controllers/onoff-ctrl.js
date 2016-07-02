@@ -35,7 +35,7 @@ module.exports = function () {
         destination64: "0013a20040401122",
         destination16: "fffe", // optional, "fffe" is default
         remoteCommandOptions: 0x02, // optional, 0x02 is default
-        command: "D3",
+        command: "D0",
         // 0x04: low, 0x05: high
         commandParameter: [0x01] // Can either be string or byte array.
     };
@@ -62,7 +62,7 @@ module.exports = function () {
             // we assume serialport has been opened. todo: check if it is opened
             frameObj.command = pin;
             frameObj.commandParameter = val ? 0x05 : 0x04;
-            //serialport.write(xbeeAPI.buildFrame(frameObj));
+            xbee.serialport.write(xbee.API.buildFrame(frameObj));
         }
         res.sendStatus(200);
     };

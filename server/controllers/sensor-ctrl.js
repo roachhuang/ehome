@@ -1,14 +1,14 @@
 'use strict';
 var email = require('./emailController');
 // test purpose
-var sms = require('./sms-ctrl');
+var twilio = require('./sms-ctrl')();
 
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbee = require('../config/xbee-obj')();
 
 // sensor object is passed in from app.js
 module.exports = function (sensors) {
-    xbee.serialport.on('open', function () {        
+    xbee.serialport.on('open', function () {
         console.log('port opened.');
     });
 
@@ -30,7 +30,8 @@ module.exports = function (sensors) {
         // there should be a limit of sending email and txt msg.
         email.sendEmail();
         // send text msg
-        sms();
+        //twilio.sendMessage();
+        //twilio.makeCall();
         // start recording video or capture video image 10 times (one time per sec)
         // 7-eleven call police
         // alert.window = true;
