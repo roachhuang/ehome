@@ -1,6 +1,6 @@
 'use strict';
 var events = require('events');
-var request = require('request');
+//var request = require('request');
 
 module.exports = function () {
 
@@ -14,7 +14,9 @@ module.exports = function () {
     // parse frame from xbee-api
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
-        if (frame.digitalSamples.DIO4 === 1) {
+        if (typeof frame.digitalSamples.DIO4 === 'undefined') {
+            this.status = false;
+        } else if (frame.digitalSamples.DIO4 === 1) {
             // window get opened
             this.status = true;
             // fire open event

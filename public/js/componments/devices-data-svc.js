@@ -29,7 +29,7 @@
             this.id = nextId++;
             this.name = name;
             this.status = 0;    //toto: 0 or null (init state?)
-            this.pin = GpioPin;     
+            this.pin = GpioPin;
             //this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing

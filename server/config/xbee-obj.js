@@ -2,26 +2,27 @@
 'use strict';
 
 //var util = require('util');
-var SerialPort = require('serialport').SerialPort;
+var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 
 module.exports = function () {
     var C = xbee_api.constants;
-    //var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 1});
-    var xbeeAPI = new xbee_api.XBeeAPI();
+    var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 1});
+    //var xbeeAPI = new xbee_api.XBeeAPI();
 
     // ls /dev/ttyAMA0 to make suer it is exist.
     
     var serialport = new SerialPort('/dev/ttyAMA0', {
     //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
-        parser: xbeeAPI.rawParser()
+        parser: xbeeAPI.rawParser()    
     });
     
 
     return {
         API: xbeeAPI,
-        serialport: serialport
+        serialport: serialport,
+        C: C
     };
 
 /*

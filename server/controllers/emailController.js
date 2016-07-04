@@ -33,7 +33,6 @@ exports.sendEmail = function (req, res) {
         if (error) {
             return console.log(error);
         }
-        console.log('Message sent: ' + info.response);
-        res.send(200);
+        console.log('Message sent: ' + info.response);   
     });
 };

@@ -13,7 +13,7 @@ module.exports = function () {
         "userkey": "EPT34QUZU30U",
         "password": "0916@tpe",
         "originator": "mark.huang@ca-sec.com",
-        // Optional: 
+        // Optional:
         //"deliveryNotificationUrl": "http://example.com/success",
         //"nonDeliveryNotificationUrl": "http://example.com/failure"
     };
@@ -35,7 +35,6 @@ var client = require('twilio')('AC3bc257b085176ab8684e69045e64c476', '9454f1c06a
 module.exports = function () {
     //Send an SMS text message
     client.sendMessage({
-
         to: '+886922719061', // Any number Twilio can deliver to
         //from: '+14506667788', // A number you bought from Twilio and can use for outbound communication
         from: '+33644609063',
@@ -58,7 +57,6 @@ module.exports = function () {
 /*
     //Place a phone call, and respond with TwiML instructions from the given URL
     client.makeCall({
-
         to: '+886922719061', // Any number Twilio can call
         from: '+33644609063', // A number you bought from Twilio and can use for outbound communication
         url: 'http://www.example.com/twiml.php' // A URL that produces an XML document (TwiML) which contains instructions for the call
@@ -66,7 +64,8 @@ module.exports = function () {
     }, function (err, responseData) {
 
         //executed when the call has been initiated.
-        console.log(responseData.from); // outputs "+14506667788"
+        //console.log(responseData.from); // outputs "+14506667788"
+          console.log(responseData); // outputs "+14506667788"
 
     });
 */
