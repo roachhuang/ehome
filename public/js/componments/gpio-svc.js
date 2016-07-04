@@ -41,7 +41,6 @@
                 def.reject('failed to get IO status');
             });
             return def.promise;
-
         }
     }
 })();

@@ -1,9 +1,8 @@
 'use strict';
 var express = require('express');
+var router = express.Router();
 
 module.exports = function (sensors) {
-    var router = express.Router();
-
     router.route('/')
         .get(function (req, res) {
             // sensors status: true or false

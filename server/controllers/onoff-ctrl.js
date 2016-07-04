@@ -1,7 +1,7 @@
 
 'use strict';
 
-var xbee = require('../config/xbee-obj')();
+//var xbee = require('../config/xbee-obj')();
 var exec = require('child_process').exec;
 
 /*
@@ -26,9 +26,9 @@ for pi-gpio lib, pin = physical pin number
 */
 
 var Gpio = require('onoff').Gpio;
-//var r Gpio = {};
+//var  Gpio = {};
 
-module.exports = function () {
+module.exports = function (xbee) {
     var frameObj = {
         type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
         id: 0x01, // optional, nextFrameId() is called per default
@@ -62,7 +62,7 @@ module.exports = function () {
             // we assume serialport has been opened. todo: check if it is opened
             frameObj.command = pin;
             frameObj.commandParameter = val ? 0x05 : 0x04;
-            //serialport.write(xbeeAPI.buildFrame(frameObj));
+            xbee.serialport.write(xbee.API.buildFrame(frameObj));
         }
         res.sendStatus(200);
     };

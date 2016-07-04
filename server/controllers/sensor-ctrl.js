@@ -4,10 +4,10 @@ var email = require('./emailController');
 var sms = require('./sms-ctrl');
 
 // init xbee - setup baud rate, com port,  mode, etc.
-var xbee = require('../config/xbee-obj')();
+//var xbee = require('../config/xbee-obj')();
 
 // sensor object is passed in from app.js
-module.exports = function (sensors) {
+module.exports = function (sensors, xbee) {
     xbee.serialport.on('open', function () {        
         console.log('port opened.');
     });

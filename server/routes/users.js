@@ -151,8 +151,6 @@ router.get('/saveimage', function (req, res) {
     });
 });
 
-
-
 router.get('/saveVideo', function (req, res) {
     var writeStream = fs.createWriteStream('./output.avi');
     request('http://ubuy.asuscomm.com:8080/video.cgi').pipe(fs.createWriteStream('./output.avi'));
