@@ -33,5 +33,5 @@ module.exports = function (xbee) {
         .post(gpioController.post);
 
     return router;
-}
+};
 

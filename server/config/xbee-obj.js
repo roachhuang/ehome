@@ -15,7 +15,8 @@ module.exports = function () {
     var serialport = new SerialPort('/dev/ttyAMA0', {
     //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
-        parser: xbeeAPI.rawParser()    
+        parser: xbeeAPI.rawParser(),
+        rtscts: true            
     });
     
 

@@ -32,10 +32,10 @@ module.exports = function (xbee) {
     var frame_obj = {
         type: 0x17, // xbee_api.constants.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST
         id: 0x01, // optional, nextFrameId() is called per default
-        destination64: "0013A20040EB556C",
-        destination16: "fffe", // optional, "fffe" is default
+        destination64: '0013A20040EB556C',
+        destination16: 'fffe', // optional, "fffe" is default
         remoteCommandOptions: 0x02, // optional, 0x02 is default
-        command: "D0",
+        command: 'D0',
         // 0x04: low, 0x05: high
         commandParameter: [0x01] // Can either be string or byte array.
     };
@@ -63,9 +63,9 @@ module.exports = function (xbee) {
             var frame_obj = { // AT Request to be sent to
                 type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
                 destination64: '0013A20040EB556C',       
-                command = pin,
-                commandParameter = val ? 0x05 : 0x04
-            }
+                command: pin,
+                commandParameter: val ? 0x05 : 0x04
+            };
             xbee.serialport.write(xbee.API.buildFrame(frame_obj), function(error){
                 console.log(xbee.API.buildFrame(frame_obj));
                 console.log('remote ctrl frame: '+error);

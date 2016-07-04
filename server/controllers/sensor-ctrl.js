@@ -10,12 +10,12 @@ var email = require('./emailController');
 
 module.exports = function (sensors, xbee) {
 
-    xbee.serialport.on("open", function () {
+    xbee.serialport.on('open', function () {
         console.log('port opened.');
         var frame_obj = { // AT Request to be sent to
             type: xbee.C.FRAME_TYPE.AT_COMMAND,
             destination64: '0013A20040EB556C',            
-            command: "NI",
+            command: 'NI',
             commandParameter: [],
         };
         xbee.serialport.write(xbee.API.buildFrame(frame_obj), function(error) {
