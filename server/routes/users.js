@@ -140,7 +140,7 @@ router.get('/saveimage', function (req, res) {
                     res.sendStatus(200);
                 }
                 else {
-                    console.error(err + response.statusCode);
+                    console.error(body);
                 }
             });
             // send email w/ ipcma img attachment

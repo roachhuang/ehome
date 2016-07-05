@@ -1,14 +1,24 @@
-angular.module('myApp')
-	.controller('cameraCtrl', function ($scope, $http) {
-		/*
-		$http.get('/api/url').then(function (res) {
-			$window.open(url, 'Please sign in with Google", "width=500px,height:700px');
-			var url = res.data;			
-		});
-		*/
-		$scope.snapShot = function () {			
+(function () {
+	'use strict';
+
+	angular
+		.module('myApp')
+		.controller('cameraCtrl', cameraCtrl);
+
+	cameraCtrl.$inject = ['$http'];
+	function cameraCtrl($http) {
+		var vm = this;
+
+		vm.snapShot = function () {
 			$http.get('/users/saveimage').then(function (res) {
 				console.log('img captured');
 			});
 		};
-	});
+
+		activate();
+
+		////////////////
+
+		function activate() { }
+	}
+})();
