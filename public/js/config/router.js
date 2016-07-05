@@ -12,7 +12,7 @@ angular.module('myApp')
 			})
 			.when('/camera', {
 				templateUrl: '/js/camera/cameraview.html',
-				controller: 'cameraCtrl'
+				controller: 'cameraCtrl as vm'
 				/*
 	controller: 'cameraCtrl',
 	resolve: {

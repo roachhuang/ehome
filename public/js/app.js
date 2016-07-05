@@ -3,7 +3,8 @@
     'use strict';
 
     angular
-        .module('myApp', ['ngSanitize', 'ngResource', 'ngRoute', 'angular-cron-jobs', 'app.gpio'])
+        //.module('myApp', ['ngSanitize', 'ngResource', 'ngRoute', 'angular-cron-jobs', 'app.gpio'])
+        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])
         .controller('mainCtrl', mainCtrl);
 
     // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
@@ -18,18 +19,12 @@
         ////////////////
 
         function activate() {
-            $http.get('/users/token').then(function (res) {
-                if (res.data.token != null) {
-                    vm.hasAuthorized = true;
-                } else {
-                    vm.hasAuthorized = false;
-                }
-            });
             /*
             vm.$route = $route;
             vm.$location = $location;
             vm.$routeParams = $routeParams;
             */
+            hasAuthorized();
 
             $http.get('/api/yahoo').then(function (res) {
                 vm.yahoo = res.data.query.results.channel;
@@ -37,6 +32,17 @@
 
             $http.get('/api/apod').then(function (res) {
                 vm.apod = res.data;
+            });
+        }
+
+        function hasAuthorized() {
+            //$http.get('/users/google').then(function (res) {
+            $http.get('/auth/google').then(function (res) {
+                if (res.data.token != null) {
+                    vm.hasAuthorized = true;
+                } else {
+                    vm.hasAuthorized = false;
+                }
             });
         }
     }

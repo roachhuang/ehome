@@ -10,12 +10,17 @@
 		// use $scope so we can inherit $scope from mainCtrl
 		var vm = $scope;
 		vm.sensors = [];
+		vm.onExit = function () {
+			// close serialport, release GPIO ports, 
+		}
 
 		activate();
 
 		////////////////
 		function activate() {
+			// hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
+				alert("not logon, please log on");
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
@@ -34,8 +39,10 @@
 			}, 2500);
 
 			vm.$on('$locationChangeStart', function (event, next, current) {
+				alert("locationChange event..");
 				clearInterval(vm.myReading);
 			});
+			$window.onbeforeunload = vm.onExit;
 		}
 	}
 })();

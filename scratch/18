@@ -1,1 +1,0 @@
-{"gpio":"18","gpioPath":"/sys/class/gpio/gpio18/","opts":{"debounceTimeout":0},"readBuffer":{"type":"Buffer","data":[48,255,255,255,0,224,34,2,4,0,0,0,66,42,28,87]},"listeners":[],"valueFd":22,"poller":{"closed":false}}
