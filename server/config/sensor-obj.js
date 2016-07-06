@@ -34,6 +34,7 @@ module.exports = function () {
             this.status = false;
         }
     };
+    // todo: return constructor and create window obj in senor-ctrl.js
     var window = new Sensor('DIO4', 'in the living room');
     var door = new Sensor('DIO3', 'main gate');
 

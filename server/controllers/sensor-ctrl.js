@@ -11,20 +11,24 @@ var email = require('./emailController');
 module.exports = function (sensors, xbee) {
 
     xbee.serialport.on('open', function () {
-        console.log('port opened.');
+        console.log('port opened.');        
         var frame_obj = { // AT Request to be sent to
             type: xbee.C.FRAME_TYPE.AT_COMMAND,
             destination64: '0013A20040EB556C',            
             command: 'NI',
             commandParameter: [],
         };
-        xbee.serialport.write(xbee.API.buildFrame(frame_obj), function(error) {
-            console.log('sendframe: ' + error);
-        });
+        //xbee.serialport.write(xbee.API.buildFrame(frame_obj), function(error) {
+        //    console.log('sendframe: ' + error);
+        //});
     });
 
     xbee.serialport.on('data', function (data) {
         console.log('data received: ' + data);
+    });
+
+    xbee.serialport.on('error', function (err) {
+        console.log('Error: ', err.message);
     });
 
     // All frames parsed by the XBee will be emitted here

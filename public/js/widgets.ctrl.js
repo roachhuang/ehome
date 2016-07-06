@@ -10,8 +10,9 @@
 		// use $scope so we can inherit $scope from mainCtrl
 		var vm = $scope;
 		vm.sensors = [];
+
 		vm.onExit = function () {
-			// close serialport, release GPIO ports, 
+			// todo: close serialport, release GPIO ports, 
 		}
 
 		activate();
