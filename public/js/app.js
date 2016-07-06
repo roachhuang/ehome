@@ -35,9 +35,8 @@
             });
         }
 
-        function hasAuthorized() {
-            //$http.get('/users/google').then(function (res) {
-            $http.get('/auth/google').then(function (res) {
+        function hasAuthorized() {          
+            $http.get('/users/token').then(function (res) {
                 if (res.data.token != null) {
                     vm.hasAuthorized = true;
                 } else {

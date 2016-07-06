@@ -20,11 +20,16 @@ exports.sendEmail = function (req, res) {
         subject: 'Intruder', // Subject line
         text: 'Hello world', // plaintext body
         html: '<h1>Hello world</h1>', // html body
-        attachements: [
+        attachments: [
             {
-                filename: 'ipcam.jpg',
-                content: 'http://ubuy.asuscomm.com:8080/image.jpg'
-            }
+                filename: 'ipcam.jpg',         
+                path: 'http://ubuy.asuscomm.com:8080/image.jpg',
+                contentType: 'image/jpeg',
+            },
+            //{   // use URL as an attachment
+            //    filename: 'license.txt',
+            //    path: 'https://raw.github.com/nodemailer/nodemailer/master/LICENSE'
+            //},
         ]
     };
 
