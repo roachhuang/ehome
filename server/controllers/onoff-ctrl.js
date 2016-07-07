@@ -24,7 +24,7 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 (sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
-var util = require('util');
+//var util = require('util');
 var Gpio = require('onoff').Gpio;
 //var  Gpio = {};
 
@@ -49,22 +49,8 @@ module.exports = function (xbee) {
         } else {
             console.info('remote devices');
             // we assume serialport has been opened. todo: check if it is opened
-            var frame_obj = { // AT Request to be sent to
-                type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-                destination64: '0013A20040EB556C',
-                command: pin,
-                //commandParameter: val ? 0x05 : 0x04
-            };
-            frame_obj.commandParameter = val ? [0x05] : [0x04];
-            //console.log('cmdparam: ', frame_obj.commandParameter);
-
-            xbee.serialport.write(xbee.API.buildFrame(frame_obj), function (err, res) {
-                //console.log(xbee.API.buildFrame(frame_obj));
-                if (err) throw (err);
-                else {
-                    console.log('written bytes: ' + util.inspect(res));
-                }
-            });
+            const routerAddr = '0013A20040EB556C';
+            xbee.atCmd(xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, routerAddr, pin, val ? [0x05] : [0x04]);                   
         }
         res.sendStatus(200);
     };

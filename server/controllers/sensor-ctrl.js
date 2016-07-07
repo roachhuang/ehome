@@ -13,6 +13,7 @@ module.exports = function (sensors, xbee) {
 
     xbee.serialport.on('open', function () {
         console.log('port opened.');
+        xbee.atCmd(xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, xbee.routerAddr, 'V+', [0x800]);
         /*
         var frame_obj = { // AT Request to be sent to
             type: xbee.C.FRAME_TYPE.AT_COMMAND,

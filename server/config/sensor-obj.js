@@ -31,7 +31,7 @@ module.exports = function () {
                 });
                 */
             }
-        };
+       };
     }
 
     var window = new Sensor('DIO4', 'in the living room');

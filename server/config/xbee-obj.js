@@ -6,6 +6,7 @@ var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 
 module.exports = function () {
+    const routerAddr = '0013A20040EB556C';
     var C = xbee_api.constants;
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     //var xbeeAPI = new xbee_api.XBeeAPI();
@@ -23,11 +24,29 @@ module.exports = function () {
         }
     });
 
+    var atCmd = function (type, dest, cmd, param) {
+        var frame_obj = { // AT Request to be sent to
+            type: type,
+            destination64: dest,
+            command: cmd,
+            commandParameter: param
+        };       
+
+        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err, res) {
+            //console.log(xbee.API.buildFrame(frame_obj));
+            if (err) throw (err);
+            else {
+                console.log('written bytes: ' + res);
+            }
+        });
+    }
 
     return {
         API: xbeeAPI,
         serialport: serialport,
-        C: C
+        C: C,
+        atCmd: atCmd,
+        routerAddr: routerAddr
     };
 
     /*
