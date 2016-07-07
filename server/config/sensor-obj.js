@@ -14,26 +14,26 @@ module.exports = function () {
     // parse frame from xbee-api
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
-        if (typeof frame.digitalSamples.DIO4 === 'undefined') {
-            this.status = false;
-        } else if (frame.digitalSamples.DIO4 === 1) {
-            // window get opened
-            this.status = true;
-            // fire open event
-            vm.emit('open');
-            /*
-            request.get('http://localhost:3000/', function(err, res, body){
-                if (err) {
-                    console.log(err);
-                } else {
-                    //console.log(res);
-                }
-            });
-            */
-        } else {
-            this.status = false;
-        }
-    };
+        vm.status = false;
+        if (frame.hasOwnProperty('digitalSamples.DIO4')) {
+            if (frame.digitalSamples.DIO4 === 1) {
+                // window get opened
+                vm.status = true;
+                // fire open event
+                vm.emit('open');
+                /*
+                request.get('http://localhost:3000/', function(err, res, body){
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        //console.log(res);
+                    }
+                });
+                */
+            }
+        };
+    }
+
     var window = new Sensor('DIO4', 'in the living room');
     var door = new Sensor('DIO3', 'main gate');
 
@@ -45,7 +45,7 @@ module.exports = function () {
     /* Remove the binding of listner1 function
     eventEmitter.removeListener('connection', listner1);
     console.log("Listner1 will not listen now.");
-
+ 
     eventListeners = require('events').EventEmitter.listenerCount(eventEmitter, 'connection');
     console.log(eventListeners + " Listner(s) listening to connection event");
     */

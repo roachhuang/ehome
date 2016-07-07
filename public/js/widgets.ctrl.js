@@ -5,10 +5,10 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$rootScope'];
-	function widgetsCtrl($scope, $http, $window) {
+	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$interval'];
+	function widgetsCtrl($scope, $http, $window, $interval) {
 		// use $scope so we can inherit $scope from mainCtrl
-		var vm = $scope;
+		var vm = $scope, stop;
 		vm.sensors = [];
 		vm.onExit = function () {
 			// close serialport, release GPIO ports, 
@@ -24,8 +24,8 @@
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
-			// read sensors data every 2s
-			vm.myReading = setInterval(function () {
+			// read sensors data every 3s
+			stop = $interval(function () {
 				vm.anyAlarm = false;
 				$http.get('/sensors').then(function (res) {
 					vm.sensors = res.data.sensors;    // inside data there is an object sensors
@@ -36,12 +36,16 @@
 				}, function (res) {
 					console.log(res.err);
 				});
-			}, 2500);
+			}, 3 * 1000);
 
-			vm.$on('$locationChangeStart', function (event, next, current) {
-				alert("locationChange event..");
-				clearInterval(vm.myReading);
+			vm.$on('$destroy', function () {
+				// Make sure that the interval is destroyed too
+				if (angular.isDefined(stop)) {
+					$interval.cancel(stop);
+					stop = undefined;
+				}
 			});
+
 			$window.onbeforeunload = vm.onExit;
 		}
 	}

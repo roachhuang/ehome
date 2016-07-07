@@ -7,18 +7,22 @@ var xbee_api = require('xbee-api');
 
 module.exports = function () {
     var C = xbee_api.constants;
-    var xbeeAPI = new xbee_api.XBeeAPI({api_mode: 1});
+    var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     //var xbeeAPI = new xbee_api.XBeeAPI();
 
     // ls /dev/ttyAMA0 to make suer it is exist.
-    
+
     var serialport = new SerialPort('/dev/ttyAMA0', {
-    //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
+        //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
-        parser: xbeeAPI.rawParser(),
-        rtscts: true            
+        parser: xbeeAPI.rawParser()
+        //rtscts: true            
+    }, function (err) {
+        if (err) {
+            return console.log('Error: ', err.message);
+        }
     });
-    
+
 
     return {
         API: xbeeAPI,
@@ -26,66 +30,66 @@ module.exports = function () {
         C: C
     };
 
-/*
-    serialport.on('open', function () {
-        console.log('port opened.');
-    });
-
-
     /*
         serialport.on('open', function () {
-            var frame_obj = {
-                type: 0x10,
-                id: 0x01,
-                destination64: '0013A20040EB5559',
-                broadcastRadius: 0x00,
-                options: 0x00,
-                data: 'Hello world'
+            console.log('port opened.');
+        });
+    
+    
+        /*
+            serialport.on('open', function () {
+                var frame_obj = {
+                    type: 0x10,
+                    id: 0x01,
+                    destination64: '0013A20040EB5559',
+                    broadcastRadius: 0x00,
+                    options: 0x00,
+                    data: 'Hello world'
+                };
+                serialport.write(xbeeAPI.buildFrame(frame_obj));
+                console.log('Sent to serial port.');
+            });
+    
+        serialport.on("open", function() {
+            console.log("open");
+            var frame_obj = { // AT Request to be sent to
+                type: C.FRAME_TYPE.AT_COMMAND,
+                command: "D0",
+                commandParameter: [0x05],
             };
             serialport.write(xbeeAPI.buildFrame(frame_obj));
-            console.log('Sent to serial port.');
         });
-
-    serialport.on("open", function() {
-        console.log("open");
-        var frame_obj = { // AT Request to be sent to
-            type: C.FRAME_TYPE.AT_COMMAND,
-            command: "D0",
-            commandParameter: [0x05],
-        };
-        serialport.write(xbeeAPI.buildFrame(frame_obj));
-    });
-
-
-    serialport.on('data', function (data) {
-        console.log('data received: ' + data);
-
-    });
-
-    // All frames parsed by the XBee will be emitted here
-    xbeeAPI.on('frame_object', function (frame) {
-        console.log('>>', frame);
-        sensors.window.getStatus(frame);
-        // i/o data received
-
-    });
-    /*
-    {
-        type: 0x92, // xbee_api.constants.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX
-        remote64: "0013a20040522baa",
-        remote16: "7d84",
-        receiveOptions: 0x01,
-        numSamples: 1,
-        digitalSamples: {
-            "DIO2": 1,
-            "DIO3": 0,
-            "DIO4": 1
-        },
-        analogSamples: {
-            "AD1": 644
+    
+    
+        serialport.on('data', function (data) {
+            console.log('data received: ' + data);
+    
+        });
+    
+        // All frames parsed by the XBee will be emitted here
+        xbeeAPI.on('frame_object', function (frame) {
+            console.log('>>', frame);
+            sensors.window.getStatus(frame);
+            // i/o data received
+    
+        });
+        /*
+        {
+            type: 0x92, // xbee_api.constants.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX
+            remote64: "0013a20040522baa",
+            remote16: "7d84",
+            receiveOptions: 0x01,
+            numSamples: 1,
+            digitalSamples: {
+                "DIO2": 1,
+                "DIO3": 0,
+                "DIO4": 1
+            },
+            analogSamples: {
+                "AD1": 644
+            }
         }
-    }
-    */
+        */
 
 
     /* simple example: query ATD0 on remote xbee module.

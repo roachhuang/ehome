@@ -20,10 +20,11 @@ exports.sendEmail = function (req, res) {
         subject: 'Intruder', // Subject line
         text: 'Hello world', // plaintext body
         html: '<h1>Hello world</h1>', // html body
-        attachements: [
+        attachments: [
             {
                 filename: 'ipcam.jpg',
-                content: 'http://ubuy.asuscomm.com:8080/image.jpg'
+                ContentType: 'image/jpeg',
+                path: 'http://ubuy.asuscomm.com:8080/image.jpg'
             }
         ]
     };

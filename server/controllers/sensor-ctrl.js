@@ -1,5 +1,6 @@
 'use strict';
 var email = require('./emailController');
+var util = require('util');
 // test purpose
 //var twilio = require('./sms-ctrl')();
 
@@ -12,6 +13,7 @@ module.exports = function (sensors, xbee) {
 
     xbee.serialport.on('open', function () {
         console.log('port opened.');
+        /*
         var frame_obj = { // AT Request to be sent to
             type: xbee.C.FRAME_TYPE.AT_COMMAND,
             destination64: '0013A20040EB556C',            
@@ -22,14 +24,20 @@ module.exports = function (sensors, xbee) {
             console.log('sendframe: ' + error);
         });
     });
+    */
+    });
 
     xbee.serialport.on('data', function (data) {
         console.log('data received: ' + data);
     });
 
+    xbee.serialport.on('error', function (err) {
+        console.log('Error: ', err.message);
+    });
+
     // All frames parsed by the XBee will be emitted here
     xbee.API.on('frame_object', function (frame) {
-        console.log('>>', frame);
+        console.log('>>'+ util.inspect(frame));        
         sensors.window.getStatus(frame);
         // i/o data received
     });
