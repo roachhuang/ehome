@@ -13,11 +13,12 @@ module.exports = function (sensors, xbee) {
 
     xbee.serialport.on('open', function () {
         console.log('port opened.');
-        xbee.atCmd(xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, xbee.routerAddr, 'V+', [0x800]);
+        // read router's battery level
+        xbee.rmtAtCmd('%V', [], xbee.routerAddr);
         /*
         var frame_obj = { // AT Request to be sent to
             type: xbee.C.FRAME_TYPE.AT_COMMAND,
-            destination64: '0013A20040EB556C',            
+            destination64: '0013A20040EB556C',
             command: 'NI',
             commandParameter: [],
         };
@@ -38,9 +39,26 @@ module.exports = function (sensors, xbee) {
 
     // All frames parsed by the XBee will be emitted here
     xbee.API.on('frame_object', function (frame) {
-        console.log('>>'+ util.inspect(frame));        
-        sensors.window.getStatus(frame);
-        // i/o data received
+        //console.log('>>' + util.inspect(frame));
+        // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
+        console.log('frame type: ', frame.type);
+        switch (frame.type) {
+            case 0x97: // remote AT command response
+                console.log('>>' + util.inspect(frame));
+                if (frame.commandStatus === 0x00 && frame.command === '%V') {
+                    var voltage = (frame.commandData[0] * 256 + frame.commandData[1]) / 1024;
+                    //console.info('voltage: ', voltage);
+                    sensors.xbeeRouter.status = voltage.toString() + 'V';
+                }
+                break;
+            case 0x88:  // local AT cmd response
+                break;
+            case 0x92:  // IO data sample RX indicator
+                sensors.window.getStatus(frame);
+                break;
+            default:
+                break;
+        }
     });
 
     sensors.window.on('open', function () {
@@ -48,7 +66,7 @@ module.exports = function (sensors, xbee) {
         // turn on spot light
         // activate alarm
         // there should be a limit of sending email and txt msg.
-        email.sendEmail();
+        //email.sendEmail();
         // send text msg
         //twilio.sendMessage();
         //twilio.makeCall();

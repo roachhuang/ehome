@@ -11,7 +11,7 @@
 		var vm = $scope, stop;
 		vm.sensors = [];
 		vm.onExit = function () {
-			// close serialport, release GPIO ports, 
+			// close serialport, release GPIO ports,
 		}
 
 		activate();
@@ -30,25 +30,28 @@
 				$http.get('/sensors').then(function (res) {
 					vm.sensors = res.data.sensors;    // inside data there is an object sensors
 					var i;
+					// shouldn't include xbee in sensor object, but i don't have time to amend it.
 					for (i in vm.sensors) {
-						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+						if (vm.sensors[i].pin !== 'xbee') {
+							vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+						}
 					}
 				}, function (res) {
 					console.log(res.err);
 				});
-			}, 3 * 1000);
+		}, 3 * 1000);
 
-			vm.$on('$destroy', function () {
-				// Make sure that the interval is destroyed too
-				if (angular.isDefined(stop)) {
-					$interval.cancel(stop);
-					stop = undefined;
-				}
-			});
+		vm.$on('$destroy', function () {
+			// Make sure that the interval is destroyed too
+			if (angular.isDefined(stop)) {
+				$interval.cancel(stop);
+				stop = undefined;
+			}
+		});
 
-			$window.onbeforeunload = vm.onExit;
-		}
+		$window.onbeforeunload = vm.onExit;
 	}
+}
 })();
 
 		/*

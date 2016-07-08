@@ -16,36 +16,50 @@ module.exports = function () {
     var serialport = new SerialPort('/dev/ttyAMA0', {
         //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
-        parser: xbeeAPI.rawParser()
-        //rtscts: true            
+        parser: xbeeAPI.rawParser(),
+        //rtscts: true
     }, function (err) {
         if (err) {
             return console.log('Error: ', err.message);
         }
     });
 
-    var atCmd = function (type, dest, cmd, param) {
+    var rmtAtCmd = function (cmd, param, dest64) {
         var frame_obj = { // AT Request to be sent to
-            type: type,
-            destination64: dest,
+            type: 0x17,
+            destination64: dest64,
             command: cmd,
             commandParameter: param
-        };       
+        };
 
         serialport.write(xbeeAPI.buildFrame(frame_obj), function (err, res) {
-            //console.log(xbee.API.buildFrame(frame_obj));
+            console.log(xbeeAPI.buildFrame(frame_obj));
             if (err) throw (err);
             else {
                 console.log('written bytes: ' + res);
             }
         });
     }
+    var atCmd = function (cmd, param) {
+        var frame_obj = { // AT Request to be sent to
+            type: 0x08,
+            command: cmd,
+            commandParameter: param
+        };
 
+        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err, res) {
+            console.log(xbeeAPI.buildFrame(frame_obj));
+            if (err) throw (err);
+            else {
+                console.log('written bytes: ' + res);
+            }
+        });
+    }
     return {
         API: xbeeAPI,
         serialport: serialport,
         C: C,
-        atCmd: atCmd,
+        rmtAtCmd: rmtAtCmd,
         routerAddr: routerAddr
     };
 
@@ -53,45 +67,8 @@ module.exports = function () {
         serialport.on('open', function () {
             console.log('port opened.');
         });
-    
-    
-        /*
-            serialport.on('open', function () {
-                var frame_obj = {
-                    type: 0x10,
-                    id: 0x01,
-                    destination64: '0013A20040EB5559',
-                    broadcastRadius: 0x00,
-                    options: 0x00,
-                    data: 'Hello world'
-                };
-                serialport.write(xbeeAPI.buildFrame(frame_obj));
-                console.log('Sent to serial port.');
-            });
-    
-        serialport.on("open", function() {
-            console.log("open");
-            var frame_obj = { // AT Request to be sent to
-                type: C.FRAME_TYPE.AT_COMMAND,
-                command: "D0",
-                commandParameter: [0x05],
-            };
-            serialport.write(xbeeAPI.buildFrame(frame_obj));
-        });
-    
-    
-        serialport.on('data', function (data) {
-            console.log('data received: ' + data);
-    
-        });
-    
-        // All frames parsed by the XBee will be emitted here
-        xbeeAPI.on('frame_object', function (frame) {
-            console.log('>>', frame);
-            sensors.window.getStatus(frame);
-            // i/o data received
-    
-        });
+
+
         /*
         {
             type: 0x92, // xbee_api.constants.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX
