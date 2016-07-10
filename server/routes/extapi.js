@@ -4,7 +4,7 @@
 var express = require('express');
 var nasa = require('../controllers/nasaController');
 var yahoo = require('../controllers/yahooController');
-var email = require('../controllers/emailController');
+//var email = require('../controllers/emailController')();
 
 var router = express.Router();
 /*
@@ -28,7 +28,7 @@ router.get('/apod', nasa.pixDaily);
 router.get('/yahoo', yahoo.weather);
 
 //todo: no route for email is requried. remove it later.
-router.get('/email', email.sendEmail);
+//router.get('/email', email.sendEmail);
 
 router.get('/saveimage', function () {
 	console.log('saveimg is called');

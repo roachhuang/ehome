@@ -32,6 +32,7 @@
 					var i;
 					// shouldn't include xbee in sensor object, but i don't have time to amend it.
 					for (i in vm.sensors) {
+						console.log(vm.sensors[i].pin);
 						if (vm.sensors[i].pin !== 'xbee') {
 							vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
 						}

@@ -9,5 +9,14 @@ module.exports = function (sensors) {
             res.json({ sensors: sensors });
         });
 
+    router.route('/dht')
+        .get(function (req, res) {
+            res.json(gauges.dht.data);
+        });
+
+    router.route('/battery/:gauge')
+        .get(function (req, res) {
+            res.json({ batteryLvl: gauges[gauge].data });
+        });
     return router;
 };
