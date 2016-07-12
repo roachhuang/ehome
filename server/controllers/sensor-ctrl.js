@@ -34,7 +34,7 @@ module.exports = function (sensors, xbee) {
             case 0x97: // remote AT command response
                 console.log('>>' + util.inspect(frame));
                 if (frame.commandStatus === 0x00 && frame.command === '%V') {
-                    sensors.xbeeRouter.batteryLvl(frame);
+                    gauges[frame.remote16].getBatteryLvl(frame);
                 }
                 break;
             case 0x88:  // local AT cmd response
@@ -42,9 +42,9 @@ module.exports = function (sensors, xbee) {
             case 0x92:  // IO data sample RX indicator
                 var i;
                 for (i in sensors) {
-                    if (i !== 'xbeeRouter') {
+                    //if (i !== 'xbeeRouter') {
                         sensors[i].getStatus(frame);
-                    }
+                    //}
                 }
                 break;
             default:

@@ -10,15 +10,11 @@ var app = express();
 
 var config = require('./server/config/config')[env];
 /*
-// init xbee - setup baud rate, com port,  mode, etc.
-var xbee = require('./server/config/xbee-obj')();
-
 // create sensor objects - window and door
 var sensorObj = require('./server/config/sensor-obj')();
 
-// read API frame and fire open event if window gets opened.
-require('./server/controllers/sensor-ctrl')(sensorObj, xbee);
-*/
+// init xbee - setup baud rate, com port,  mode, etc.
+var xbee = require('./server/config/xbee-obj')(sensorObj);
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);

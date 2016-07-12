@@ -32,7 +32,7 @@
 					var i;
 					// shouldn't include xbee in sensor object, but i don't have time to amend it.
 					for (i in vm.sensors) {
-						console.log(vm.sensors[i].pin);
+						//console.log(vm.sensors[i].pin);
 						if (vm.sensors[i].pin !== 'xbee') {
 							vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
 						}
@@ -40,19 +40,32 @@
 				}, function (res) {
 					console.log(res.err);
 				});
-		}, 3 * 1000);
+			}, 3 * 1000);
 
-		vm.$on('$destroy', function () {
-			// Make sure that the interval is destroyed too
-			if (angular.isDefined(stop)) {
-				$interval.cancel(stop);
-				stop = undefined;
-			}
-		});
+			var stop1 = $interval(function () {
+				$http.get('/sensors/dht').then(function (res) {
+					vm.gauges = res.data.gauges;    // inside data there is an object sensors
+					var i;
+					// shouldn't include xbee in sensor object, but i don't have time to amend it.
+					for (i in vm.gauges) {
+						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
+					}
+				}, function (res) {
+					console.log(res.err);
+				});
+			}, 30 * 60 * 1000);
 
-		$window.onbeforeunload = vm.onExit;
+			vm.$on('$destroy', function () {
+				// Make sure that the interval is destroyed too
+				if (angular.isDefined(stop)) {
+					$interval.cancel(stop);
+					stop = undefined;
+				}
+			});
+
+			$window.onbeforeunload = vm.onExit;
+		}
 	}
-}
 })();
 
 		/*

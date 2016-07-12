@@ -1,4 +1,18 @@
-<h1>sensor reading</h1>
-<h2>display battery level of each sensor</h2>
-<h3>send email if battery low</h3>
-<h4>display sensors reading and events</h4>
+<h2>感應數據</h2>
+
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='table-responsive' ng-repeat='sensor in sensors'>
+            <table class='tab table-striped table-bordered table-condensed'>
+                <tr>
+                    <th>Sensor Name</th>
+                    <th>value</th>
+                </tr>
+                <tr>
+                    <td>{{sensor.name}}</td>
+                    <td>{{sensor.satus}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

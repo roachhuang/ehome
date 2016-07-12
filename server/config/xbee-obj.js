@@ -1,9 +1,10 @@
 
 'use strict';
 
-//var util = require('util');
+var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
+var sensor = require('./sensor-obj');
 
 module.exports = function () {
     const routerAddr = '0013A20040EB556C';
@@ -21,6 +22,47 @@ module.exports = function () {
     }, function (err) {
         if (err) {
             return console.log('Error: ', err.message);
+        }
+    });
+
+    serialport.on('open', function () {
+        console.log('port opened.');
+        // read router's battery level every 2 hrs
+        setInterval(rmtAtCmd('%V', [], routerAddr), 2 * 60 * 60 * 1000);
+    });
+
+    serialport.on('data', function (data) {
+        console.log('data received: ' + data);
+    });
+
+    serialport.on('error', function (err) {
+        console.log('Error: ', err.message);
+    });
+
+    // All frames parsed by the XBee will be emitted here
+    xbeeAPI.on('frame_object', function (frame) {
+        console.log('>>' + util.inspect(frame));
+        // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
+        console.log('frame type: ', frame.type);
+        switch (frame.type) {
+            case 0x97: // remote AT command response
+                console.log('>>' + util.inspect(frame));
+                if (frame.commandStatus === 0x00 && frame.command === '%V') {
+                    sensor.gauges[frame.remote16].getBatteryLvl(frame);
+                }
+                break;
+            case 0x88:  // local AT cmd response
+                break;
+            case 0x92:  // IO data sample RX indicator
+                var i;
+                for (i in sensor.detectors) {
+                    //if (i !== 'xbeeRouter') {
+                    sensor.detector[i].getStatus(frame);
+                    //}
+                }
+                break;
+            default:
+                break;
         }
     });
 
@@ -55,12 +97,9 @@ module.exports = function () {
             }
         });
     }
-    return {
-        API: xbeeAPI,
-        serialport: serialport,
-        C: C,
-        rmtAtCmd: rmtAtCmd,
-        routerAddr: routerAddr
+    return { 
+        atCmd:atCmd,
+        rmtAtCmd: rmtAtCmd      
     };
 
     /*
