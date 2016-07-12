@@ -1,7 +1,6 @@
 
 'use strict';
 
-//var xbee = require('../config/xbee-obj')();
 var exec = require('child_process').exec;
 
 /*
@@ -41,17 +40,14 @@ module.exports = function (xbee) {
 
         // check if it is local gpio pin or remote xbee pin
         console.info(typeof pin);
+        var gpio;
         if (pin[0] !== 'D') {
-            console.log('local devices');
-            io = new Gpio(pin, 'out');
-            io.writeSync(val);
-            // D0 ~ D7 on xbee
+            gpio = new LocalOnOff(pin, val);
         } else {
-            console.info('remote devices');
-            // we assume serialport has been opened. todo: check if it is opened
-            var routerAddr = '0013A20040EB556C';
-            xbee.rmtAtCmd(pin, val ? [0x05] : [0x04], routerAddr);
+            // D0 ~ D7 on xbee
+            gpio = new RemoteOnOff(pin, val, '0013A20040EB556C');
         }
+        gpio.onOff();
         res.sendStatus(200);
     };
 
@@ -77,6 +73,27 @@ module.exports = function (xbee) {
         }
     };
 
+    //strategy pattern 
+    function RemoteOnOff(pin, val, dest16) {
+        this.pin = pin;
+        this.val = val;
+        //todo: change to 16 addr
+        this.dest16 = dest16 || '0013A20040EB556C';
+    }
+    RemoteOnOff.prototype.onOff = function () {
+        console.info('remote devices');
+        // we assume serialport has been opened. todo: check if it is opened        
+        xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.dest16);
+    };
+    function LocalOnOff(pin, val) {
+        this.pin = pin;
+        this.val = val;
+    }
+    LocalOnOff.prototype.onOff = function () {
+        console.log('local devices');
+        var io = new Gpio(this.pin, 'out');
+        io.writeSync(this.val);
+    };
     return {
         post: post,
         get: get,
