@@ -16,7 +16,7 @@ module.exports = function (sensors) {
 
     router.route('/battery/:remote16')        
         .get(function (req, res) {
-            var remote16 = req.params.remote16
+            var remote16 = req.params.remote16;
             res.json({ batteryLvl: sensors.gauges[remote16].data });
         });
     return router;

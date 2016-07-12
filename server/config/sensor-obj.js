@@ -47,7 +47,7 @@ module.exports = function () {
         } else {
             vm.status = false;
         }
-    }
+    };
 
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room'));
@@ -69,11 +69,11 @@ module.exports = function () {
             // fire open event
             //vm.emit('battery low');
         }
-    }
+    };
 
     var gauges = {};
     gauges.dht = new Gauge();
-    gauges.battery[dest16] = new Gauge(dest16);
+    gauges.battery['01'] = new Gauge('01');
 
     /*
     var window = new Sensor('DIO4', 'in the living room');
@@ -86,7 +86,7 @@ module.exports = function () {
     return {
         detectors: detectors,
         gauges: gauges
-    }
+    };
 
     /* Remove the binding of listner1 function
     eventEmitter.removeListener('connection', listner1);

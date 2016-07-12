@@ -15,6 +15,7 @@ var sensorObj = require('./server/config/sensor-obj')();
 
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbee = require('./server/config/xbee-obj')(sensorObj);
+*/
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
@@ -42,4 +43,5 @@ app.use('/auth', auth);
 
 app.listen(config.port, function (req, res) {
     console.info('Listening on port: ' + config.port + '...');
+    
 });

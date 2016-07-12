@@ -12,7 +12,7 @@
 		vm.sensors = [];
 		vm.onExit = function () {
 			// close serialport, release GPIO ports,
-		}
+		};
 
 		activate();
 
@@ -20,7 +20,7 @@
 		function activate() {
 			// hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
-				alert("not logon, please log on");
+				alert('not logon, please log on');
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}

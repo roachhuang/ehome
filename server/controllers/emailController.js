@@ -37,7 +37,7 @@ module.exports = function (msg) {
             console.log('Message sent: ' + info.response);
         });
     };
-    return {
-        sendEmail
-    }
-}
+
+    return sendEmail;
+    
+};

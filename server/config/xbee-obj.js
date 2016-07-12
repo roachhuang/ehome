@@ -7,7 +7,7 @@ var xbee_api = require('xbee-api');
 var sensor = require('./sensor-obj');
 
 module.exports = function () {
-    const routerAddr = '0013A20040EB556C';
+    var routerAddr = '0013A20040EB556C';
     var C = xbee_api.constants;
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
     //var xbeeAPI = new xbee_api.XBeeAPI();
@@ -81,7 +81,7 @@ module.exports = function () {
                 console.log('written bytes: ' + res);
             }
         });
-    }
+    };
     var atCmd = function (cmd, param) {
         var frame_obj = { // AT Request to be sent to
             type: 0x08,
@@ -96,7 +96,7 @@ module.exports = function () {
                 console.log('written bytes: ' + res);
             }
         });
-    }
+    };
     return { 
         atCmd:atCmd,
         rmtAtCmd: rmtAtCmd      

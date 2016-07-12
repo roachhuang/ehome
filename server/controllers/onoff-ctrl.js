@@ -49,7 +49,7 @@ module.exports = function (xbee) {
         } else {
             console.info('remote devices');
             // we assume serialport has been opened. todo: check if it is opened
-            const routerAddr = '0013A20040EB556C';
+            var routerAddr = '0013A20040EB556C';
             xbee.rmtAtCmd(pin, val ? [0x05] : [0x04], routerAddr);
         }
         res.sendStatus(200);
