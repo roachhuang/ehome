@@ -14,8 +14,8 @@ module.exports = function () {
         events.EventEmitter.call(this);
         this.on('open', this._open);
     }
-
     Sensor.prototype = new events.EventEmitter();
+
     Sensor.prototype._open = function () {
         //if (alarm.state === 'on') {
         // turn on spot light
@@ -51,7 +51,7 @@ module.exports = function () {
 
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room'));
-    detectors.push(new Sensor('DIO0', 'main gate'));
+    //detectors.push(new Sensor('DIO0', 'main gate'));
     detectors.push(new Sensor('AD3', 'somker detector at the kitchen'));
 
     function Gauge(addr16) {
@@ -73,7 +73,7 @@ module.exports = function () {
 
     var gauges = {};
     gauges.dht = new Gauge();
-    gauges.battery['01'] = new Gauge('01');
+    gauges.battery = new Gauge('01');
 
     /*
     var window = new Sensor('DIO4', 'in the living room');

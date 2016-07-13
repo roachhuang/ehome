@@ -38,6 +38,6 @@ module.exports = function (msg) {
         });
     };
 
-    return sendEmail;
-    
+    return { sendEmail };
+
 };

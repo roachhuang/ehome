@@ -4,9 +4,8 @@
 var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
-var sensor = require('./sensor-obj');
 
-module.exports = function () {
+module.exports = function (sensor) {
     var routerAddr = '0013A20040EB556C';
     var C = xbee_api.constants;
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
@@ -48,7 +47,7 @@ module.exports = function () {
             case 0x97: // remote AT command response
                 console.log('>>' + util.inspect(frame));
                 if (frame.commandStatus === 0x00 && frame.command === '%V') {
-                    sensor.gauges[frame.remote16].getBatteryLvl(frame);
+                    sensor.gauges.battery.getBatteryLvl(frame);
                 }
                 break;
             case 0x88:  // local AT cmd response
@@ -57,7 +56,7 @@ module.exports = function () {
                 var i;
                 for (i in sensor.detectors) {
                     //if (i !== 'xbeeRouter') {
-                    sensor.detector[i].getStatus(frame);
+                    sensor.detectors[i].getStatus(frame);
                     //}
                 }
                 break;
@@ -97,9 +96,9 @@ module.exports = function () {
             }
         });
     };
-    return { 
+    return {
         atCmd:atCmd,
-        rmtAtCmd: rmtAtCmd      
+        rmtAtCmd: rmtAtCmd
     };
 
     /*
