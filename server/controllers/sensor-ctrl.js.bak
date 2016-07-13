@@ -1,0 +1,30 @@
+'use strict';
+var email = require('./emailController')();
+var util = require('util');
+// test purpose
+//var twilio = require('./sms-ctrl')();
+
+// init xbee - setup baud rate, com port,  mode, etc.
+//var xbee = require('../config/xbee-obj')();
+
+// sensor object is passed in from app.js
+
+module.exports = function (sensors, xbee) {
+
+    sensors.xbeeRouter.on('battery low', function () {
+        email.sendEmail(sensors.xbeeRouter.name + ' battery low');
+    })
+ 
+
+    /*
+       door.on('open', function () {
+           if (alarm.state === 'on') {
+               alarm.sound();
+               hounds.release();
+           } else {
+               lights.switchOn();
+               voice.speak('Welcome home');
+           }
+       });
+   */
+};

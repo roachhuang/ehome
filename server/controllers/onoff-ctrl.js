@@ -27,7 +27,7 @@ for pi-gpio lib, pin = physical pin number
 var Gpio = require('onoff').Gpio;
 //var  Gpio = {};
 
-module.exports = function (xbee) {
+module.exports = function (xbee, sensor) {
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
@@ -35,11 +35,11 @@ module.exports = function (xbee) {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var io, pin = req.params.pin, val = req.body.val;
+        var pin = req.params.pin, val = req.body.val;
         //console.log('pin: '+pin+' val: '+val);
 
         // check if it is local gpio pin or remote xbee pin
-        console.info(typeof pin);
+        //console.info(typeof pin);
         var gpio;
         if (pin[0] !== 'D') {
             gpio = new LocalOnOff(pin, val);
@@ -52,25 +52,17 @@ module.exports = function (xbee) {
     };
 
     var get = function (req, res) {
-        var value, io, pin = req.params.pin, strPin;
-        strPin = pin.toString();
+        var value, pin = req.params.pin, gpio;
+
         //if (pin > 0 && pin < 28) {
-        console.info(typeof pin);
-        if (pin[0] === 'D') {
-            res.status(200).send({ value: 0 });
+        //console.info(typeof pin);
+        if (pin[0] !== 'D') {
+            gpio = new LocalOnOff(pin);
         } else {
-            exec('cat /sys/class/gpio/gpio' + strPin + '/value', function (err, stdout, stderr) {
-                console.log('stdout: ' + stdout);
-                value = parseInt(stdout);
-                console.log('stderr: ' + stderr);
-                if (err !== null) {
-                    io = new Gpio(pin, 'in');     // this will reset the output
-                    console.log('new io: ' + io);
-                    value = io.readSync();
-                }
-                res.status(200).send({ value: value });
-            });
+            gpio = new RemoteOnOff(pin);
         }
+        value = gpio.readPin();
+        res.status(200).send({ value: value });
     };
 
     //strategy pattern 
@@ -81,19 +73,41 @@ module.exports = function (xbee) {
         this.dest16 = dest16 || '0013A20040EB556C';
     }
     RemoteOnOff.prototype.onOff = function () {
-        console.info('remote devices');
+        //console.info('remote devices');
         // we assume serialport has been opened. todo: check if it is opened        
         xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.dest16);
     };
+    RemoteOnOff.prototype.readPin = function () {
+        //return sensor.detectors[i].status;
+        return false;
+    };
+
     function LocalOnOff(pin, val) {
         this.pin = pin;
-        this.val = val;
+        this.val = val || 0;
     }
     LocalOnOff.prototype.onOff = function () {
-        console.log('local devices');
+        //console.log('local devices');
         var io = new Gpio(this.pin, 'out');
         io.writeSync(this.val);
     };
+
+    LocalOnOff.prototype.readPin = function () {
+        var vm = this;
+        var strPin = vm.pin.toString();
+        exec('cat /sys/class/gpio/gpio' + strPin + '/value', function (err, stdout, stderr) {
+            //console.log('stdout: ' + stdout);
+            var value = parseInt(stdout);
+            //console.log('stderr: ' + stderr);
+            if (err !== null) {
+                var io = new Gpio(vm.pin, 'in');     // this will reset the output
+                //console.log('new io: ' + io);
+                value = io.readSync();
+            }
+            return value;
+        });
+    };
+
     return {
         post: post,
         get: get,

@@ -49,13 +49,15 @@ module.exports = function () {
         }
     };
 
+    //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
     detectors.push(new Sensor('AD3', 'somker detector at the kitchen'));
 
-    function Gauge(addr16) {
-        this.addr16 = addr16;
+    function Gauge(name, addr) {
+        this.addr = addr;   //toto: change to addr16 if have time
+        this.name = name;
         this.data = [];
         //events.EventEmitter.call(this);
     }
@@ -66,14 +68,16 @@ module.exports = function () {
         //console.info('voltage: ', voltage);
         vm.data = voltage.toFixed(2);
         if (voltage < 2.5) {
-            // fire open event
+            //todo: fire battery low event          
             //vm.emit('battery low');
         }
     };
 
     var gauges = {};
+    gauges.battery =[];
+
     gauges.dht = new Gauge();
-    gauges.battery = new Gauge('01');
+    gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));
 
     /*
     var window = new Sensor('DIO4', 'in the living room');

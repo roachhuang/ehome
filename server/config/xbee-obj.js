@@ -27,7 +27,9 @@ module.exports = function (sensor) {
     serialport.on('open', function () {
         console.log('port opened.');
         // read router's battery level every 2 hrs
-        setInterval(rmtAtCmd('%V', [], routerAddr), 2 * 60 * 60 * 1000);
+        for (var i in sensor.gauges.battery) {
+            setInterval(rmtAtCmd('%V', [], sensor.gauges.battery.addr), 2 * 60 * 60 * 1000);
+        }
     });
 
     serialport.on('data', function (data) {
@@ -47,7 +49,11 @@ module.exports = function (sensor) {
             case 0x97: // remote AT command response
                 console.log('>>' + util.inspect(frame));
                 if (frame.commandStatus === 0x00 && frame.command === '%V') {
-                    sensor.gauges.battery.getBatteryLvl(frame);
+                    for (var i in sensor.gauges.battery) {
+                        if (sensor.gauges.battery[i].addr === frame.remote64) {
+                            sensor.gauges.battery[i].getBatteryLvl(frame);
+                        }
+                    }
                 }
                 break;
             case 0x88:  // local AT cmd response
@@ -97,7 +103,7 @@ module.exports = function (sensor) {
         });
     };
     return {
-        atCmd:atCmd,
+        atCmd: atCmd,
         rmtAtCmd: rmtAtCmd
     };
 
