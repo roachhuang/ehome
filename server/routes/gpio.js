@@ -2,7 +2,6 @@
 var express = require('express');
 var router = express.Router();
 
-
 // gpiocontroller is a func; in order to have it returns an object back to us, we need to execute it by following "()"
 module.exports = function (xbee) {
     var gpioController = require('../controllers/onoff-ctrl')(xbee);
@@ -15,7 +14,7 @@ module.exports = function (xbee) {
     */
     /*
     var fs = require('fs');
-    
+
     router.all('*', function (req, res, next) {
         fs.readFile('token.json', function (err, token) {
             if (err) {

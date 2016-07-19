@@ -26,6 +26,7 @@ module.exports = function (sensor) {
 
     serialport.on('open', function () {
         console.log('port opened.');
+        atCmd('ND', []);
         // read router's battery level every 2 hrs
         for (var i in sensor.gauges.battery) {
             setInterval(rmtAtCmd('%V', [], sensor.gauges.battery.addr), 2 * 60 * 60 * 1000);
@@ -57,9 +58,34 @@ module.exports = function (sensor) {
                 }
                 break;
             case 0x88:  // local AT cmd response
+
+>>{ type: 136,
+  id: 1,
+  command: 'ND',
+  commandStatus: 0,
+  nodeIdentification:
+   { remote16: 'edee',
+     remote64: '0013a20040eb556c',
+     nodeIdentifier: 'r01',
+     remoteParent16: 'fffe',
+     deviceType: 1,
+     sourceEvent: 0,
+     digiProfileID: 'c105',
+     digiManufacturerID: '101e' } }
+
+                (frame.command === 'ND')
+                frame.nodeIdentification.remote64
                 break;
             case 0x92:  // IO data sample RX indicator
-                var i;
+                { type: 146,
+  remote64: '0013a20040eb556c',
+  remote16: 'edee',
+  receiveOptions: 1,
+  digitalSamples: { DIO0: 0, DIO4: 1 },
+  analogSamples: {},
+  numSamples: 1 }
+
+                //var i;
                 for (i in sensor.detectors) {
                     //if (i !== 'xbeeRouter') {
                     sensor.detectors[i].getStatus(frame);
@@ -79,11 +105,11 @@ module.exports = function (sensor) {
             commandParameter: param
         };
 
-        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err, res) {
+        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err) {
             console.log(xbeeAPI.buildFrame(frame_obj));
             if (err) throw (err);
             else {
-                console.log('written bytes: ' + res);
+                console.log(err);
             }
         });
     };
@@ -94,12 +120,9 @@ module.exports = function (sensor) {
             commandParameter: param
         };
 
-        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err, res) {
+        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err) {
             console.log(xbeeAPI.buildFrame(frame_obj));
-            if (err) throw (err);
-            else {
-                console.log('written bytes: ' + res);
-            }
+            console.log(err);
         });
     };
     return {
