@@ -18,6 +18,7 @@
 
 		////////////////
 		function activate() {
+			var i;
 			// hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
 				alert('not logon, please log on');
@@ -28,8 +29,7 @@
 			stop = $interval(function () {
 				vm.anyAlarm = false;
 				$http.get('/sensors').then(function (res) {
-					vm.sensors = res.data.sensors;    // inside data there is an object sensors
-					var i;
+					vm.sensors = res.data.sensors;    // inside data there is an object sensors				
 					// shouldn't include xbee in sensor object, but i don't have time to amend it.
 					for (i in vm.sensors) {
 						console.log('sensor : ' + vm.sensors[i]);
@@ -44,9 +44,7 @@
 
 			var stop1 = $interval(function () {
 				$http.get('/sensors/dht').then(function (res) {
-					vm.gauges = res.data.gauges;    // inside data there is an object sensors
-					var i;
-					// shouldn't include xbee in sensor object, but i don't have time to amend it.
+					vm.gauges = res.data.gauges;    // inside data there is an object sensors							
 					for (i in vm.gauges) {
 						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
 					}

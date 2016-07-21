@@ -25,9 +25,10 @@ for pi-gpio lib, pin = physical pin number
 */
 //var util = require('util');
 var Gpio = require('onoff').Gpio;
-//var  Gpio = {};
 
 module.exports = function (xbee, sensor) {
+    var devices;
+
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
         //res.redirect('/');
@@ -35,52 +36,57 @@ module.exports = function (xbee, sensor) {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var pin = req.params.pin, val = req.body.val;
+        var pin = req.params.pin, val = req.body.val, addr = req.params.addr;
         //console.log('pin: '+pin+' val: '+val);
 
         // check if it is local gpio pin or remote xbee pin
         //console.info(typeof pin);
         var gpio;
-        if (pin[0] !== 'D') {
+        if (addr === null) {
             gpio = new LocalOnOff(pin, val);
         } else {
             // D0 ~ D7 on xbee
-            gpio = new RemoteOnOff(pin, val, '0013A20040EB556C');
+            gpio = new RemoteOnOff(pin, val, addr);
         }
         gpio.onOff();
         res.sendStatus(200);
     };
 
     var get = function (req, res) {
-        var value, pin = req.params.pin, gpio;
+        var value, pin = req.params.pin, gpio, addr = req.params.addr;
 
         //if (pin > 0 && pin < 28) {
         //console.info(typeof pin);
-        if (pin[0] !== 'D') {
+        //if (pin[0] !== 'D') {
+        if (addr === null) {
             gpio = new LocalOnOff(pin);
         } else {
-            gpio = new RemoteOnOff(pin);
+            gpio = new RemoteOnOff(pin, addr);
         }
         value = gpio.readPin();
         res.status(200).send({ value: value });
     };
 
     //strategy pattern 
-    function RemoteOnOff(pin, val, dest16) {
+    function RemoteOnOff(pin, val, addr) {
         this.pin = pin;
         this.val = val;
         //todo: change to 16 addr
-        this.dest16 = dest16 || '0013A20040EB556C';
+        this.addr = addr;
     }
     RemoteOnOff.prototype.onOff = function () {
         //console.info('remote devices');
         // we assume serialport has been opened. todo: check if it is opened        
-        xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.dest16);
+        xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
     };
     RemoteOnOff.prototype.readPin = function () {
         //return sensor.detectors[i].status;
-        return false;
-    };
+        for (var i in devices) {
+            if (devices[i].pin === this.pin && device[i].addr === this.addr) {
+                return device[i].status;
+            }
+        }
+    }
 
     function LocalOnOff(pin, val) {
         this.pin = pin;
@@ -108,9 +114,20 @@ module.exports = function (xbee, sensor) {
         });
     };
 
+    var postDevices = function (req, res) {
+        //}
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        devices = req.body;
+        res.sendStatus(200);
+    };
+
     return {
         post: post,
         get: get,
+        postDevices: postDevices,
+        devices: devices
     };
 };
 

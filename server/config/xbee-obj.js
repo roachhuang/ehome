@@ -4,6 +4,8 @@
 var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
+// in order to get devices object
+var onOff = require('../controllers/onoff-ctrl');
 
 module.exports = function (sensor) {
     var routerAddr = '0013A20040EB556C';
@@ -31,6 +33,10 @@ module.exports = function (sensor) {
         for (var i in sensor.gauges.battery) {
             setInterval(rmtAtCmd('%V', [], sensor.gauges.battery.addr), 2 * 60 * 60 * 1000);
         }
+        // force digital and analog input sample (broadcast cmd)
+        rmtAtCmd('AI', [], '00 00 00 00 00 00 FF FF');
+        rmtAtCmd('JV', [1], '00 00 00 00 00 00 FF FF');
+        rmtAtCmd('IS', [], '00 00 00 00 00 00 FF FF');
     });
 
     serialport.on('data', function (data) {
@@ -58,38 +64,43 @@ module.exports = function (sensor) {
                 }
                 break;
             case 0x88:  // local AT cmd response
-
->>{ type: 136,
-  id: 1,
-  command: 'ND',
-  commandStatus: 0,
-  nodeIdentification:
-   { remote16: 'edee',
-     remote64: '0013a20040eb556c',
-     nodeIdentifier: 'r01',
-     remoteParent16: 'fffe',
-     deviceType: 1,
-     sourceEvent: 0,
-     digiProfileID: 'c105',
-     digiManufacturerID: '101e' } }
-
+                /*
+                >>{ type: 136,
+                id: 1,
+                command: 'ND',
+                commandStatus: 0,
+                nodeIdentification:
+                { remote16: 'edee',
+                remote64: '0013a20040eb556c',
+                nodeIdentifier: 'r01',
+                remoteParent16: 'fffe',
+                deviceType: 1,
+                sourceEvent: 0,
+                digiProfileID: 'c105',
+                digiManufacturerID: '101e' } }
+                */
                 (frame.command === 'ND')
                 frame.nodeIdentification.remote64
                 break;
             case 0x92:  // IO data sample RX indicator
-                { type: 146,
-  remote64: '0013a20040eb556c',
-  remote16: 'edee',
-  receiveOptions: 1,
-  digitalSamples: { DIO0: 0, DIO4: 1 },
-  analogSamples: {},
-  numSamples: 1 }
+                /*
+                { type: 146,                
+                remote64: '0013a20040eb556c',
+                remote16: 'edee',
+                receiveOptions: 1,
+                digitalSamples: { DIO0: 0, DIO4: 1 },
+                analogSamples: {},
+                numSamples: 1 }
+                */
 
-                //var i;
                 for (i in sensor.detectors) {
-                    //if (i !== 'xbeeRouter') {
                     sensor.detectors[i].getStatus(frame);
-                    //}
+                }
+                // read remote i/o pin status from farme and update the status value in devices
+                for (i in onOff.devices) {
+                    if (frame.remote64 === onOff.devices[i].addr) {
+                        onOff.devices[i].status = frame.digitalSamples[onOff.devices[i].pin];
+                    }
                 }
                 break;
             default:

@@ -5,11 +5,12 @@ var email = require('../controllers/emailController')();
 
 module.exports = function () {
 
-    function Sensor(pin, name) {
+    function Sensor(pin, name, addr) {
         this.pin = pin || null;
         this.status = false;    // false: normal; true: get trigged
         this.data = [];
         this.name = name;
+        this.addr = addr || null;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
@@ -39,7 +40,7 @@ module.exports = function () {
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
         //if (frame.hasOwnProperty('digitalSamples.DIO4')) {
-        if (frame.digitalSamples[vm.pin] === 1) {
+        if (frame.digitalSamples[vm.pin] === 1 && frame.remote64 === vm.addr) {
             // window get opened
             vm.status = true;
             // fire open event
@@ -53,7 +54,7 @@ module.exports = function () {
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
-    detectors.push(new Sensor('AD3', 'somker detector at the kitchen'));
+    detectors.push(new Sensor('DIO5', 'somker detector at the kitchen'));
 
     function Gauge(name, addr) {
         this.addr = addr;   //toto: change to addr16 if have time

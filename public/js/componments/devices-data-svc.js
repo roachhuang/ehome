@@ -7,12 +7,14 @@
 
     deviceService.$inject = [];
     function deviceService() {
+        //todo: pair xbee devices to get their address64 before using it.
+        var xbee01Addr= '0013A20040EB556C';
         var devices = [];
         // physical pin 11 = GPIO17
         // physical pin 12 = GPIO18
         // onoff is using GPIO number instead of pin# .
         // or DIO5?
-        devices.push(new Device('remote PWR outlet', 'D0'));
+        devices.push(new Device('remote PWR outlet', 'D0', xbee01Addr));
         //devices.push(new Device('bedRoom', 7));
         devices.push(new Device('livingRoom', 23));
         devices.push(new Device('kitchen', 24));
@@ -25,11 +27,12 @@
     var Device = (function () {
         var nextId = 0; // init = 0
 
-        return function Device(name, GpioPin) {
-            this.id = nextId++;
+        return function Device(name, GpioPin, addr) {
+            //this.id = nextId++;
             this.name = name;
             this.status = 0;    //toto: 0 or null (init state?)
             this.pin = GpioPin;
+            this.addr = addr || null;
             //this.cronJobs = [{ count: 0, on: '', off: '' }];
 
             // load cronjobs from local storage when initializing

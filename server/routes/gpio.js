@@ -31,6 +31,10 @@ module.exports = function (xbee) {
         .get(gpioController.get)   // return 0 or 1
         .post(gpioController.post);
 
+    router.route('/')
+        // pass devices obj from angularjs
+        .post(gpioController.postDevices);
+
     return router;
 };
 
