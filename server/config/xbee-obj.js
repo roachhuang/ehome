@@ -4,10 +4,10 @@
 var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
-// in order to get devices object
-var onOff = require('../controllers/onoff-ctrl');
+// in order to get devices object. todo: may be change to use deive router instead.
+//var onOff = require('../controllers/onoff-ctrl')();
 
-module.exports = function (sensor) {
+module.exports = function (sensor, devices) {
     var routerAddr = '0013A20040EB556C';
     var C = xbee_api.constants;
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
@@ -34,9 +34,9 @@ module.exports = function (sensor) {
             setInterval(rmtAtCmd('%V', [], sensor.gauges.battery.addr), 2 * 60 * 60 * 1000);
         }
         // force digital and analog input sample (broadcast cmd)
-        rmtAtCmd('AI', [], '00 00 00 00 00 00 FF FF');
-        rmtAtCmd('JV', [1], '00 00 00 00 00 00 FF FF');
-        rmtAtCmd('IS', [], '00 00 00 00 00 00 FF FF');
+        rmtAtCmd('AI', [], '000000000000FFFF');
+        rmtAtCmd('JV', [0x01], '000000000000FFFF');
+        rmtAtCmd('IS', [], '000000000000FFFF');
     });
 
     serialport.on('data', function (data) {
@@ -54,7 +54,7 @@ module.exports = function (sensor) {
         console.log('frame type: ', frame.type);
         switch (frame.type) {
             case 0x97: // remote AT command response
-                console.log('>>' + util.inspect(frame));
+                //console.log('>>' + util.inspect(frame));
                 if (frame.commandStatus === 0x00 && frame.command === '%V') {
                     for (var i in sensor.gauges.battery) {
                         if (sensor.gauges.battery[i].addr === frame.remote64) {
@@ -79,12 +79,13 @@ module.exports = function (sensor) {
                 digiProfileID: 'c105',
                 digiManufacturerID: '101e' } }
                 */
-                (frame.command === 'ND')
-                frame.nodeIdentification.remote64
+                if (frame.command === 'ND') {
+                    var addr = frame.nodeIdentification.remote64;
+                }
                 break;
             case 0x92:  // IO data sample RX indicator
                 /*
-                { type: 146,                
+                { type: 146,
                 remote64: '0013a20040eb556c',
                 remote16: 'edee',
                 receiveOptions: 1,
@@ -96,10 +97,14 @@ module.exports = function (sensor) {
                 for (i in sensor.detectors) {
                     sensor.detectors[i].getStatus(frame);
                 }
+                console.log('xbee dev: ', myDev);
                 // read remote i/o pin status from farme and update the status value in devices
-                for (i in onOff.devices) {
-                    if (frame.remote64 === onOff.devices[i].addr) {
-                        onOff.devices[i].status = frame.digitalSamples[onOff.devices[i].pin];
+                for (i in myDev) {
+                    if (frame.remote64 === myDev[i].addr) {
+                        var pin = myDev[i].pin;
+                        var p = [pin.slice(0, 1), 'IO', pin.slice(1)].join('');
+                        console.log('p:', p);
+                        myDev[i].status = frame.digitalSamples[p];
                     }
                 }
                 break;

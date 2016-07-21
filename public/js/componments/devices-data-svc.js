@@ -14,7 +14,7 @@
         // physical pin 12 = GPIO18
         // onoff is using GPIO number instead of pin# .
         // or DIO5?
-        devices.push(new Device('remote PWR outlet', 'D0', xbee01Addr));
+        devices.push(new Device('remote PWR outlet', 'D0', xbee01Addr.toLowerCase()));
         //devices.push(new Device('bedRoom', 7));
         devices.push(new Device('livingRoom', 23));
         devices.push(new Device('kitchen', 24));

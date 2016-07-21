@@ -4,7 +4,7 @@
 // port defined in server/config/env/*.js file
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has to be before config coz config reads it
-
+global.myDev = [];
 var express = require('express');
 var app = express();
 

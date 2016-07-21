@@ -27,7 +27,7 @@ for pi-gpio lib, pin = physical pin number
 var Gpio = require('onoff').Gpio;
 
 module.exports = function (xbee, sensor) {
-    var devices;
+    //var devices;
 
     var post = function (req, res) {
         //if (!res.user) {  only authorized users can do the control
@@ -67,7 +67,7 @@ module.exports = function (xbee, sensor) {
         res.status(200).send({ value: value });
     };
 
-    //strategy pattern 
+    //strategy pattern
     function RemoteOnOff(pin, val, addr) {
         this.pin = pin;
         this.val = val;
@@ -76,14 +76,14 @@ module.exports = function (xbee, sensor) {
     }
     RemoteOnOff.prototype.onOff = function () {
         //console.info('remote devices');
-        // we assume serialport has been opened. todo: check if it is opened        
+        // we assume serialport has been opened. todo: check if it is opened
         xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
     };
     RemoteOnOff.prototype.readPin = function () {
         //return sensor.detectors[i].status;
-        for (var i in devices) {
-            if (devices[i].pin === this.pin && device[i].addr === this.addr) {
-                return device[i].status;
+        for (var i in myDev) {
+            if (myDev[i].pin === this.pin && myDev[i].addr === this.addr) {
+                return myDev[i].status;
             }
         }
     }
@@ -115,19 +115,20 @@ module.exports = function (xbee, sensor) {
     };
 
     var postDevices = function (req, res) {
-        //}
+        myDev = req.body;
+        //util.inspect(devices);
+        console.log('xbee devices: ', myDev);
         if (!req.body) {
             return res.sendStatus(400);
         }
-        devices = req.body;
-        res.sendStatus(200);
+        res.sendStatus(201);
     };
 
     return {
         post: post,
         get: get,
         postDevices: postDevices,
-        devices: devices
+        //devices: devices
     };
 };
 
