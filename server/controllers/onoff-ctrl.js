@@ -77,15 +77,39 @@ module.exports = function (xbee, sensor) {
     RemoteOnOff.prototype.onOff = function () {
         //console.info('remote devices');
         // we assume serialport has been opened. todo: check if it is opened
-        xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
+        //xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
+        xbee.xbeeCommand({
+            type: C.FRAME_TYPE.AT_COMMAND,
+            destination64: this.addr,
+            command: this.pin,
+            commandParameter: this.val ? [0x05] : [0x04],
+        }).then(function (f) {
+            console.log("Command successful:", f);
+        }).catch(function (e) {
+            console.log("Command failed:", e);
+        });
     };
     RemoteOnOff.prototype.readPin = function () {
-        //return sensor.detectors[i].status;
+        xbee.xbeeCommand({
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: this.addr,
+            command: 'IS',
+            commandParameter: []
+        }).then(function (f) {
+            console.log("Command successful:", f);
+            var p = [this.pin.slice(0, 1), 'IO', this.pin.slice(1)].join('');
+            console.log('p:', p);
+            return frame.digitalSamples[p];
+        }).catch(function (e) {
+            console.log("Command failed:", e);
+        });
+        /*return sensor.detectors[i].status;
         for (var i in myDev) {
             if (myDev[i].pin === this.pin && myDev[i].addr === this.addr) {
                 return myDev[i].status;
             }
         }
+        */
     }
 
     function LocalOnOff(pin, val) {
@@ -113,21 +137,51 @@ module.exports = function (xbee, sensor) {
             return value;
         });
     };
-
-    var postDevices = function (req, res) {
-        myDev = req.body;
-        //util.inspect(devices);
-        console.log('xbee devices: ', myDev);
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        res.sendStatus(201);
-    };
+    /*
+        var postDevices = function (req, res) {
+            myDev = req.body;
+            //util.inspect(devices);
+            console.log('xbee devices: ', myDev);
+            if (!req.body) {
+                return res.sendStatus(400);
+            }
+            res.sendStatus(200);
+        };
+    */
+    var atCmd = function (req, res) {
+        var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
+        xbee.xbeeCommand({
+            type: C.FRAME_TYPE.AT_COMMAND,            
+            command: cmd,
+            commandParameter: cmdParam || []
+        }).then(function (f) {
+            console.log("Command successful:", f); 
+            //return frame.digitalSamples[p];
+        }).catch(function (e) {
+            console.log("Command failed:", e);
+        });
+    }
+    var rmtAtCmd = function (req, res) {
+        var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
+        xbee.xbeeCommand({
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: this.addr,
+            command: 'IS',
+            commandParameter: []
+        }).then(function (f) {
+            console.log("Command successful:", f);
+            var p = [this.pin.slice(0, 1), 'IO', this.pin.slice(1)].join('');
+            console.log('p:', p);
+            return frame.digitalSamples[p];
+        }).catch(function (e) {
+            console.log("Command failed:", e);
+        });
+    }
 
     return {
         post: post,
         get: get,
-        postDevices: postDevices,
+        //postDevices: postDevices,
         //devices: devices
     };
 };

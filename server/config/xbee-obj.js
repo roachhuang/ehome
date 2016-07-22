@@ -4,15 +4,15 @@
 var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
+var C = xbee_api.constants;
+var Q = require('q');
 // in order to get devices object. todo: may be change to use deive router instead.
 //var onOff = require('../controllers/onoff-ctrl')();
 
 module.exports = function (sensor, devices) {
-    var routerAddr = '0013A20040EB556C';
-    var C = xbee_api.constants;
+    //var routerAddr = '0013A20040EB556C'; 
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
-    //var xbeeAPI = new xbee_api.XBeeAPI();
-
+   
     // ls /dev/ttyAMA0 to make suer it is exist.
 
     var serialport = new SerialPort('/dev/ttyAMA0', {
@@ -26,6 +26,9 @@ module.exports = function (sensor, devices) {
         }
     });
 
+    // How long are we prepared to wait for a response to our command?
+    var maxWait = 5000; // ms
+
     serialport.on('open', function () {
         console.log('port opened.');
         atCmd('ND', []);
@@ -33,22 +36,16 @@ module.exports = function (sensor, devices) {
         for (var i in sensor.gauges.battery) {
             setInterval(rmtAtCmd('%V', [], sensor.gauges.battery.addr), 2 * 60 * 60 * 1000);
         }
-        // force digital and analog input sample (broadcast cmd)
+        //Read information regarding last node join request
         rmtAtCmd('AI', [], '000000000000FFFF');
-        rmtAtCmd('JV', [0x01], '000000000000FFFF');
-        rmtAtCmd('IS', [], '000000000000FFFF');
-    });
-
-    serialport.on('data', function (data) {
-        console.log('data received: ' + data);
+        rmtAtCmd('JV', [0x01], '000000000000FFFF');     
     });
 
     serialport.on('error', function (err) {
         console.log('Error: ', err.message);
     });
 
-    // All frames parsed by the XBee will be emitted here
-    xbeeAPI.on('frame_object', function (frame) {
+    xbeeAPI.on("frame_object", function (frame) {
         console.log('>>' + util.inspect(frame));
         // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
         console.log('frame type: ', frame.type);
@@ -96,143 +93,45 @@ module.exports = function (sensor, devices) {
 
                 for (i in sensor.detectors) {
                     sensor.detectors[i].getStatus(frame);
-                }
-                console.log('xbee dev: ', myDev);
-                // read remote i/o pin status from farme and update the status value in devices
-                for (i in myDev) {
-                    if (frame.remote64 === myDev[i].addr) {
-                        var pin = myDev[i].pin;
-                        var p = [pin.slice(0, 1), 'IO', pin.slice(1)].join('');
-                        console.log('p:', p);
-                        myDev[i].status = frame.digitalSamples[p];
-                    }
-                }
+                }           
                 break;
             default:
                 break;
         }
+    };
+ 
+function xbeeCommand(frame) {
+    // set frame id
+    frame.id = xbeeAPI.nextFrameId();
+
+    // We're going to return a promise
+    var deferred = Q.defer();
+
+    var callback = function(receivedFrame) {
+        if (receivedFrame.id == frame.id) {
+            // This is our frame's response. Resolve the promise.
+            deferred.resolve(receivedFrame);
+        }
+    };
+
+    // Clear up: remove listener after the timeout and a bit, it's no longer needed
+    setTimeout(function() {
+        xbeeAPI.removeListener("frame_object", callback);
+    }, maxWait + 1000);
+    
+    // Attach callback so we're waiting for the response
+    xbeeAPI.on("frame_object", callback);
+
+    // Pass the bytes down the serial port
+    serialport.write(xbeeAPI.buildFrame(frame), function(err){
+        if (err) throw(err);
     });
 
-    var rmtAtCmd = function (cmd, param, dest64) {
-        var frame_obj = { // AT Request to be sent to
-            type: 0x17,
-            destination64: dest64,
-            command: cmd,
-            commandParameter: param
-        };
-
-        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err) {
-            console.log(xbeeAPI.buildFrame(frame_obj));
-            if (err) throw (err);
-            else {
-                console.log(err);
-            }
-        });
-    };
-    var atCmd = function (cmd, param) {
-        var frame_obj = { // AT Request to be sent to
-            type: 0x08,
-            command: cmd,
-            commandParameter: param
-        };
-
-        serialport.write(xbeeAPI.buildFrame(frame_obj), function (err) {
-            console.log(xbeeAPI.buildFrame(frame_obj));
-            console.log(err);
-        });
-    };
+    // Return our promise with a timeout
+    return deferred.promise.timeout(maxWait);
+}
     return {
-        atCmd: atCmd,
-        rmtAtCmd: rmtAtCmd
+        xbeeCommand: xbeeCommand,
+        C: C
     };
-
-    /*
-        serialport.on('open', function () {
-            console.log('port opened.');
-        });
-
-
-        /*
-        {
-            type: 0x92, // xbee_api.constants.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX
-            remote64: "0013a20040522baa",
-            remote16: "7d84",
-            receiveOptions: 0x01,
-            numSamples: 1,
-            digitalSamples: {
-                "DIO2": 1,
-                "DIO3": 0,
-                "DIO4": 1
-            },
-            analogSamples: {
-                "AD1": 644
-            }
-        }
-        */
-
-
-    /* simple example: query ATD0 on remote xbee module.
-    var remote64 = [0x00,0x13,0xa2,0x00,0x40,0x7a,0x1f,0x95];  // <-- you'll need to replace this with the 64-bit hex address of your module
-    var remote16 = [0xff,0xfe]; // <-- put the 16 bit address of remote module here, if known. Otherwise use [0xff, 0xfe]
-
-    RemoteAT('D0', null, remote64, remote16);
-
-    void setRemoteState(int value) { // pass either a 0x4 or 0x5 to turn the pin on/off
-    Serial.print(0x7E, BYTE); // start byte
-    Serial.print(0x0, BYTE); // high part of length (always zero)
-    Serial.print(0x10, BYTE); // low part of length (the number of bytes
-    // that follow, not including checksum)
-    Serial.print(0x17, BYTE); // 0x17 is a remote AT command
-    Serial.print(0x0, BYTE); // frame id set to zero for no reply
-    // ID of recipient, or use 0xFFFF for broadcast
-    Serial.print(00, BYTE);
-    Serial.print(00, BYTE);
-    Serial.print(00, BYTE);
-    Serial.print(00, BYTE);
-    Serial.print(00, BYTE);
-    108 | Chapter 4: Ins and Outs
-    www.it-ebooks.info
-    Serial.print(00, BYTE);
-    Serial.print(0xFF, BYTE); // 0xFF for broadcast
-    Serial.print(0xFF, BYTE); // 0xFF for broadcast
-    // 16 bit of recipient or 0xFFFE if unknown
-    Serial.print(0xFF, BYTE);
-    Serial.print(0xFE, BYTE);
-    Serial.print(0x02, BYTE); // 0x02 to apply changes immediately on remote
-    // command name in ASCII characters
-    Serial.print('D', BYTE);
-    Serial.print('1', BYTE);
-    // command data in as many bytes as needed
-    Serial.print(value, BYTE);
-    // checksum is all bytes after length bytes
-    long sum = 0x17 + 0xFF + 0xFF + 0xFF + 0xFE + 0x02 + 'D' + '1' + value;
-    Serial.print( 0xFF - ( sum & 0xFF) , BYTE ); // calculate the proper checksum
-    delay(10); // safety pause to avoid overwhelming the
-    // serial port (if this function is not implemented properly)
-    }
-
-    // execute an AT command on the local xbee module
-    function AT(cmd, val) {      // e.g. 'ID' or '%V'
-        var atc = new xbee.ATCommand();
-        atc.setCommand(cmd);
-        atc.commandParameter = val;
-        var b = atc.getBytes();
-        serial_xbee.write(b);
-        //console.log('Wrote bytes to serial port', b);
-    }
-
-    // execute an AT command on a remote xbee module
-    function RemoteAT(cmd, val, remote64, remote16) {
-        var atc = new xbee.RemoteATCommand();
-        atc.setCommand(cmd);
-        atc.commandParameter = val;
-        atc.destination64 = remote64;
-        atc.destination16 = remote16;
-        var b = atc.getBytes();
-        serial_xbee.write(b);
-        //console.log('Wrote bytes to serial port', b);
-    }
-
-    */
-
 };
