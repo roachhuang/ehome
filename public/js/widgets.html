@@ -74,8 +74,8 @@
 					<div class='summary-line-1'>
 						<h2>感應數據讀取</h2>
 					</div>
-					<div class='summary-line-2' ng-repeat='gauge in gauges.battery'>
-						<p>{{gauge.name}}: {{gauge.data}}</p>
+					<div class='summary-line-2' ng-repeat='sensor in sensors'>
+						<p>{{sensor.name}}: {{sensor.battery}} v</p>
 					</div>
 				</div>
 				<div class="summary-footer">

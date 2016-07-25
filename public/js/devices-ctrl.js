@@ -12,31 +12,19 @@
         activate();
 
         ////////////////
-
         function activate() {
-            // deviceService is a singleton
-            var i, pin, addr;
             vm.devices = deviceService;
-
-            $http.post('/gpio', vm.devices, { header: {'content-Type': 'application/JSON'}}).then(function (res) {
-                for (i in vm.devices) {
-                    $timeout(function () {
-                        pin = vm.devices[i].pin;
-                        addr = vm.devices[i].addr;
-                        $http.get('/gpio/' + pin + '/' + addr).success(function (data) {
-                            vm.devices[i].status = data.value;
-                            console.log(pin.toString() + ':' + vm.devices[i].status);
-                        });
-                    }, 500);
-                }
+            // deviceService is a singleton
+            // this is very important to know return from  nodejs is res.status(200).send({value: value})
+            angular.forEach(vm.devices, function (device) {
+                //$timeout(function () {
+                    $http.get('/gpio/' + device.pin + '/' + device.addr).success(function (data) {
+                        device.status = data.value;
+                        console.log(device.pin + ': ' + device.status + ' val: ' + data.value);
+                    });
+                //}, 500);
+                //$window.onbeforeunload = vm.onExit;
             });
-
-            // read devices status
-            //setTimeout(function () {
-
-            //}, 200); // setInterval to .5s
-
-            //$window.onbeforeunload = vm.onExit;
         }
         /*
                 vm.onExit = function () {

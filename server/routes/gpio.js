@@ -29,12 +29,10 @@ module.exports = function (xbee) {
 
     router.route('/:pin/:addr')
         .get(gpioController.get)   // return 0 or 1
-        .post(gpioController.post);
+        .post(gpioController.post)
 
-    router.route('/')
-        // pass devices obj from angularjs
-        .post(gpioController.postDevices)
-
+    router.route('/battery/:addr')
+        .get(gpioController.getBattery)
     return router;
 };
 

@@ -11,6 +11,8 @@ module.exports = function () {
         this.data = [];
         this.name = name;
         this.addr = addr || null;
+        // voltage
+        this.battery;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
@@ -39,8 +41,10 @@ module.exports = function () {
 
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
+         console.log('detected', vm.pin, vm.addr);
         //if (frame.hasOwnProperty('digitalSamples.DIO4')) {
         if (frame.digitalSamples[vm.pin] === 1 && frame.remote64 === vm.addr) {
+
             // window get opened
             vm.status = true;
             // fire open event
@@ -52,9 +56,9 @@ module.exports = function () {
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
     var detectors = [];
-    detectors.push(new Sensor('DIO4', 'in the living room'));
+    detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
-    detectors.push(new Sensor('DIO5', 'somker detector at the kitchen'));
+    detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
 
     function Gauge(name, addr) {
         this.addr = addr;   //toto: change to addr16 if have time
@@ -69,7 +73,7 @@ module.exports = function () {
         //console.info('voltage: ', voltage);
         vm.data = voltage.toFixed(2);
         if (voltage < 2.5) {
-            //todo: fire battery low event          
+            //todo: fire battery low event
             //vm.emit('battery low');
         }
     };

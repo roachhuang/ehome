@@ -26,7 +26,7 @@ for pi-gpio lib, pin = physical pin number
 //var util = require('util');
 var Gpio = require('onoff').Gpio;
 
-module.exports = function (xbee, sensor) {
+module.exports = function (xbee) {
     //var devices;
 
     var post = function (req, res) {
@@ -37,12 +37,13 @@ module.exports = function (xbee, sensor) {
             return res.sendStatus(400);
         }
         var pin = req.params.pin, val = req.body.val, addr = req.params.addr;
-        //console.log('pin: '+pin+' val: '+val);
+        console.log('pin: ' + pin + ' val: ' + val, 'addr:', addr);
 
         // check if it is local gpio pin or remote xbee pin
         //console.info(typeof pin);
         var gpio;
-        if (addr === null) {
+        if (pin[0] !== 'D') {
+            //if (addr === null) {
             gpio = new LocalOnOff(pin, val);
         } else {
             // D0 ~ D7 on xbee
@@ -53,17 +54,20 @@ module.exports = function (xbee, sensor) {
     };
 
     var get = function (req, res) {
-        var value, pin = req.params.pin, gpio, addr = req.params.addr;
-
+        var pin = req.params.pin, gpio, addr = req.params.addr;
+        //console.log('PIN:', pin);
         //if (pin > 0 && pin < 28) {
         //console.info(typeof pin);
-        //if (pin[0] !== 'D') {
-        if (addr === null) {
+        if (pin[0] !== 'D') {
+            //if (addr === null) {
+            //console.log('local');
             gpio = new LocalOnOff(pin);
         } else {
             gpio = new RemoteOnOff(pin, addr);
+            console.log('remote');
         }
-        value = gpio.readPin();
+        var value = gpio.readPin();
+        console.log('pin-', pin, 'val-', value);
         res.status(200).send({ value: value });
     };
 
@@ -79,7 +83,7 @@ module.exports = function (xbee, sensor) {
         // we assume serialport has been opened. todo: check if it is opened
         //xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
         xbee.xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: this.addr,
             command: this.pin,
             commandParameter: this.val ? [0x05] : [0x04],
@@ -90,19 +94,23 @@ module.exports = function (xbee, sensor) {
         });
     };
     RemoteOnOff.prototype.readPin = function () {
+        var vm = this, ret;
         xbee.xbeeCommand({
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: this.addr,
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: vm.addr,
             command: 'IS',
-            commandParameter: []
+            commandParameter: [],
         }).then(function (f) {
             console.log("Command successful:", f);
-            var p = [this.pin.slice(0, 1), 'IO', this.pin.slice(1)].join('');
-            console.log('p:', p);
-            return frame.digitalSamples[p];
+            var p = [vm.pin.slice(0, 1), 'IO', vm.pin.slice(1)].join('');
+            ret = f.digitalSamples[p];
         }).catch(function (e) {
             console.log("Command failed:", e);
         });
+        while (ret === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return ret;
         /*return sensor.detectors[i].status;
         for (var i in myDev) {
             if (myDev[i].pin === this.pin && myDev[i].addr === this.addr) {
@@ -123,19 +131,23 @@ module.exports = function (xbee, sensor) {
     };
 
     LocalOnOff.prototype.readPin = function () {
-        var vm = this;
+        var value, vm = this;
         var strPin = vm.pin.toString();
         exec('cat /sys/class/gpio/gpio' + strPin + '/value', function (err, stdout, stderr) {
             //console.log('stdout: ' + stdout);
-            var value = parseInt(stdout);
+            value = parseInt(stdout);
             //console.log('stderr: ' + stderr);
             if (err !== null) {
                 var io = new Gpio(vm.pin, 'in');     // this will reset the output
-                //console.log('new io: ' + io);
+                console.log('new io: ' + io);
                 value = io.readSync();
             }
-            return value;
         });
+        while (value === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        console.log('pin: ', vm.pin + 'readpin: ', value);
+        return value;
     };
     /*
         var postDevices = function (req, res) {
@@ -148,31 +160,19 @@ module.exports = function (xbee, sensor) {
             res.sendStatus(200);
         };
     */
-    var atCmd = function (req, res) {
-        var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
-        xbee.xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,            
-            command: cmd,
-            commandParameter: cmdParam || []
-        }).then(function (f) {
-            console.log("Command successful:", f); 
-            //return frame.digitalSamples[p];
-        }).catch(function (e) {
-            console.log("Command failed:", e);
-        });
-    }
-    var rmtAtCmd = function (req, res) {
-        var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
+
+    var getBattery = function (req, res) {
+        var addr = req.params.addr;
         xbee.xbeeCommand({
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: this.addr,
-            command: 'IS',
+            destination64: addr,
+            command: '%V',
             commandParameter: []
         }).then(function (f) {
             console.log("Command successful:", f);
-            var p = [this.pin.slice(0, 1), 'IO', this.pin.slice(1)].join('');
-            console.log('p:', p);
-            return frame.digitalSamples[p];
+            var voltage = (f.commandData[0] * 256 + f.commandData[1]) / 1024;
+            //console.info('voltage: ', voltage);
+            return res.status(200).send({ v: voltage.toFixed(2) });
         }).catch(function (e) {
             console.log("Command failed:", e);
         });
@@ -181,8 +181,7 @@ module.exports = function (xbee, sensor) {
     return {
         post: post,
         get: get,
-        //postDevices: postDevices,
-        //devices: devices
+        getBattery: getBattery
     };
 };
 

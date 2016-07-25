@@ -9,15 +9,10 @@ module.exports = function (sensor) {
             res.json({ sensors: sensor.detectors });
         });
 
-    router.route('/dht')
+    router.route('/battery/:addr')
         .get(function (req, res) {
             res.json(sensor.gauges.dht.data);
         });
 
-    router.route('/battery/:addr')
-        .get(function (req, res) {
-            var addr = req.params.addr;
-            res.json({ batteryLvl: sensor.gauges.battery.data });
-        });
     return router;
 };

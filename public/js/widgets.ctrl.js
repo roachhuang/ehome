@@ -29,29 +29,24 @@
 			stop = $interval(function () {
 				vm.anyAlarm = false;
 				$http.get('/sensors').then(function (res) {
-					vm.sensors = res.data.sensors;    // inside data there is an object sensors				
+					vm.sensors = res.data.sensors;    // inside data there is an object sensors
 					// shouldn't include xbee in sensor object, but i don't have time to amend it.
 					for (i in vm.sensors) {
+/*
+						$http.get('/gpio/battery/'+vm.sensors[i].addr).then(function (res) {
+							vm.sensors[i].battery = res.data.v;
+						})
+*/
 						console.log('sensor : ' + vm.sensors[i]);
 						if (vm.sensors[i].pin !== 'xbee') {
 							vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
 						}
+
 					}
 				}, function (res) {
 					console.log(res.err);
 				});
 			}, 3 * 1000);
-
-			var stop1 = $interval(function () {
-				$http.get('/sensors/dht').then(function (res) {
-					vm.gauges = res.data.gauges;    // inside data there is an object sensors							
-					for (i in vm.gauges) {
-						vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
-					}
-				}, function (res) {
-					console.log(res.err);
-				});
-			}, 30 * 60 * 1000);
 
 			vm.$on('$destroy', function () {
 				// Make sure that the interval is destroyed too
