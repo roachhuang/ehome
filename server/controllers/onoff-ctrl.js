@@ -110,7 +110,7 @@ module.exports = function (xbee) {
         while (ret === undefined) {
             require('deasync').runLoopOnce();
         }
-        return ret;    
+        return ret;
     }
 
     function LocalOnOff(pin, val) {
@@ -174,14 +174,15 @@ module.exports = function (xbee) {
    var rmtAtCmd = function (req, res) {
         var addr = req.params.addr;
         var cmd = req.params.cmd;
+        cmd = (cmd === 'V') ? '%V' : cmd;
         var cmdParam = req.params.cmdParam;
         xbee.xbeeCommand({
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: addr,
             command: cmd,
             commandParameter: cmdParam || []
         }).then(function (f) {
-            console.log("Command successful:", f);           
+            console.log("Command successful:", f);
             return res.status(200).send(f);
         }).catch(function (e) {
             console.log("Command failed:", e);

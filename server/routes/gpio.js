@@ -33,6 +33,10 @@ module.exports = function (xbee) {
 
     router.route('/battery/:addr')
         .get(gpioController.getBattery)
+
+    router.route('/rmtAtCmd/:addr/:cmd')
+        .get(gpioController.rmtAtCmd)
+
     return router;
 };
 
