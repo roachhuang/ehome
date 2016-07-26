@@ -4,10 +4,10 @@
     angular
         .module('app.gpio', [])
         .factory('gpioService', gpioService);
-    gpioService.$inject = ['$http', '$q'];
-    function gpioService($http, $q) {
+    gpioService.$inject = ['$http'];
+    function gpioService($http) {
         var service = {
-            value: '',
+            //value: '',
             inPut: inPut,
             outPut: outPut
         };
@@ -22,24 +22,32 @@
             var val = value;
             var req = {
                 method: 'POST',
-                url: '/gpio/' + pin +'/'+ addr,
+                url: '/gpio/' + pin + '/' + addr,
                 //transformRequest: transformRequestAsFormPost,
                 data: { val: val }
             };
-            $http(req).then(function (data) {
-                console.log(data);
+            return $http(req).then(function (res) {
+                //console.log(res.data);
+                return res.data;
             });
         }
-
+        /*
+                function inPut(pin, addr) {
+                    var def = $q.defer();
+                    $http.get('/gpio/' + pin + '/' + addr).success(function (data) {
+                        service.value = data.value;
+                        def.resolve(data.value);
+                    }).error(function () {
+                        def.reject('failed to get IO status');
+                    });
+                    return def.promise;
+                }
+            }
+        */
         function inPut(pin, addr) {
-            var def = $q.defer();
-            $http.get('/gpio/' + pin + '/' + addr).success(function (data) {
-                service.value = data.value;
-                def.resolve(data.value);
-            }).error(function () {
-                def.reject('failed to get IO status');
+            return $http.get('/gpio/' + pin + '/' + addr).then(function (res) {
+                return res.data.value;
             });
-            return def.promise;
         }
     }
 })();

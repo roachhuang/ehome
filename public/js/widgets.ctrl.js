@@ -16,9 +16,22 @@
 
 		activate();
 
+		function getSensorObjs() {
+			return $http.get('/sensors').then(function (res) {
+				vm.sensors = res.data.sensors;    // inside data there is an object sensors
+			})
+		}
+		function readSensorsStatus() {			
+			angular.forEach(vm.sensors, function (sensor) {
+				vm.anyAlarm = sensor.status || vm.anyAlarm;
+				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/%V').then(function (f) {
+					sensor.battery = (f.commandData[0] * 256 + f.commandData[1]) / 1024;
+					//console.info('voltage: ', voltage);
+				})
+			})
+		}
 		////////////////
 		function activate() {
-			var i;
 			// hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
 				alert('not logon, please log on');
@@ -28,24 +41,7 @@
 			// read sensors data every 3s
 			stop = $interval(function () {
 				vm.anyAlarm = false;
-				$http.get('/sensors').then(function (res) {
-					vm.sensors = res.data.sensors;    // inside data there is an object sensors
-					// shouldn't include xbee in sensor object, but i don't have time to amend it.
-					for (i in vm.sensors) {
-/*
-						$http.get('/gpio/battery/'+vm.sensors[i].addr).then(function (res) {
-							vm.sensors[i].battery = res.data.v;
-						})
-*/
-						console.log('sensor : ' + vm.sensors[i]);
-						if (vm.sensors[i].pin !== 'xbee') {
-							vm.anyAlarm = vm.sensors[i].status || vm.anyAlarm;
-						}
-
-					}
-				}, function (res) {
-					console.log(res.err);
-				});
+				getSensorObjs().then(readSensorsStatus);
 			}, 3 * 1000);
 
 			vm.$on('$destroy', function () {

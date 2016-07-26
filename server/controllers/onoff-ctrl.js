@@ -110,14 +110,7 @@ module.exports = function (xbee) {
         while (ret === undefined) {
             require('deasync').runLoopOnce();
         }
-        return ret;
-        /*return sensor.detectors[i].status;
-        for (var i in myDev) {
-            if (myDev[i].pin === this.pin && myDev[i].addr === this.addr) {
-                return myDev[i].status;
-            }
-        }
-        */
+        return ret;    
     }
 
     function LocalOnOff(pin, val) {
@@ -178,10 +171,27 @@ module.exports = function (xbee) {
         });
     }
 
+   var rmtAtCmd = function (req, res) {
+        var addr = req.params.addr;
+        var cmd = req.params.cmd;
+        var cmdParam = req.params.cmdParam;
+        xbee.xbeeCommand({
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: addr,
+            command: cmd,
+            commandParameter: cmdParam || []
+        }).then(function (f) {
+            console.log("Command successful:", f);           
+            return res.status(200).send(f);
+        }).catch(function (e) {
+            console.log("Command failed:", e);
+        });
+    }
     return {
         post: post,
         get: get,
-        getBattery: getBattery
+        getBattery: getBattery,
+        rmtAtCmd: rmtAtCmd
     };
 };
 
