@@ -24,8 +24,9 @@
 		function readSensorsStatus() {
 			angular.forEach(vm.sensors, function (sensor) {
 				vm.anyAlarm = sensor.status || vm.anyAlarm;
-				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/%V').then(function (f) {
-					sensor.battery = (f.commandData[0] * 256 + f.commandData[1]) / 1024;
+				var cmdParm = [];
+				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
+					sensor.battery = (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
 					//console.info('voltage: ', voltage);
 				})
 			})

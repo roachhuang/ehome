@@ -6,10 +6,13 @@
             <tr class='info'>
                 <th>Sensor Name</th>
                 <th>value</th>
+                <th>電池電力</th>
             </tr>
             <tr class='warning' ng-repeat='sensor in sensors'>
                 <td>{{vm.sensor.name}}</td>
                 <td>{{vm.sensor.status}}</td>
+                <td>{{vm.sensor.battery}}<td>
+
             </tr>
         </table>
     </div>
