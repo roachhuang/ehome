@@ -68,9 +68,9 @@
         };
 
         vm.deleteAllJobs = function(){
-            $http.delete('/cron', null).then(function(res){
-                console.log(res.data);
+            return $http.delete('/cron', null).then(function(res){                
                 localStorage.removeItem(itemName);
+                return res.status;
             });
         };
 
@@ -81,8 +81,8 @@
                 //transformRequest: transformRequestAsFormPost,
                 data: { job: job, pin: pin } // to do: '1' or 1 or can use false
             };
-            $http(req).then(function (res) {
-                console.log(res.status);
+            return $http(req).then(function (res) {
+                return res.status;
             });
         }
 
@@ -92,7 +92,7 @@
                 url: '/cron/' + id,
             };
             $http(req).then(function (res) {
-                console.log(res.status);
+                return res.status;
             });
         }
     }

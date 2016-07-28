@@ -10,8 +10,8 @@
 		var vm = this;
 
 		vm.snapShot = function () {
-			$http.get('/users/saveimage').then(function (res) {
-				console.log('img captured');
+			return $http.get('/users/saveimage').then(function (res) {
+				return res.data;
 			});
 		};
 

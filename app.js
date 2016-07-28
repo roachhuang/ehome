@@ -9,13 +9,13 @@ var express = require('express');
 var app = express();
 
 var config = require('./server/config/config')[env];
+const io = require('socket.io').listen(app.listen(config.port));
 
 // create sensor objects - window and door
-var sensorObj = require('./server/config/sensor-obj')();
+var sensorObj = require('./server/config/sensor-obj')(io);
 
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbee = require('./server/config/xbee-obj')(sensorObj);
-
 
 require('./server/config/express')(app, config);
 require('./server/config/my-passport')(app, config);
@@ -41,6 +41,6 @@ app.use('/users', users);
 app.use('/auth', auth);
 app.use('/sensors', sensors);
 
-app.listen(config.port, function (req, res) {
-    console.info('Listening on port: ' + config.port + '...');
-});
+//app.listen(config.port, function (req, res) {
+//    console.info('Listening on port: ' + config.port + '...');
+//});

@@ -44,7 +44,7 @@ angular.module('myApp')
 			})
 			.when('/sensors', {				
 				templateUrl: '/js/sensors/sensors.html',
-				controller: 'widgetsCtrl as vm'
+				controller: 'sensorsCtrl as vm'
 			})
 			.when('/login', {
 				// set cronjob by devId

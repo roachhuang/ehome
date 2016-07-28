@@ -3,7 +3,7 @@ var events = require('events');
 var email = require('../controllers/emailController')();
 //var request = require('request');
 
-module.exports = function () {
+module.exports = function (io) {
 
     function Sensor(pin, name, addr) {
         this.pin = pin || null;
@@ -41,7 +41,7 @@ module.exports = function () {
 
     Sensor.prototype.getStatus = function (frame) {
         var vm = this;
-         console.log('detected', vm.pin, vm.addr);
+        console.log('detected', vm.pin, vm.addr);
         //if (frame.hasOwnProperty('digitalSamples.DIO4')) {
         if (frame.digitalSamples[vm.pin] === 1 && frame.remote64 === vm.addr) {
 
@@ -52,6 +52,8 @@ module.exports = function () {
         } else {
             vm.status = false;
         }
+        // inform client           
+        io.sockets.emit('intruder', vm.status);
     };
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
@@ -79,7 +81,7 @@ module.exports = function () {
     };
 
     var gauges = {};
-    gauges.battery =[];
+    gauges.battery = [];
 
     gauges.dht = new Gauge();
     gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));

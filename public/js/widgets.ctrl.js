@@ -21,7 +21,7 @@
 				vm.sensors = res.data.sensors;    // inside data there is an object sensors
 			})
 		}
-		function readSensorsStatus() {			
+		function readSensorsStatus() {
 			angular.forEach(vm.sensors, function (sensor) {
 				vm.anyAlarm = sensor.status || vm.anyAlarm;
 				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/%V').then(function (f) {
@@ -38,12 +38,15 @@
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
-			// read sensors data every 3s
+			socket.on('intruder', function(data){
+				vm.anyAlarm = data;
+			});
+			/* read sensors data every 3s
 			stop = $interval(function () {
 				vm.anyAlarm = false;
 				getSensorObjs().then(readSensorsStatus);
 			}, 3 * 1000);
-
+			
 			vm.$on('$destroy', function () {
 				// Make sure that the interval is destroyed too
 				if (angular.isDefined(stop)) {
@@ -52,6 +55,7 @@
 				}
 			});
 			$window.onbeforeunload = vm.onExit;
+			*/
 		}
 	}
 })();

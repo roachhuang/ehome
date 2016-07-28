@@ -1,6 +1,6 @@
 
 'use strict';
-
+//https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 var exec = require('child_process').exec;
 
 /*
