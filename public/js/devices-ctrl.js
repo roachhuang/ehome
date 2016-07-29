@@ -44,20 +44,12 @@
             gpioService.outPut(device.status, device.pin, device.addr);
         };
 
-        vm.allOn = function (devices) {
-            for (var i in devices) {
+        vm.ctrlAll = function (devices, value) {
+            angular.forEach (devices, function(device) {
                 $timeout(function () {
-                    gpioService.outPut(1, devices[i].pin, devices[i].addr);
+                    gpioService.outPut(value, device.pin, device.addr);
                 }, 500);
-
-            }
-        };
-        vm.allOff = function (devices) {
-            for (var i in devices) {
-                $timeout(function () {
-                    gpioService.outPut(0, devices[i].pin, devices[i].addr);
-                }, 500);
-            }
-        };
+            });
+        }     
     }
 })();

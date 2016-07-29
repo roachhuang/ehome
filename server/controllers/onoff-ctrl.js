@@ -20,7 +20,7 @@ After this, you will need to logout and log back in. Details, if you are interes
 Next, cd to your project directory and use npm to install pi-gpio in your project.
 
 After changing the path and reinstalling gpio-admin, you need to change the path variable to
-(sysFsPath = "/sys/class/gpio") in pi-gpio.js: line7 in node_modules/pi-gpio folder.
+(sysFsPath = '/sys/class/gpio') in pi-gpio.js: line7 in node_modules/pi-gpio folder.
 for pi-gpio lib, pin = physical pin number
 */
 //var util = require('util');
@@ -47,7 +47,7 @@ module.exports = function (xbee) {
             gpio = new LocalOnOff(pin, val);
         } else {
             // D0 ~ D7 on xbee
-            gpio = new RemoteOnOff(pin, val, addr);
+            gpio = new RemoteOnOff(pin, addr, val);
         }
         gpio.onOff();
         res.sendStatus(200);
@@ -55,16 +55,18 @@ module.exports = function (xbee) {
 
     var get = function (req, res) {
         var pin = req.params.pin, gpio, addr = req.params.addr;
-        //console.log('PIN:', pin);
+        console.log('PIN:', pin);
         //if (pin > 0 && pin < 28) {
-        //console.info(typeof pin);
+
         if (pin[0] !== 'D') {
             //if (addr === null) {
-            //console.log('local');
+            console.log('local');
             gpio = new LocalOnOff(pin);
         } else {
+            console.info('addr ', addr);
             gpio = new RemoteOnOff(pin, addr);
-            console.log('remote');
+
+            console.log(gpio);
         }
         var value = gpio.readPin();
         console.log('pin-', pin, 'val-', value);
@@ -72,11 +74,12 @@ module.exports = function (xbee) {
     };
 
     //strategy pattern
-    function RemoteOnOff(pin, val, addr) {
+    function RemoteOnOff(pin, addr, val) {
         this.pin = pin;
-        this.val = val;
-        //todo: change to 16 addr
         this.addr = addr;
+        this.val = val || 0;
+        //todo: change to 16 addr
+
     }
     RemoteOnOff.prototype.onOff = function () {
         //console.info('remote devices');
@@ -88,30 +91,31 @@ module.exports = function (xbee) {
             command: this.pin,
             commandParameter: this.val ? [0x05] : [0x04],
         }).then(function (f) {
-            console.log("Command successful:", f);
+            console.log('Command successful:', f);
         }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('Command failed:', e);
         });
     };
     RemoteOnOff.prototype.readPin = function () {
         var vm = this, ret;
+        console.log('vm.addr', vm.addr);
         xbee.xbeeCommand({
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: vm.addr,
             command: 'IS',
             commandParameter: [],
         }).then(function (f) {
-            console.log("Command successful:", f);
+            console.log('Command successful:', f);
             var p = [vm.pin.slice(0, 1), 'IO', vm.pin.slice(1)].join('');
             ret = f.digitalSamples[p];
         }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('readpin Command failed:', e);
         });
         while (ret === undefined) {
             require('deasync').runLoopOnce();
         }
         return ret;
-    }
+    };
 
     function LocalOnOff(pin, val) {
         this.pin = pin;
@@ -154,24 +158,7 @@ module.exports = function (xbee) {
         };
     */
 
-    var getBattery = function (req, res) {
-        var addr = req.params.addr;
-        xbee.xbeeCommand({
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: addr,
-            command: '%V',
-            commandParameter: []
-        }).then(function (f) {
-            console.log("Command successful:", f);
-            var voltage = (f.commandData[0] * 256 + f.commandData[1]) / 1024;
-            //console.info('voltage: ', voltage);
-            return res.status(200).send({ v: voltage.toFixed(2) });
-        }).catch(function (e) {
-            console.log("Command failed:", e);
-        });
-    }
-
-   var rmtAtCmd = function (req, res) {
+    var rmtAtCmd = function (req, res) {
         var addr = req.params.addr;
         var cmd = req.params.cmd;
         cmd = (cmd === 'V') ? '%V' : cmd;
@@ -182,16 +169,16 @@ module.exports = function (xbee) {
             command: cmd,
             commandParameter: cmdParam || []
         }).then(function (f) {
-            console.log("Command successful:", f);
+            // response of the command
+            console.log('Command successful:', f);
             return res.status(200).send(f);
         }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('Command failed:', e);
         });
-    }
+    };
     return {
         post: post,
         get: get,
-        getBattery: getBattery,
         rmtAtCmd: rmtAtCmd
     };
 };

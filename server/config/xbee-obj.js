@@ -10,7 +10,7 @@ var Q = require('q');
 //var onOff = require('../controllers/onoff-ctrl')();
 
 module.exports = function (sensor, devices) {
-    //var routerAddr = '0013A20040EB556C';
+    var routerAddr = '0013A20040EB556C';
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
 
     // ls /dev/ttyAMA0 to make suer it is exist.
@@ -29,32 +29,42 @@ module.exports = function (sensor, devices) {
     // How long are we prepared to wait for a response to our command?
     var maxWait = 5000; // ms
 
-    serialport.on('open', function () {
-        console.log('port opened.');
-        /*
+    var initXbee = function () {
         xbeeCommand({
             type: C.FRAME_TYPE.AT_COMMAND,
             command: 'ND',
             commandParameter: [],
         }).then(function (f) {
-            console.log("Command successful:", f);
+            console.log('Command successful:', f);
         }).catch(function (e) {
-            console.log("Command failed:", e);
-            });
-
-        xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,
-            command: '%V',
-            commandParameter: [],
-        }).then(function (f) {
-            console.log("Command successful:", f);
-            var voltage = (f.commandData[0] * 256 + f.commandData[1]) / 1024;
-            voltage = voltage.toFixed(2);
-            console.info('voltage: ', voltage);
-        }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('Command failed:', e);
         });
+        /*
+                xbeeCommand({
+                    type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+                    command: 'V+',
+                    remote64: '000000000000FFFF',
+                    // set battery threshold 0x800 * 1200/1024 = 2.4v
+                    commandParameter: [0x800],
+                }).then(function (f) {
+                    console.log('Command successful:', f);
+                }).catch(function (e) {
+                    console.log('Command failed:', e);
+                });
+
+                xbeeCommand({
+                    type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+                    command: '%V',
+                    remote64: routerAddr,
+                    // set battery threshold 0x800 * 1200/1024 = 2.4v
+                    commandParameter: [],
+                }).then(function (f) {
+                    console.log('Command successful:', f);
+                }).catch(function (e) {
+                    console.log('Command failed:', e);
+                });
         */
+
         //atCmd('ND', []);
         // read router's battery level every 2 hrs
         //for (var i in sensor.gauges.battery) {
@@ -63,26 +73,50 @@ module.exports = function (sensor, devices) {
         //Read information regarding last node join request
         //rmtAtCmd('AI', [], '000000000000FFFF');
         //rmtAtCmd('JV', [0x01], '000000000000FFFF');
+    };
+
+    serialport.on('open', function () {
+        console.log('port opened.');
+        //initXbee();
     });
 
     serialport.on('error', function (err) {
         console.log('Error: ', err.message);
     });
 
-    xbeeAPI.on("frame_object", function (frame) {
+    xbeeAPI.on('frame_object', function (frame) {
+        var i, v;
         console.log('outer>>' + util.inspect(frame));
         // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
         console.log('frame type: ', frame.type);
         switch (frame.type) {
             case 0x97: // remote AT command response
-                //console.log('>>' + util.inspect(frame));
-                if (frame.commandStatus === 0x00 && frame.command === '%V') {
-                    for (var i in sensor.gauges.battery) {
-                        if (sensor.gauges.battery[i].addr === frame.remote64) {
-                            sensor.gauges.battery[i].getBatteryLvl(frame);
+                console.log('>>' + util.inspect(frame));
+                /*
+                if (frame.commandStatus === 0x00) {
+                    if (frame.command === '%V') {
+                        for (i in sensor.detectors) {
+                            if (sensor.detectors[i].addr === frame.remote64) {
+                                v = (frame.commandData[0] * 256 + frame.commandData[1]) * 1200 / 1024;
+                                sensor.detectors[i].battery = v;
+                                //console.info('voltage: ', v);
+                                //vm.data = voltage.toFixed(2);
+                            }
                         }
+                    } else if (frame.command === 'IS') {
+                        util.inspect(frame);
+                        /*
+                        v = (frame.commandData[4] * 256 + frame.commandData[5]) * 1200 / 1024;
+                        for (i in sensor.detectors) {
+                            if (sensor.detectors[i].addr === frame.remote64) {
+                                sensor.detectors[i].battery = v;
+                                sensor.detectors[i].emit('batteryLow');
+                            }
+                        }
+
                     }
-                }
+    }
+        */
                 break;
             case 0x88:  // local AT cmd response
                 /*
@@ -132,7 +166,7 @@ module.exports = function (sensor, devices) {
         var deferred = Q.defer();
 
         var callback = function (receivedFrame) {
-            if (receivedFrame.id == frame.id) {
+            if (receivedFrame.id === frame.id) {
                 // This is our frame's response. Resolve the promise.
                 deferred.resolve(receivedFrame);
             }
@@ -140,14 +174,14 @@ module.exports = function (sensor, devices) {
 
         // Clear up: remove listener after the timeout and a bit, it's no longer needed
         setTimeout(function () {
-            xbeeAPI.removeListener("frame_object", callback);
+            xbeeAPI.removeListener('frame_object', callback);
         }, maxWait + 1000);
 
         // Attach callback so we're waiting for the response
-        xbeeAPI.on("frame_object", callback);
+        xbeeAPI.on('frame_object', callback);
 
         // Pass the bytes down the serial port
-        util.inspect(frame);
+        console.log(util.inspect(frame));
         serialport.write(xbeeAPI.buildFrame(frame), function (err) {
             if (err) throw (err);
         });
@@ -163,10 +197,10 @@ module.exports = function (sensor, devices) {
             command: cmd,
             commandParameter: cmdParam || []
         }).then(function (f) {
-            console.log("Command successful:", f);
+            console.log('Command successful:', f);
             return f;
         }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('Command failed:', e);
         });
     }
     var rmtAtCmd = function (req, res) {
@@ -177,10 +211,10 @@ module.exports = function (sensor, devices) {
             command: cmd,
             commandParameter: cmdParam || []
         }).then(function (f) {
-            console.log("Command successful:", f);
+            console.log('Command successful:', f);
             return f;
         }).catch(function (e) {
-            console.log("Command failed:", e);
+            console.log('Command failed:', e);
         });
     }
     */

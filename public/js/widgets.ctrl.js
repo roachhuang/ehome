@@ -5,28 +5,29 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$interval'];
-	function widgetsCtrl($scope, $http, $window, $interval) {
+	widgetsCtrl.$inject = ['$http', '$window'];
+	function widgetsCtrl($http, $window) {
 		// use $scope so we can inherit $scope from mainCtrl
-		var vm = $scope;
+		var vm = this;
 		vm.sensors = [];
 		vm.onExit = function () {
 			// close serialport, release GPIO ports,
 		};
-
 		activate();
-/*
-		function readSensorsStatus() {
-			angular.forEach(vm.sensors, function (sensor) {
-				vm.anyAlarm = sensor.status || vm.anyAlarm;
-				var cmdParm = [];
-				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
-					sensor.battery = (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
-					console.info('voltage: ', voltage);
-				})
-			})
-		}
-		*/
+
+		/*
+
+				function readSensorsStatus() {
+					angular.forEach(vm.sensors, function (sensor) {
+						vm.anyAlarm = sensor.status || vm.anyAlarm;
+						var cmdParm = [];
+						return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
+							sensor.battery = (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
+							console.info('voltage: ', voltage);
+						})
+					})
+				}
+				*/
 		////////////////
 		function activate() {
 			// hasAuthorized variable is inherited from app.js
@@ -35,9 +36,10 @@
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
+
 			//get event from nodejs
 			var socket = io.connect();
-			socket.on('intruder', function(data){
+			socket.on('intruder', function (data) {
 				vm.anyAlarm = data;
 				console.log('get alarm evt', data);
 			});

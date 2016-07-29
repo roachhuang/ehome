@@ -12,12 +12,17 @@ module.exports = function (io) {
         this.name = name;
         this.addr = addr || null;
         // voltage
-        this.battery;
+        this.battery = 0;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
+        this.on('batteryLow', this._batteryLow);
     }
     Sensor.prototype = new events.EventEmitter();
+
+    Sensor.prototype._batteryLow = function () {
+        email.sendEmail(this.name + 'battery low');
+    };
 
     Sensor.prototype._open = function () {
         //if (alarm.state === 'on') {
@@ -70,16 +75,6 @@ module.exports = function (io) {
         //events.EventEmitter.call(this);
     }
 
-    Gauge.prototype.getBatteryLvl = function (frame) {
-        var vm = this, voltage;
-        voltage = (frame.commandData[0] * 256 + frame.commandData[1]) / 1024;
-        //console.info('voltage: ', voltage);
-        vm.data = voltage.toFixed(2);
-        if (voltage < 2.5) {
-            //todo: fire battery low event
-            //vm.emit('battery low');
-        }
-    };
 
     //var gauges = {};
     //gauges.battery = [];

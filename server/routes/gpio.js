@@ -31,9 +31,6 @@ module.exports = function (xbee) {
         .get(gpioController.get)   // return 0 or 1
         .post(gpioController.post)
 
-    router.route('/battery/:addr')
-        .get(gpioController.getBattery)
-
     router.route('/rmtAtCmd/:addr/:cmd')
         .get(gpioController.rmtAtCmd)
 

@@ -13,7 +13,7 @@
         function loadSensorObjs() {
             return $http.get('/sensors').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
-            })
+            });
         }
         ////////////////
 
