@@ -31,6 +31,7 @@ module.exports = function (sensor, devices) {
 
     serialport.on('open', function () {
         console.log('port opened.');
+        /*
         xbeeCommand({
             type: C.FRAME_TYPE.AT_COMMAND,
             command: 'ND',
@@ -39,7 +40,8 @@ module.exports = function (sensor, devices) {
             console.log("Command successful:", f);
         }).catch(function (e) {
             console.log("Command failed:", e);
-        });
+            });
+
         xbeeCommand({
             type: C.FRAME_TYPE.AT_COMMAND,
             command: '%V',
@@ -52,6 +54,7 @@ module.exports = function (sensor, devices) {
         }).catch(function (e) {
             console.log("Command failed:", e);
         });
+        */
         //atCmd('ND', []);
         // read router's battery level every 2 hrs
         //for (var i in sensor.gauges.battery) {

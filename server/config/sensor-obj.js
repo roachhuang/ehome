@@ -52,15 +52,16 @@ module.exports = function (io) {
         } else {
             vm.status = false;
         }
-        // inform client           
+        // inform client
         io.sockets.emit('intruder', vm.status);
+        console.log('fire alarm evt', vm.status);
     };
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
-    detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
+    //detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
 
     function Gauge(name, addr) {
         this.addr = addr;   //toto: change to addr16 if have time
@@ -80,11 +81,11 @@ module.exports = function (io) {
         }
     };
 
-    var gauges = {};
-    gauges.battery = [];
+    //var gauges = {};
+    //gauges.battery = [];
 
-    gauges.dht = new Gauge();
-    gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));
+    //gauges.dht = new Gauge();
+    //gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));
 
     /*
     var window = new Sensor('DIO4', 'in the living room');
@@ -96,7 +97,7 @@ module.exports = function (io) {
 
     return {
         detectors: detectors,
-        gauges: gauges
+        //gauges: gauges
     };
 
     /* Remove the binding of listner1 function
