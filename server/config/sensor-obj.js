@@ -12,12 +12,17 @@ module.exports = function (io) {
         this.name = name;
         this.addr = addr || null;
         // voltage
-        this.battery;
+        this.battery = 0;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
+        this.on('batteryLow', this._battery);
     }
     Sensor.prototype = new events.EventEmitter();
+
+    Sensor.prototype._batteryLow = function () {       
+        email.sendEmail(this.name + 'battery low');    
+    };
 
     Sensor.prototype._open = function () {
         //if (alarm.state === 'on') {
@@ -60,7 +65,7 @@ module.exports = function (io) {
     var detectors = [];
     detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
-    detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
+    //detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
 
     function Gauge(name, addr) {
         this.addr = addr;   //toto: change to addr16 if have time
@@ -69,22 +74,12 @@ module.exports = function (io) {
         //events.EventEmitter.call(this);
     }
 
-    Gauge.prototype.getBatteryLvl = function (frame) {
-        var vm = this, voltage;
-        voltage = (frame.commandData[0] * 256 + frame.commandData[1]) / 1024;
-        //console.info('voltage: ', voltage);
-        vm.data = voltage.toFixed(2);
-        if (voltage < 2.5) {
-            //todo: fire battery low event
-            //vm.emit('battery low');
-        }
-    };
 
-    var gauges = {};
-    gauges.battery = [];
+    //var gauges = {};
+    //gauges.battery = [];
 
-    gauges.dht = new Gauge();
-    gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));
+    //gauges.dht = new Gauge();
+    //gauges.battery.push(new Gauge('xbee01', '0013A20040EB556C'));
 
     /*
     var window = new Sensor('DIO4', 'in the living room');
@@ -96,7 +91,7 @@ module.exports = function (io) {
 
     return {
         detectors: detectors,
-        gauges: gauges
+        //gauges: gauges
     };
 
     /* Remove the binding of listner1 function

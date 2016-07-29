@@ -17,9 +17,9 @@ module.exports = function () {
     function get(req, res) {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-            for (var prop in jobs) {
-                console.log('jobs' + prop + '=' + jobs[prop]);
-            }
+            angular.forEach (jobs, function(job) {
+                console.log('jobs' + job + '= ', job);
+            });
             res.json(200, { jobs: jobs });
         });
         //res.json(crons);

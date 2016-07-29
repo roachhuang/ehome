@@ -66,7 +66,7 @@
 
 	<section class='col-sm-4'>
 		<a href='/sensors'>
-			<div ng-class="anyAlarm? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
+			<div ng-class="vm.anyAlarm? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
 				<div class="summary-bg">
 					<i class="fa fa-tachometer fa-5x"></i>
 				</div>
@@ -74,8 +74,8 @@
 					<div class='summary-line-1'>
 						<h2>感應數據讀取</h2>
 					</div>
-					<div class='summary-line-2' ng-repeat='sensor in sensors'>
-						<p>{{sensor.name}}: {{sensor.battery}} v</p>
+					<div class='summary-line-2' ng-repeat='sensor in vm.sensors'>
+						<p>{{vm.sensor.name}}: {{vm.sensor.battery}} v</p>
 					</div>
 				</div>
 				<div class="summary-footer">
@@ -85,7 +85,7 @@
 		</a>
 	</section>
 	<section class='col-sm-4'>
-		<div id='nasaImg' style='background-image: url({{apod.url}}'>
+		<div id='nasaImg' style='background-image: url({{vm.apod.url}}'>
 			<a href='/nasa' class='divLink'>NASA 每日一圖</a>
 		</div>
 	</section>

@@ -5,10 +5,10 @@
 		.module('myApp')
 		.controller('widgetsCtrl', widgetsCtrl);
 
-	widgetsCtrl.$inject = ['$scope', '$http', '$window', '$interval'];
-	function widgetsCtrl($scope, $http, $window, $interval) {
+	widgetsCtrl.$inject = ['$http', '$window'];
+	function widgetsCtrl($http, $window) {
 		// use $scope so we can inherit $scope from mainCtrl
-		var vm = $scope, stop;
+		var vm = this;
 		vm.sensors = [];
 		vm.onExit = function () {
 			// close serialport, release GPIO ports,
@@ -19,7 +19,7 @@
 		function getSensorObjs() {
 			return $http.get('/sensors').then(function (res) {
 				vm.sensors = res.data.sensors;    // inside data there is an object sensors
-			})
+			});
 		}
 		function readSensorsStatus() {
 			angular.forEach(vm.sensors, function (sensor) {
@@ -28,8 +28,8 @@
 				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
 					sensor.battery = (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
 					//console.info('voltage: ', voltage);
-				})
-			})
+				});
+			});
 		}
 		////////////////
 		function activate() {
@@ -39,6 +39,7 @@
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
+			socket = io.connect();
 			socket.on('intruder', function(data){
 				vm.anyAlarm = data;
 			});
