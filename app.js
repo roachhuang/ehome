@@ -4,15 +4,15 @@
 // port defined in server/config/env/*.js file
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // has to be before config coz config reads it
-global.myDev = [];
 var express = require('express');
 var app = express();
 
 var config = require('./server/config/config')[env];
-const io = require('socket.io').listen(app.listen(config.port));
+//const io = require('socket.io').listen(app.listen(config.port));
 
 // create sensor objects - window and door
-var sensorObj = require('./server/config/sensor-obj')(io);
+//var sensorObj = require('./server/config/sensor-obj')(io);
+var sensorObj = require('./server/config/sensor-obj')();
 
 // init xbee - setup baud rate, com port,  mode, etc.
 var xbee = require('./server/config/xbee-obj')(sensorObj);
@@ -41,6 +41,6 @@ app.use('/users', users);
 app.use('/auth', auth);
 app.use('/sensors', sensors);
 
-//app.listen(config.port, function (req, res) {
-//    console.info('Listening on port: ' + config.port + '...');
-//});
+app.listen(config.port, function (req, res) {
+    console.info('Listening on port: ' + config.port + '...');
+});

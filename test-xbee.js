@@ -4,7 +4,7 @@ var util = require('util');
 var C = xbee_api.constants;
 
 var xbeeAPI = new xbee_api.XBeeAPI({
-  api_mode: 2
+  api_mode: 1
 });
 
 var serialport = new SerialPort('/dev/ttyAMA0', {

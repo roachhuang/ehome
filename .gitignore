@@ -1,5 +1,7 @@
 public/lib/**/*
-public/assets/videos/
+./public/assets/videos/
+./public/lib/*
+public/lib/
 node_modules/
 *.log
 

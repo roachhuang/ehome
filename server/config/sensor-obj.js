@@ -3,8 +3,8 @@ var events = require('events');
 var email = require('../controllers/emailController')();
 //var request = require('request');
 
-module.exports = function (io) {
-
+//module.exports = function (io) {
+module.exports = function () {
     function Sensor(pin, name, addr) {
         this.pin = pin || null;
         this.status = false;    // false: normal; true: get trigged
@@ -58,8 +58,8 @@ module.exports = function (io) {
             vm.status = false;
         }
         // inform client
-        io.sockets.emit('intruder', vm.status);
-        console.log('fire alarm evt', vm.status);
+        //io.sockets.emit('intruder', vm.status);
+        //console.log('fire alarm evt', vm.status);
     };
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)

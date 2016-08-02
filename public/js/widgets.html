@@ -69,7 +69,10 @@
 
 	<section class='col-sm-4'>
 		<a href='/sensors'>
-			<div ng-class="vm.anyAlarm? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
+		<!--
+			<div ng-class="anyAlarm===true? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
+		-->
+			<div class='pdsa-summary-block pdsa-block-warning'>
 				<div class="summary-bg">
 					<i class="fa fa-tachometer fa-5x"></i>
 				</div>
@@ -77,8 +80,9 @@
 					<div class='summary-line-1'>
 						<h2>感應數據讀取</h2>
 					</div>
-					<div class='summary-line-2' ng-repeat='sensor in vm.sensors'>
-						<p>{{vm.sensor.name}}: {{vm.sensor.battery}} v</p>
+
+					<div class='summary-line-2' ng-repeat='sensor in sensors'>
+						<p>{{sensor.name}}: {{sensor.battery}} v</p>
 					</div>
 				</div>
 				<div class="summary-footer">

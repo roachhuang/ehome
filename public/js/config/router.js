@@ -42,7 +42,7 @@ angular.module('myApp')
 				templateUrl: '/js/cron/cron.html',
 				controller: 'cronCtrl'
 			})
-			.when('/sensors', {				
+			.when('/sensors', {
 				templateUrl: '/js/sensors/sensors.html',
 				controller: 'sensorsCtrl as vm'
 			})
@@ -55,7 +55,7 @@ angular.module('myApp')
 				templateUrl: '/views/about.html'
 			})
 			.otherwise({
-				controller: 'widgetsCtrl as vm',
+				controller: 'widgetsCtrl',
 				templateUrl: '/js/widgets.html'
 			});
 	});
