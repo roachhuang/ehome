@@ -17,10 +17,14 @@ module.exports = function () {
     function get(req, res) {
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-            angular.forEach (jobs, function(job) {
-                console.log('jobs' + job + '= ', job);
-            });
-            res.json(200, { jobs: jobs });
+            /*
+            for( var i in jobs) {
+                console.log('jobs' + job + '= ', job[i]);
+            };
+            */
+            if (err) console.log(err);
+            console.log(jobs);
+            res.status(200).json({ jobs: jobs });
         });
         //res.json(crons);
     }
@@ -78,12 +82,20 @@ module.exports = function () {
         });
     }
 
-
     // save a cron job
     function post(req, res) {
-        var job = req.body.job, pin = req.body.pin;
-        var cmd1 = "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
-        var cmd0 = "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        var schedule = req.body.job, pin = req.body.pin, addr = req.body.addr;
+        var job;
+        if (pin[0] !== 'D') {
+            //if (addr === null) {
+            job = new LocalJob(pin);
+        } else {
+            // D0 ~ D7 on xbee
+            job = new RemoteJob(pin, addr);
+        }
+
+        var cmd1 = job.cmdOn();
+        var cmd0 = job.cmdOff();
 
         if (!req.body) {
             return res.sendStatus(400);
@@ -91,14 +103,34 @@ module.exports = function () {
         // set cron job on server
         cron.load(function (err, crontab) {
             // cmd, time, comment
-            var job1 = crontab.create(cmd1, job.on);
-            var job0 = crontab.create(cmd0, job.off);
+            var job1 = crontab.create(cmd1, schedule.on);
+            var job0 = crontab.create(cmd0, schedule.off);
             crontab.save(function (err, crontab) {
                 res.sendStatus(200);
                 console.log(err);
             });
         });
     }
+
+
+    function LocalJob(pin) {
+        this.pin = pin;
+    }
+    LocalJob.prototype.cmdOn = function () {
+        return "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+    };
+    LocalJob.prototype.cmdOff = function () {
+        return "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+    };
+    function RemoteJob(pin, addr) {
+        this.pin = pin;
+        this.addr = addr;
+    }
+    RemoteJob.prototype.cmdOn = function () {
+
+    }
+
+
 };
 
 

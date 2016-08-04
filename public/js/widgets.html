@@ -1,7 +1,7 @@
 <div class="row">
 	<section class='col-sm-4'>
 		<div id='nasaImg' style='background-image: url(http://ubuy.asuscomm.com:8080/video.cgi)'>
-			<a href='/camera' class='divLink'>Camera view</a>
+			<a ng-href='/camera' class='divLink'>Camera view</a>
 		</div>
 	</section>
 
@@ -30,7 +30,7 @@
 		</a>
 	</section>
 	<section class='col-sm-4'>
-		<a href='/about'>
+		<a ng-href='/about'>
 			<div class='pdsa-summary-block pdsa-block-info'>
 				<div class="summary-bg">
 					<i class="fa fa-registered fa-5x"></i>
@@ -68,7 +68,7 @@
 	</section>
 
 	<section class='col-sm-4'>
-		<a href='/sensors'>
+		<a ng-href='/sensors'>
 		<!--
 			<div ng-class="anyAlarm===true? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
 		-->
@@ -93,7 +93,7 @@
 	</section>
 	<section class='col-sm-4'>
 		<div id='nasaImg' style='background-image: url({{vm.apod.url}}'>
-			<a href='/nasa' class='divLink'>NASA 每日一圖</a>
+			<a ng-href='/nasa' class='divLink'>NASA 每日一圖</a>
 		</div>
 	</section>
 </div>

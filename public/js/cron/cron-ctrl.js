@@ -26,8 +26,10 @@
             //vm.selectedDevice.cronJobs = [];
             itemName = vm.selectedDevice.name;
             console.log(localStorage.getItem(itemName));
-            vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
-            //vm.cronJobs = $http.get('/cron');
+            //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
+            $http.get('/cron').then(function (res) {
+                vm.cronJobs = res.data.jobs;
+            })
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {};
@@ -54,7 +56,7 @@
             localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            addCronTab(job, vm.selectedDevice.pin);
+            addCronTab(job, vm.selectedDevice.pin, vm.selectedDevice.addr);
         };
 
         vm.removeJob = function (id) {
@@ -67,8 +69,8 @@
             //localStorage[itemName] = JSON.stringify(json);
         };
 
-        vm.deleteAllJobs = function(){
-            return $http.delete('/cron', null).then(function(res){                
+        vm.deleteAllJobs = function () {
+            return $http.delete('/cron', null).then(function (res) {
                 localStorage.removeItem(itemName);
                 return res.status;
             });
