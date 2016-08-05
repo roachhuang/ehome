@@ -29,7 +29,7 @@
             //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
             $http.get('/cron').then(function (res) {
                 vm.cronJobs = res.data.jobs;
-            })
+            });
             //$scope.getJobs();
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {};

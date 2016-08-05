@@ -2,7 +2,7 @@
 var cron = require('crontab');
 var request = require('request');
 
-module.exports = function () {
+module.exports = function (xbee) {
     var crons = [];
 
     return {
@@ -112,24 +112,56 @@ module.exports = function () {
         });
     }
 
-
     function LocalJob(pin) {
         this.pin = pin;
     }
+
     LocalJob.prototype.cmdOn = function () {
-        return "echo '1' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        return "echo '1' > /sys/class/gpio/gpio" + this.pin.toString() + '/value';
     };
     LocalJob.prototype.cmdOff = function () {
-        return "echo '0' > /sys/class/gpio/gpio" + pin.toString() + '/value';
+        return "echo '0' > /sys/class/gpio/gpio" + this.pin.toString() + '/value';
     };
     function RemoteJob(pin, addr) {
         this.pin = pin;
         this.addr = addr;
     }
+
     RemoteJob.prototype.cmdOn = function () {
+        //var frameId = xbee.xbeeAPI.nextFrameId();
+        var f = {
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            //id: frameId,
+            command: this.pin,
+            destination64: this.addr,
+            commandParameter: [0x05]
+        };
+        f = xbee.xbeeAPI.buildFrame(f);
+        var a = '';
+        for (var i = 0; i < f.length; i += 2) {
+            a = a.concat('\\x');
+            a = a.concat(f.slice(i, i + 2));
+        }
+        return 'echo -en' + a + '> /dev/ttyAMA0';
+        //return '/pi/home/bin/www/ehome/s.sh f1.txt';
+    };
 
-    }
-
+    RemoteJob.prototype.cmdOff = function () {
+        var f = {
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            //id: frameId,
+            command: this.pin,
+            destination64: this.addr,
+            commandParameter: [0x04]
+        };
+        f = xbee.xbeeAPI.buildFrame(f);
+        var a = '';
+        for (var i = 0; i < f.length; i += 2) {
+            a = a.concat('\\x');
+            a = a.concat(f.slice(i, i + 2));
+        }
+        return 'echo -en' + a + '> /dev/ttyAMA0';
+    };
 
 };
 

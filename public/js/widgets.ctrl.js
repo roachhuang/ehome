@@ -22,8 +22,8 @@
 				return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
 					sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) + 512 / 1024;
 					//console.info('voltage: ', voltage);
-				})
-			})
+				});
+			});
 		}
 
 		////////////////

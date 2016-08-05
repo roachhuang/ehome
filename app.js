@@ -27,7 +27,8 @@ app.get('/', function (req, res) {
 });
 
 var extapi = require('./server/routes/extapi');
-var cron = require('./server/routes/cron.js');
+// passing xbee to cron is for building frame for remote devices
+var cron = require('./server/routes/cron.js')(xbee);
 var gpio = require('./server/routes/gpio')(xbee);
 var users = require('./server/routes/users');
 var auth = require('./server/routes/auth');

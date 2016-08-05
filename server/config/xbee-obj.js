@@ -70,7 +70,7 @@ module.exports = function (sensor, devices) {
             command: 'IR',
             destination64: routerAddr,
             commandParameter: [0]
-        }
+        };
         serialport.write(xbeeAPI.buildFrame(f));
 
 
@@ -196,7 +196,7 @@ module.exports = function (sensor, devices) {
 
     var atCmd = function (req, res) {
         var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
-        xbee.xbeeCommand({
+        xbeeCommand({
             type: C.FRAME_TYPE.AT_COMMAND,
             command: cmd,
             commandParameter: cmdParam || []
@@ -206,10 +206,10 @@ module.exports = function (sensor, devices) {
         }).catch(function (e) {
             console.log('Command failed:', e);
         });
-    }
+    };
     var rmtAtCmd = function (req, res) {
         var addr = req.params.addr, cmd = req.params.cmd, cmdParam = req.cmdParam;
-        xbee.xbeeCommand({
+        xbeeCommand({
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: this.addr,
             command: cmd,
@@ -220,7 +220,7 @@ module.exports = function (sensor, devices) {
         }).catch(function (e) {
             console.log('Command failed:', e);
         });
-    }
+    };
 
     return {
         xbeeCommand: xbeeCommand,

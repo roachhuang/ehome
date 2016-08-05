@@ -16,8 +16,8 @@
                     sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
                     sensor.battery = (sensor.battery / 1000).toFixed(2);
                     //console.info('voltage: ', voltage);
-                })
-            })
+                });
+            });
         }
 
         activate();

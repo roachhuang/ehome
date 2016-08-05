@@ -50,6 +50,6 @@
                     gpioService.outPut(value, device.pin, device.addr);
                 }, 500);
             });
-        }     
+        };     
     }
 })();

@@ -34,7 +34,7 @@
         this.status = 0;    //toto: 0 or null (init state?)
         this.pin = GpioPin;
         this.addr = addr || null;
-    };
+    }
 
     Device.prototype.readCronJob = function () {
         var items = localStorage != null ? localStorage[this.name] : null;
