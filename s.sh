@@ -1,8 +1,12 @@
 #!/bin/bash
 # usage ./sh f.txt. where f.txt is the frame to send
+
+
 sudo stty -F /dev/ttyAMA0 9600
-read -r line < "$1"
-echo -en $line > /dev/ttyAMA0
+echo -en '~¢@ëUlÿþD0Ë' > /dev/ttyAMA0
+
+#read -r line < "$1"
+#echo -en $line > /dev/ttyAMA0
 #echo -en "$line" |od -t x1 -c;
 #echo  $1
 #while read -r line

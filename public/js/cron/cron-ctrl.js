@@ -76,12 +76,12 @@
             });
         };
 
-        function addCronTab(job, pin) {
+        function addCronTab(job, pin, addr) {
             var req = {
                 method: 'POST',
                 url: '/cron',
                 //transformRequest: transformRequestAsFormPost,
-                data: { job: job, pin: pin } // to do: '1' or 1 or can use false
+                data: { job: job, pin: pin, addr: addr } // to do: '1' or 1 or can use false
             };
             return $http(req).then(function (res) {
                 return res.status;
