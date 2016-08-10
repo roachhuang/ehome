@@ -14,7 +14,7 @@
 		// close serialport, release GPIO ports,
 		//};
 		activate();
-
+/*
 		function readSensorsStatus() {
 			angular.forEach(vm.sensors, function (sensor) {
 				vm.anyAlarm = sensor.status || vm.anyAlarm;
@@ -25,7 +25,7 @@
 				});
 			});
 		}
-
+*/
 		////////////////
 		function activate() {
 			// hasAuthorized variable is inherited from app.js

@@ -58,13 +58,12 @@ module.exports = function (xbee) {
 
     function deleteById(req, res) {
         // each job has 2 cmd - on and off
-        var id = req.params.id * 2;
-        console.log('id:' + id);
+        var id = req.params.id * 2;       
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
             crontab.remove(jobs[id]);
             id += 1;
-            console.log('id:' + id);
+            //console.log('id:' + id);
             crontab.remove(jobs[id]);
             // crons.splice(id, 1);
             /*

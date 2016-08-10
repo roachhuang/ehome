@@ -54,6 +54,10 @@ angular.module('myApp')
 			.when('/about', {
 				templateUrl: '/views/about.html'
 			})
+			.when('/home', {
+				controller: 'widgetsCtrl',
+				templateUrl: '/js/widgets.html'
+			})
 			.otherwise({
 				controller: 'widgetsCtrl',
 				templateUrl: '/js/widgets.html'

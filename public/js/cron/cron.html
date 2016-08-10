@@ -22,15 +22,20 @@
         <thead>
             <tr>
                 <th>組別</th>
-                <th>On</th>
-                <th>Off</th>
+                <th>Weekday</th>
+                <th>Hour</th>
+                <th>Minute</th>
+                <th>On/Off</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat='job in cronJobs'>
-                <td>{{$index}}</td>
-                <td>{{job.on}}</td>
-                <td>{{job.off}}</td>
+                <td>{{$index/2}}</td>
+                <td>{{$index % 2? 'On': 'Off''}}</td>
+                <td>{{job.dow}}</td>
+                <td>{{job.hour}}</td>
+                <td>{{job.minute}}</td>
+
                 <td><button class='btn btn-warning' ng-click='removeJob(tmpJob, $index)'>Delete</button></td>
             </tr>
         </tbody>
