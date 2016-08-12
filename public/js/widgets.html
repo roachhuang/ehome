@@ -67,20 +67,20 @@
 		</a>
 	</section>
 
-	<section class='col-sm-4'>
+	<section class='col-sm-4'>	
 		<a ng-href='/sensors'>
-		<!--
+			<!--
 			<div ng-class="anyAlarm===true? 'pdsa-summary-block pdsa-block-danger':'pdsa-summary-block pdsa-block-default'">
 		-->
 			<div class='pdsa-summary-block pdsa-block-warning'>
 				<div class="summary-bg">
 					<i class="fa fa-tachometer fa-5x"></i>
 				</div>
+				
 				<div class='summary-body divLink'>
 					<div class='summary-line-1'>
 						<h2>感應數據讀取</h2>
 					</div>
-
 					<div class='summary-line-2' ng-repeat='sensor in sensors'>
 						<p>{{sensor.name}}: {{sensor.battery}} v</p>
 					</div>

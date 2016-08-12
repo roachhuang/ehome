@@ -8,17 +8,17 @@ module.exports = function (xbee) {
 
     function get(req, res) {
         cron.load(function (err, crontab) {
-            var jobs = crontab.jobs();
-            /*
-            for( var i in jobs) {
-                console.log('jobs' + job + '= ', job[i]);
+            var jobs = crontab.jobs(), j=[], dow, h, m;
+            for (var i = 0; i < jobs.length; i++) {
+                dow = jobs[i].dow().render();
+                h = jobs[i].hour().render();
+                m = jobs[i].minute().render();
+                j.push({dow:dow, h:h, m:m});                
             };
-            */
-            if (err) console.log(err);
-            console.log(util.inspect(jobs[0]));
-            //console.log(util.inspect(jobs.CronJob.hour));
+
+            if (err) console.log(err);            
             res.status(200).json({
-                jobs: jobs
+                jobs: j
             });
         });
         //res.json(crons);
@@ -58,13 +58,14 @@ module.exports = function (xbee) {
 
     function deleteById(req, res) {
         // each job has 2 cmd - on and off
-        var id = req.params.id * 2;       
+        //var id = req.params.id * 2;
+        var id = req.params.id;
         cron.load(function (err, crontab) {
             var jobs = crontab.jobs();
-            crontab.remove(jobs[id]);
-            id += 1;
+            crontab.remove(jobs[parseInt(id)]);
+            //id += 1;
             //console.log('id:' + id);
-            crontab.remove(jobs[id]);
+            //crontab.remove(jobs[id]);
             // crons.splice(id, 1);
             /*
                         for (var prop in jobs) {
@@ -136,6 +137,7 @@ module.exports = function (xbee) {
     RemoteJob.prototype.cmd = function (val) {
         //var frameId = xbee.xbeeAPI.nextFrameId();
         //var f = new Buffer([0x7e, 0x00, 0x10, 0x17, 0x05, 0x00, 0x13, 0xa2, 0x00]);
+        
         var f = {
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: this.addr,
@@ -158,11 +160,8 @@ module.exports = function (xbee) {
         //console.log('a: ', 'echo -en ' + a + ' > /dev/ttyAMA0');
         return 'echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
 
-        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0
-        //return 's.sh f.txt'
-
-        //return 'echo -en ' + apiFrame.toString() + ' > /dev/ttyAMA0';
-        //return '/pi/home/bin/www/ehome/s.sh f1.txt';
+        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0     
+        //return 's.sh f1.txt';
     };
 
     return {

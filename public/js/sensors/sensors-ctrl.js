@@ -28,6 +28,14 @@
                 console.log('c sensors: ', vm.sensors);
             });
         }
+        function enableSensors(val) {
+            angular.forEach(vm.sensors, function (sensor) {
+                sensor.enable = val;
+            });
+             return $http.get('/sensors/ctrlAll/val').then(function (res) {
+                 // done
+             });
+        }
         ////////////////
 
         function activate() {

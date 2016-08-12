@@ -13,6 +13,8 @@ module.exports = function () {
         this.addr = addr || null;
         // voltage
         this.battery = 0;
+        // sensors are enabled by default
+        this.enable =true;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
@@ -25,10 +27,10 @@ module.exports = function () {
     };
 
     Sensor.prototype._open = function () {
-        //if (alarm.state === 'on') {
+        if (this.enable === true) {
         // turn on spot light
         // activate alarm
-        // there should be a limit of sending email and txt msg.
+        // there should be a limit of sending email and txt msg.                   
         email.sendEmail(this.name);
         // send text msg
         //twilio.sendMessage();
@@ -39,7 +41,7 @@ module.exports = function () {
         //} else {
         //lights.switchOn();
         //voice.speak('Welcome home');
-        // }
+        }
     };
 
     // parse frame from xbee-api

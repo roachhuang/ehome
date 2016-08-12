@@ -9,7 +9,7 @@
 	function widgetsCtrl($scope, $http, $window) {
 		// use $scope so we can inherit $scope from mainCtrl
 		var vm = $scope;
-		//vm.anyAlarm;
+		//vm.checkboxModel;
 		//vm.onExit = function () {
 		// close serialport, release GPIO ports,
 		//};
@@ -27,7 +27,7 @@
 		}
 */
 		////////////////
-		function activate() {
+		function activate() {			
 			// hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
 				alert('not logon, please log on');
