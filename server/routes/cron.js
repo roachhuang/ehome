@@ -19,7 +19,7 @@ module.exports = function (xbee) {
     router.route('/')
         .post(cronCtrl.post)
         .delete(cronCtrl.deleteAll)
-        .get(cronCtrl.get);
+        //.get(cronCtrl.get);
     /*
     router.use('/:id', function(req, res, next){
         var id = req.params.id
@@ -29,7 +29,10 @@ module.exports = function (xbee) {
             req.cron = cron;
     });
     */
+    router.route('/:filter')
+        .get(cronCtrl.get);
 
+    router.route('/:pin')
     router.route('/:id')
         .delete(cronCtrl.deleteById);
 

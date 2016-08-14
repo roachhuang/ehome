@@ -17,7 +17,7 @@
         devices.push(new Device('remote PWR outlet', 'D0', xbee01Addr.toLowerCase()));
         //devices.push(new Device('bedRoom', 7));
         //devices.push(new Device('livingRoom', 23));
-        devices.push(new Device('kitchen', 24));
+        devices.push(new Device('kitchen', 24, 'gpio08'));
         return devices;
 
         ////////////////
