@@ -7,16 +7,20 @@ module.exports = function (xbee) {
     var crons = [];
 
     function get(req, res) {
+        var filter = req.params.filter;
         cron.load(function (err, crontab) {
-            var jobs = crontab.jobs(), j=[], dow, h, m;
+            var jobs = crontab.jobs(), j = [], dow, h, m, cmd;
             for (var i = 0; i < jobs.length; i++) {
-                dow = jobs[i].dow().render();
-                h = jobs[i].hour().render();
-                m = jobs[i].minute().render();
-                j.push({dow:dow, h:h, m:m});                
+                cmd = jobs[i].command.render();
+                if (cmd.search(filter) != -1) {
+                    dow = jobs[i].dow().render();
+                    h = jobs[i].hour().render();
+                    m = jobs[i].minute().render();
+                    j.push({ dow: dow, h: h, m: m });
+                }
             };
 
-            if (err) console.log(err);            
+            if (err) console.log(err);
             res.status(200).json({
                 jobs: j
             });
@@ -125,10 +129,11 @@ module.exports = function (xbee) {
     LocalJob.prototype.cmd = function (val) {
         return "echo " + val + " > /sys/class/gpio/gpio" + this.pin.toString() + '/value';
     };
+    /*
     LocalJob.prototype.cmdOff = function () {
         return "echo '0' > /sys/class/gpio/gpio" + this.pin.toString() + '/value';
     };
-
+*/
     function RemoteJob(pin, addr) {
         this.pin = pin;
         this.addr = addr;
@@ -137,7 +142,7 @@ module.exports = function (xbee) {
     RemoteJob.prototype.cmd = function (val) {
         //var frameId = xbee.xbeeAPI.nextFrameId();
         //var f = new Buffer([0x7e, 0x00, 0x10, 0x17, 0x05, 0x00, 0x13, 0xa2, 0x00]);
-        
+
         var f = {
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: this.addr,
@@ -158,9 +163,9 @@ module.exports = function (xbee) {
             a = a.concat('\\x' + f.substr(i, 2));
         }
         //console.log('a: ', 'echo -en ' + a + ' > /dev/ttyAMA0');
-        return 'echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
+        return 'sudo stty - F / dev/ttyAMA0 9600; echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
 
-        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0     
+        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0
         //return 's.sh f1.txt';
     };
 

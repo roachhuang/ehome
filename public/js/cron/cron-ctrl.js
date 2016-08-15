@@ -7,7 +7,7 @@
 
     cronCtrl.$inject = ['$scope', '$routeParams', 'deviceService', '$http'];
     function cronCtrl($scope, $routeParams, deviceService, $http) {
-        var vm = $scope, itemName;
+        var vm = $scope;
         /*
                 $scope.cron = Cron.get({id: $routeParams.id});
                 $scope.crons = Cron.query();
@@ -24,10 +24,12 @@
             //read cronjobs from localstorage.
             vm.selectedDevice = deviceService[$routeParams.deviceId];
             //vm.selectedDevice.cronJobs = [];
-            itemName = vm.selectedDevice.name;
-            console.log(localStorage.getItem(itemName));
+            //itemName = vm.selectedDevice.name;
+            //console.log(localStorage.getItem(itemName));
             //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
-            $http.get('/cron').then(function (res) {
+
+            // retrieve only the device's jobs
+            $http.get('/cron/vm.SelectedDevice.addr').then(function (res) {
                 vm.cronJobs = res.data.jobs;
             });
             //$scope.getJobs();
@@ -42,7 +44,7 @@
                 }
             };
             //selected device for setting up cronjob
-            console.log(vm.selectedDevice);
+            //console.log(vm.selectedDevice);
         }
 
         // data is from cron.html (tmpJob)
@@ -53,17 +55,23 @@
             //device = dev[vm.selectedDeviceId];
             //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
             vm.cronJobs.push(myJob);
-            localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
+            //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
             addCronTab(job, vm.selectedDevice.pin, vm.selectedDevice.addr);
+            $http.get('/cron').then(function (res) {
+                vm.cronJobs = res.data.jobs;
+            });
         };
 
         vm.removeJob = function (id) {
             //vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
             vm.cronJobs.splice(id, 1);
-            localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
+            //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             delCronTab(id);
+            $http.get('/cron').then(function (res) {
+                vm.cronJobs = res.data.jobs;
+            });
             //var json = JSON.parse(localStorage[itemName]);
             //json.splice(json.indexOf(job), 1);
             //localStorage[itemName] = JSON.stringify(json);
