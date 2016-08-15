@@ -1,3 +1,5 @@
+.idea/
+.DS_store
 public/lib/**/*
 ./public/assets/videos/
 ./public/lib/*
