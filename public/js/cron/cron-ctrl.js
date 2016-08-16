@@ -29,7 +29,7 @@
             //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
 
             // retrieve only the device's jobs
-            $http.get('/cron/vm.SelectedDevice.addr').then(function (res) {
+            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
                 vm.cronJobs = res.data.jobs;
             });
             //$scope.getJobs();
@@ -59,7 +59,8 @@
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
             addCronTab(job, vm.selectedDevice.pin, vm.selectedDevice.addr);
-            $http.get('/cron').then(function (res) {
+            // need to use promise obj  
+            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
                 vm.cronJobs = res.data.jobs;
             });
         };
@@ -78,8 +79,8 @@
         };
 
         vm.deleteAllJobs = function () {
-            return $http.delete('/cron', null).then(function (res) {
-                localStorage.removeItem(itemName);
+            return $http.delete('/cron/' + vm.selectedDevice.addr, null).then(function (res) {
+                //localStorage.removeItem(itemName);
                 return res.status;
             });
         };
@@ -87,9 +88,9 @@
         function addCronTab(job, pin, addr) {
             var req = {
                 method: 'POST',
-                url: '/cron',
+                url: '/cron' / + addr,
                 //transformRequest: transformRequestAsFormPost,
-                data: { job: job, pin: pin, addr: addr } // to do: '1' or 1 or can use false
+                data: { job: job, pin: pin } // to do: '1' or 1 or can use false
             };
             return $http(req).then(function (res) {
                 return res.status;

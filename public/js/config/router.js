@@ -4,7 +4,8 @@
 angular.module('myApp')
 	.config(function ($routeProvider, $locationProvider, $httpProvider) {
 		// base is set to public bah?
-		$locationProvider.html5Mode({ enabled: true, requireBase: false });
+		//$locationProvider.html5Mode({ enabled: true, requireBase: false });
+		$locationProvider.html5Mode(true);
 		$routeProvider
 			.when('/', {
 				controller: 'widgetsCtrl',
@@ -53,13 +54,8 @@ angular.module('myApp')
 			})
 			.when('/about', {
 				templateUrl: '/views/about.html'
-			})
-			.when('/home', {
-				controller: 'widgetsCtrl',
-				templateUrl: '/js/widgets.html'
-			})
+			})	
 			.otherwise({
-				controller: 'widgetsCtrl',
-				templateUrl: '/js/widgets.html'
+				redirectTo: '/'
 			});
 	});

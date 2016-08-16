@@ -1,26 +1,24 @@
 'use strict';
 var cron = require('crontab');
-//var request = require('request');
+var fs = require('fs');
 var util = require('util');
 
 module.exports = function (xbee) {
     var crons = [];
 
     function get(req, res) {
-        var filter = req.params.filter;
+        var addr = req.params.addr;
         cron.load(function (err, crontab) {
-            var jobs = crontab.jobs(), j = [], dow, h, m, cmd;
+            var j = [], dow, h, m;
+            var jobs = crontab.jobs({ comment: addr });
             for (var i = 0; i < jobs.length; i++) {
-                cmd = jobs[i].command.render();
-                if (cmd.search(filter) != -1) {
-                    dow = jobs[i].dow().render();
-                    h = jobs[i].hour().render();
-                    m = jobs[i].minute().render();
-                    j.push({ dow: dow, h: h, m: m });
-                }
+                dow = jobs[i].dow().render();
+                h = jobs[i].hour().render();
+                m = jobs[i].minute().render();
+                j.push({ dow: dow, h: h, m: m });
             };
 
-            if (err) console.log(err);
+            if (err) throw err;
             res.status(200).json({
                 jobs: j
             });
@@ -48,10 +46,11 @@ module.exports = function (xbee) {
     }
     */
     function deleteAll(req, res) {
+        var addr = req.params.addr;
         cron.load(function (err, crontab) {
             if (err) throw err;
-            var jobs = crontab.jobs();
-            crontab.remove(jobs);
+            //var jobs = crontab.jobs();
+            crontab.remove({ comment: addr });
             //crontab.reset();
             crontab.save(function (err, crontab) {
                 if (err) throw err;
@@ -88,9 +87,8 @@ module.exports = function (xbee) {
 
     // save a cron job
     function post(req, res) {
-        var schedule = req.body.job,
-            pin = req.body.pin,
-            addr = req.body.addr;
+        var schedule = req.body.job, pin = req.body.pin;
+        var addr = req.params.addr;
         if (!req.body) {
             return res.sendStatus(400);
         }
@@ -111,9 +109,9 @@ module.exports = function (xbee) {
         //console.log('cmd0', cmd0);
         // set cron job on server
         cron.load(function (err, crontab) {
-            // cmd, time, comment
-            var job1 = crontab.create(cmd1, schedule.on);
-            var job0 = crontab.create(cmd0, schedule.off);
+            // cmd, time, comment=addr 
+            var job1 = crontab.create(cmd1, schedule.on, addr);
+            var job0 = crontab.create(cmd0, schedule.off, addr);
             crontab.save(function (err, crontab) {
                 res.sendStatus(200);
                 console.log(err);
@@ -142,14 +140,35 @@ module.exports = function (xbee) {
     RemoteJob.prototype.cmd = function (val) {
         //var frameId = xbee.xbeeAPI.nextFrameId();
         //var f = new Buffer([0x7e, 0x00, 0x10, 0x17, 0x05, 0x00, 0x13, 0xa2, 0x00]);
+        fs.stat(this.addr + this.pin + val, function (err, stat) {
+            if (err == null) {
+                console.log('File exists');
+            } else if (err.code == 'ENOENT') {
+                // file does not exist
+                buildFrame(this.addr, this.pin, val);
+                fs.writeFile(this.addr + this.pin, a, function (err) {
+                    if (err) throw err;
+                });
 
+            } else {
+                console.log('Some other error: ', err.code);
+            }
+        });
+
+        //console.log('a: ', 'echo -en ' + a + ' > /dev/ttyAMA0');
+        //return 'sudo stty - F / dev/ttyAMA0 9600; echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
+        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0
+        return 's.sh ' + this.addr + this.pin + val;
+    };
+
+    var buildFram = function (addr, pin, val) {
         var f = {
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: this.addr,
+            destination64: addr,
             destination16: "fffe", // optional, "fffe" is default
             remoteCommandOptions: 0x02,
             //id: frameId,
-            command: this.pin,
+            command: pin,
             commandParameter: (val === "1") ? [0x05] : [0x04],
         };
 
@@ -162,11 +181,7 @@ module.exports = function (xbee) {
         for (var i = 0; i < f.length; i += 2) {
             a = a.concat('\\x' + f.substr(i, 2));
         }
-        //console.log('a: ', 'echo -en ' + a + ' > /dev/ttyAMA0');
-        return 'sudo stty - F / dev/ttyAMA0 9600; echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
-
-        //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0
-        //return 's.sh f1.txt';
+        return a;
     };
 
     return {

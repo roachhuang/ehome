@@ -16,10 +16,10 @@ var router = express.Router();
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 module.exports = function (xbee) {
     var cronCtrl = require('../controllers/cron-ctrl')(xbee);
-    router.route('/')
+    router.route('/addr')
         .post(cronCtrl.post)
         .delete(cronCtrl.deleteAll)
-        //.get(cronCtrl.get);
+        .get(cronCtrl.get);
     /*
     router.use('/:id', function(req, res, next){
         var id = req.params.id
@@ -28,9 +28,7 @@ module.exports = function (xbee) {
         else
             req.cron = cron;
     });
-    */
-    router.route('/:filter')
-        .get(cronCtrl.get);
+    */    
 
     router.route('/:pin')
     router.route('/:id')

@@ -30,11 +30,11 @@
         </thead>
         <tbody>
             <tr ng-repeat='job in cronJobs'>
-                <td>{{$index}}</td>
+                <td>{{$index+1}}</td>
                 <td>{{job.dow}}</td>
                 <td>{{job.h}}</td>
                 <td>{{job.m}}</td>
-                <td>{{$index%2? 'Off': 'On'}}</td>
+                <td>{{$even? 'On': 'Off'}}</td>
 
                 <td><button class='btn btn-warning' ng-click='removeJob($index)'>Delete</button></td>
             </tr>
