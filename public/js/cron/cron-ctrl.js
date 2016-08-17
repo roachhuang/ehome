@@ -59,10 +59,11 @@
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
             addCronTab(job, vm.selectedDevice.pin, vm.selectedDevice.addr);
-            // need to use promise obj  
-            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
-                vm.cronJobs = res.data.jobs;
-            });
+            setTimeout(function () {
+                $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
+                    vm.cronJobs = res.data.jobs;
+                });
+            }, 500);
         };
 
         vm.removeJob = function (id) {
@@ -88,7 +89,7 @@
         function addCronTab(job, pin, addr) {
             var req = {
                 method: 'POST',
-                url: '/cron' / + addr,
+                url: '/cron/' + addr,
                 //transformRequest: transformRequestAsFormPost,
                 data: { job: job, pin: pin } // to do: '1' or 1 or can use false
             };
