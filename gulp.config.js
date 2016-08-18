@@ -14,9 +14,9 @@ module.exports = function () {
             './*.js'
         ], // no base is specified so by default it is set as './src/'
 
-        build: './prod/', // production folder, not dev folder
+        build: './build/', // production folder, not dev folder
         // expose it as config.client
-
+        html: clientApp + '**/*.html',
         css: temp + '*.css',
         fonts: clientApp + 'lib/font-awesome/fonts/**/*/*',
         images: clientApp + 'assets/**/*.*',

@@ -2,8 +2,6 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var jscs = require('gulp-jscs');
 var nodemon = require('gulp-nodemon');
-
-
 var args = require('yargs').argv;
 
 var config = require('./gulp.config')();
@@ -22,7 +20,6 @@ function errorLog(error) {
     console.error.bind(error);
     this.emit('end');
 }
-
 
 var jsFiles = ['*.js', './public/js/**/*.js', './server/**/*.js'];
 var cssFiles = ['*.css', './public/css/*.css'];
@@ -82,6 +79,18 @@ gulp.task('inject', function () {
         .pipe(inject(injectSrc, injectOptions))
         .pipe(gulp.dest('./public/views'));
 });
+
+gulp.task('optimize', ['inject'], function(){
+    //var assets = $.useref.assets({searchPath: './'});
+    return gulp
+        .src(config.index)  
+        .pipe($.useref())        
+        .pipe(gulp.dest(config.build));
+})
+
+gulp.task('serve-dev', ['inject'], function(){
+
+})
 
 // run style and inject and then the func
 gulp.task('serve', ['style', 'inject'], function () {

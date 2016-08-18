@@ -29,10 +29,7 @@
             //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
 
             // retrieve only the device's jobs
-            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
-                vm.cronJobs = res.data.jobs;
-            });
-            //$scope.getJobs();
+            readCronJob();        
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {};
             vm.myConfig = {
@@ -43,25 +40,26 @@
                     allowYear: false
                 }
             };
-            //selected device for setting up cronjob
-            //console.log(vm.selectedDevice);
         }
-
+        var readCronJob = function () {
+            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
+                vm.cronJobs = res.data.jobs;
+            });
+        }
         // data is from cron.html (tmpJob)
         vm.addJob = function (job) {
             //hmmm... do i really need parse and stringify???
-            var myJob = JSON.parse(JSON.stringify(job));
+            //var myJob = JSON.parse(JSON.stringify(job));
             // save to localstorage and call node cron
             //device = dev[vm.selectedDeviceId];
             //angular.extend(vm.selectedDevice.cronJobs[data.count], data);
-            vm.cronJobs.push(myJob);
+            //vm.cronJobs.push(myJob);
             //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            addCronTab(job, vm.selectedDevice.pin, vm.selectedDevice.addr);
-            // need to use promise obj  
-            $http.get('/cron/' + vm.selectedDevice.addr).then(function (res) {
-                vm.cronJobs = res.data.jobs;
+            var data = { job: job, pin: vm.selectedDevice.pin, addr: vm.selectedDevice.addr };
+            addCronTab(data, function (res) {
+                readCronJob();
             });
         };
 
@@ -70,9 +68,7 @@
             vm.cronJobs.splice(id, 1);
             //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             delCronTab(id);
-            $http.get('/cron').then(function (res) {
-                vm.cronJobs = res.data.jobs;
-            });
+            readCronJob();
             //var json = JSON.parse(localStorage[itemName]);
             //json.splice(json.indexOf(job), 1);
             //localStorage[itemName] = JSON.stringify(json);
@@ -85,16 +81,14 @@
             });
         };
 
-        function addCronTab(job, pin, addr) {
+        function addCronTab(data, cb) {
             var req = {
                 method: 'POST',
                 url: '/cron' / + addr,
                 //transformRequest: transformRequestAsFormPost,
-                data: { job: job, pin: pin } // to do: '1' or 1 or can use false
+                data: data // to do: '1' or 1 or can use false
             };
-            return $http(req).then(function (res) {
-                return res.status;
-            });
+            return $http(req).then(cb);
         }
 
         function delCronTab(id) {
