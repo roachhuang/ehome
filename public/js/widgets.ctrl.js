@@ -28,13 +28,14 @@
 */
 		////////////////
 		function activate() {			
-			// hasAuthorized variable is inherited from app.js
+			/* hasAuthorized variable is inherited from app.js
 			if (vm.hasAuthorized === false) {
 				alert('not logon, please log on');
 				// if use $http.get('/auth/google), we get same origin error
 				$window.location = $window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/google";
 			}
-
+			*/
+			
 			/* get event from nodejs
 			var socket = io.connect('http://192.168.1.199:3000');
 			socket.on('intruder', function (data) {

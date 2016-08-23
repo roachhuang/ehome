@@ -1,30 +1,32 @@
 module.exports = function () {
-    var client = './'; // usually it should be the root of your app
-    var clientApp = client + 'public/';
+    var client = './public/'; // usually it should be the root of your app
+    var clientApp = client + 'js/';
     var server = './server/';
-    var temp = clientApp + 'css/';
-
+    var cs = clientApp + 'css/';
+    var root = './';
+    var temp = '.tmp/';
     var config = {
         client: client,
         clientApp: clientApp,
         // all js to vet
         alljs: [
-            clientApp + 'js/**/*.js',  // ** means zero or more directories
-            server + '/**/*.js',
+            clientApp + '**/*.js',  // ** means zero or more directories
+            server + '**/*.js',
             './*.js'
         ], // no base is specified so by default it is set as './src/'
 
         build: './build/', // production folder, not dev folder
         // expose it as config.client
-        html: clientApp + '**/*.html',
-        css: temp + '*.css',
-        fonts: clientApp + 'lib/font-awesome/fonts/**/*/*',
-        images: clientApp + 'assets/**/*.*',
-        index: clientApp + 'views/index.html',
+        html: client + '**/*.html',
+        htmltemplates: clientApp + '**/*.html',
+        css: cs + '*.css',
+        fonts: client + 'lib/font-awesome/fonts/**/*/*',
+        images: client + 'assets/**/*.*',      
+        index: client + 'index.html',
         js: [
             //client + '*.js'
-            clientApp + 'js/**/*.js', // in angular app we need 2 load any file that starts w/ module.js
-            '!' + clientApp + 'lib' // exclude lib files
+            clientApp + '**/*.js', // in angular app we need 2 load any file that starts w/ module.js
+            '!' + client + 'lib' // exclude lib files
         ],
         server: server,
         temp: temp,
@@ -33,9 +35,22 @@ module.exports = function () {
          */
         bower: {
             json: require('./bower.json'),
-            directory: clientApp + 'lib',
+            directory: client + 'lib',
             ignorePath: '../..'
         },
+
+        /**
+         * template cache
+         */
+        templateCache: {
+            file: 'templates.js',
+            options: {
+                module: 'app.template',
+                root: 'js/',
+                standAlone: false
+            }
+        },
+        
         /**
          *      Node settings
          */

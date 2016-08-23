@@ -3,6 +3,7 @@ var rootPath = path.normalize(__dirname + '/../../');
 
 module.exports = {
 	development: {
+		env:'development',
 		db: '',
 		rootPath: rootPath,
 		port: process.env.PORT || 3000,
@@ -15,7 +16,8 @@ module.exports = {
 			username: 'markhuang'
 		}
 	},
-	production: {
+	build: {
+		env: 'build',
 		db: '',
 		rootPath: rootPath,
 		port: process.env.PORT || 80,

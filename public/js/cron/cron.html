@@ -1,21 +1,21 @@
 <section>
-    <h1>{{selectedDevice.name}} 開關定時設定 - 第{{tmpJob.id+1}}組</h1>
+    <h1>{{vm.selectedDevice.name}} 開關定時設定 - 第{{vm.tmpJob.id+1}}組</h1>
 
     <div class='well well-sm pdsa-block-danger'>
         <h3><i class="fa fa-toggle-on" aria-hidden="true"></i> 開： </h3>
-        <cron-selection output="tmpJob.on" config="myConfig"></cron-selection>
-        {{tmpJob.on}}
+        <cron-selection output="vm.tmpJob.on" config="vm.myConfig"></cron-selection>
+        {{vm.tmpJob.on}}
     </div>
 
     <div class='well well-sm pdsa-block-success'>
         <h3><i class="fa fa-toggle-off" aria-hidden="true"></i> 関：</h3>
-        <cron-selection output="tmpJob.off" config="myConfig"></cron-selection>
-        {{tmpJob.off}}
+        <cron-selection output="vm.tmpJob.off" config="vm.myConfig"></cron-selection>
+        {{vm.tmpJob.off}}
     </div>
 </section>
 
-<button class='btn btn-primary' ng-click='addJob(tmpJob)'>Add</button>
-<button class='btn btn-danger' ng-click='deleteAllJobs()'>全部刪除</button>
+<button class='btn btn-primary' ng-click='vm.addJob(vm.tmpJob)'>Add</button>
+<button class='btn btn-danger' ng-click='vm.removeAllJobs()'>全部刪除</button>
 
 <section>
     <table class="table table-striped table-condensed table-bordered table-hover table-responsive">
@@ -29,14 +29,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat='job in cronJobs'>
+            <tr ng-repeat='job in vm.cronJobs'>
                 <td>{{$index+1}}</td>
                 <td>{{job.dow}}</td>
                 <td>{{job.h}}</td>
                 <td>{{job.m}}</td>
-                <td>{{$even? 'On': 'Off'}}</td>
+                <td>{{$index%2? 'Off': 'On'}}</td>
 
-                <td><button class='btn btn-warning' ng-click='removeJob($index)'>Delete</button></td>
+                <td><button class='btn btn-warning' ng-click='vm.removeJob($index)'>Delete</button></td>
             </tr>
         </tbody>
     </table>

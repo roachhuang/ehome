@@ -16,7 +16,7 @@ module.exports = function (xbee) {
                 h = jobs[i].hour().render();
                 m = jobs[i].minute().render();
                 j.push({ dow: dow, h: h, m: m });
-            };
+            }
 
             if (err) throw err;
             res.status(200).json({
@@ -105,11 +105,11 @@ module.exports = function (xbee) {
         //console.log('cmd1', cmd1);
         // if not calling twice, checksum for cmd0 will be the same as cmd1. strange!
         var cmd0 = job.cmd('0');
-        var cmd0 = job.cmd('0');
+        cmd0 = job.cmd('0');
         //console.log('cmd0', cmd0);
         // set cron job on server
         cron.load(function (err, crontab) {
-            // cmd, time, comment=addr 
+            // cmd, time, comment=addr
             var job1 = crontab.create(cmd1, schedule.on, addr);
             var job0 = crontab.create(cmd0, schedule.off, addr);
             crontab.save(function (err, crontab) {
@@ -138,18 +138,18 @@ module.exports = function (xbee) {
     }
 
     RemoteJob.prototype.cmd = function (val) {
+        var vm = this;
         //var frameId = xbee.xbeeAPI.nextFrameId();
         //var f = new Buffer([0x7e, 0x00, 0x10, 0x17, 0x05, 0x00, 0x13, 0xa2, 0x00]);
-        fs.stat(this.addr + this.pin + val, function (err, stat) {
+        fs.stat(vm.addr + vm.pin + val, function (err, stat) {
             if (err == null) {
                 console.log('File exists');
-            } else if (err.code == 'ENOENT') {
+            } else if (err.code === 'ENOENT') {
                 // file does not exist
-                buildFrame(this.addr, this.pin, val);
-                fs.writeFile(this.addr + this.pin, a, function (err) {
+                var f = buildFrame(vm.addr, vm.pin, val);
+                fs.writeFile(vm.addr + vm.pin + val, '\'' + f + '\'' + '\n', function (err) {
                     if (err) throw err;
                 });
-
             } else {
                 console.log('Some other error: ', err.code);
             }
@@ -158,10 +158,11 @@ module.exports = function (xbee) {
         //console.log('a: ', 'echo -en ' + a + ' > /dev/ttyAMA0');
         //return 'sudo stty - F / dev/ttyAMA0 9600; echo -en ' + '\'' + a + '\'' + ' > /dev/ttyAMA0';
         //echo -en "\x7e\x00\x10\x17\x05\x00\x13\xa2\x00\x40\xeb\x55\x6c\xff\xfe\x02\x44\x30\x04\xcb" > /dev/ttyAMA0
-        return 's.sh ' + this.addr + this.pin + val;
+        var fullPath = '/home/pi/';
+        return fullPath + 's.sh ' + fullPath + this.addr + this.pin + val;
     };
 
-    var buildFram = function (addr, pin, val) {
+    var buildFrame = function (addr, pin, val) {
         var f = {
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: addr,
@@ -193,4 +194,4 @@ module.exports = function (xbee) {
         deleteAll: deleteAll
     };
 
-}
+};

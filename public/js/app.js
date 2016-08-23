@@ -2,15 +2,15 @@
 (function () {
     'use strict';
 
-    angular
-        //.module('myApp', ['ngSanitize', 'ngResource', 'ngRoute', 'angular-cron-jobs', 'app.gpio'])
-        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])
+    angular  
+        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio', 'app.template'])
+        //.module('myApp', ['ngRoute', 'app.gpio'])
         .controller('mainCtrl', mainCtrl);
 
     // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
-    mainCtrl.$inject = ['$scope', '$http'];
-    function mainCtrl($scope, $http) {
-        var vm = $scope;
+    mainCtrl.$inject = ['$scope', '$http', '$location'];
+    function mainCtrl($scope, $http, $location) {
+        var vm = $scope;        
         //vm.apod = {}, vm.yahoo = {};
         //vm.devices = [];
 

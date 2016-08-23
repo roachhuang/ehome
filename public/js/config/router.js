@@ -1,15 +1,21 @@
 /* the url with "/" prefix is relative to the domain, without the "/" prefix it will be relative
  ** to the main ("index.html") page or base url (if you use location in the html5 mode).
  */
-angular.module('myApp')
-	.config(function ($routeProvider, $locationProvider, $httpProvider) {
+(function () {
+	'use strict';
+
+	angular.module('myApp')
+		.constant('baseUrl', 'http://localhost:3000/')
+		.config(config);
+	config.$inject = ['$routeProvider', '$locationProvider'];
+
+	function config($routeProvider, $locationProvider) {
 		// base is set to public bah?
-		//$locationProvider.html5Mode({ enabled: true, requireBase: false });
-		$locationProvider.html5Mode(true);
+		$locationProvider.html5Mode({enabled: true, requireBase: false});
 		$routeProvider
 			.when('/', {
 				controller: 'widgetsCtrl',
-				templateUrl: '/js/widgets.html'
+				templateUrl: '/views/widgets.html'
 			})
 			.when('/camera', {
 				templateUrl: '/js/camera/cameraview.html',
@@ -27,7 +33,7 @@ angular.module('myApp')
 	*/
 			})
 			.when('/nasa', {
-				templateUrl: '/js/nasa.html',
+				templateUrl: '/views/nasa.html',
 				controller: 'nasaCtrl'
 			})
 			.when('/devivesControl', {
@@ -41,7 +47,7 @@ angular.module('myApp')
 			.when('/settings/:deviceId', {
 				// set cronjob by devId
 				templateUrl: '/js/cron/cron.html',
-				controller: 'cronCtrl'
+				controller: 'cronCtrl as vm'
 			})
 			.when('/sensors', {
 				templateUrl: '/js/sensors/sensors.html',
@@ -49,13 +55,14 @@ angular.module('myApp')
 			})
 			.when('/login', {
 				// set cronjob by devId
-				templateUrl: '../js/login/login.html',
+				templateUrl: '/views/login/login.html',
 				controller: 'loginCtrl'
 			})
 			.when('/about', {
 				templateUrl: '/views/about.html'
-			})	
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
-	});
+	}
+})();
