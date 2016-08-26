@@ -3,7 +3,7 @@
 
     angular
         .module('myApp')
-        .constant('cronUrl', 'http://localhost:3000/cron/')
+        .constant('cronUrl', 'http://192.168.1.199/cron/')
         .controller('cronCtrl', cronCtrl);
 
     cronCtrl.$inject = ['$routeParams', 'deviceService', '$http', 'cronUrl'];
@@ -61,7 +61,7 @@
             //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
             //vm.tmpJob.on = vm.tmpJob.off = '';
             //vm.selectedDevice.saveJobs2LocalStorage();
-            var data = { job: job, pin: vm.selectedDevice.pin, addr: vm.selectedDevice.addr };
+            var data = { job: job, pin: vm.selectedDevice.pin };
             addCronTab(data, function (res) {
                 readCronJob();
             });
@@ -88,18 +88,18 @@
 
         ///////////////////////////////////////////////////////////////////////////
         var removeAllCronJobs = function (cb) {
-            return $http.delete('/cron', null).success(function (data) {
+            return $http.delete('/cron/' + vm.selectedDevice.addr, null).success(function (data) {
                 cb(null, data);
             })
-                .error(function (err) {
-                    cb(err);
-                });
+            .error(function (err) {
+                cb(err);
+            });
         };
 
         function addCronTab(data, cb) {
             var req = {
                 method: 'POST',
-                url: '/cron/',
+                url: '/cron/'+ vm.selectedDevice.addr,
                 //transformRequest: transformRequestAsFormPost,
                 data: data // to do: '1' or 1 or can use false
             };
@@ -107,7 +107,7 @@
         }
 
         function delCronTab(id, cb) {
-            return $http.delete('/cron/' + id, null).then(cb);
+            return $http.delete('/cron/byId/' + id, null).then(cb);
         }
     }
 })();

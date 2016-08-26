@@ -4,7 +4,7 @@ module.exports = function () {
     var server = './server/';
     var cs = clientApp + 'css/';
     var root = './';
-    var temp = '.tmp/';
+    var temp = './.tmp/';
     var config = {
         client: client,
         clientApp: clientApp,
@@ -20,14 +20,20 @@ module.exports = function () {
         html: client + '**/*.html',
         htmltemplates: clientApp + '**/*.html',
         css: cs + '*.css',
-        fonts: client + 'lib/font-awesome/fonts/**/*/*',
-        images: client + 'assets/**/*.*',      
+        //fonts: client + 'lib/font-awesome/fonts/**/*/*',
+        fonts: client + 'lib/font-awesome/fonts/font*.*',
+        images: client + 'assets/**/*.*',
         index: client + 'index.html',
         js: [
             //client + '*.js'
             clientApp + '**/*.js', // in angular app we need 2 load any file that starts w/ module.js
             '!' + client + 'lib' // exclude lib files
-        ],
+        ],        
+        jsOrder: [
+            '**/app.module.js',
+            '**/*.module.js',
+            '**/*.js'
+        ],        
         server: server,
         temp: temp,
         /**
@@ -45,12 +51,13 @@ module.exports = function () {
         templateCache: {
             file: 'templates.js',
             options: {
-                module: 'app.template',
-                root: 'js/',
+                //module: 'app.template',
+                module: 'myApp',
+                root: 'js/',              
                 standAlone: false
             }
         },
-        
+
         /**
          *      Node settings
          */

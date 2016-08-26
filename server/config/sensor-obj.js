@@ -14,7 +14,7 @@ module.exports = function () {
         // voltage
         this.battery = 0;
         // sensors are enabled by default
-        this.enable =true;
+        this.enable = 1;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
@@ -28,19 +28,19 @@ module.exports = function () {
 
     Sensor.prototype._open = function () {
         if (this.enable === true) {
-        // turn on spot light
-        // activate alarm
-        // there should be a limit of sending email and txt msg.                   
-        email.sendEmail(this.name);
-        // send text msg
-        //twilio.sendMessage();
-        //twilio.makeCall();
-        // start recording video or capture video image 10 times (one time per sec)
-        // 7-eleven call police
-        // alert.window = true;
-        //} else {
-        //lights.switchOn();
-        //voice.speak('Welcome home');
+            // turn on spot light
+            // activate alarm
+            // there should be a limit of sending email and txt msg.                   
+            email.sendEmail(this.name);
+            // send text msg
+            //twilio.sendMessage();
+            //twilio.makeCall();
+            // start recording video or capture video image 10 times (one time per sec)
+            // 7-eleven call police
+            // alert.window = true;
+            //} else {
+            //lights.switchOn();
+            //voice.speak('Welcome home');
         }
     };
 

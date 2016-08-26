@@ -53,9 +53,9 @@ gulp.task('inject1', function () {
 });
 */
 
-gulp.task('inject', function () {
+gulp.task('inject', ['templatecache'], function () {
     var wiredep = require('wiredep').stream;
-    var inject = require('gulp-inject');
+    //var inject = require('gulp-inject');
 
     var injectSrc = gulp.src(['./public/css/*.css',
         './public/js/**/*.js'], {
@@ -77,10 +77,11 @@ gulp.task('inject', function () {
     /* change to *.jade if you are using jade instead of html */
     return gulp.src(config.index)
         .pipe(wiredep(options)) // wiredep looks up bower.json file
-        .pipe(inject(injectSrc, injectOptions))
+        .pipe($.inject(injectSrc, injectOptions))
         .pipe(gulp.dest(config.clientApp));
 });
 
+/////////////////////////////////////////////////////////////////////////////
 /**
  * Before deploying, it’s a good idea to clean out the destination folders
  and rebuild the files—just in case any have been removed from the source
@@ -91,6 +92,23 @@ gulp.task('clean', function (done) {
     log('Cleaning: ' + $.util.colors.blue(delconfig));
     del(delconfig, done);
 });
+
+/**
+ * Remove all fonts from the build folder
+ * @param  {Function} done - callback when complete
+ */
+gulp.task('clean-fonts', function (done) {
+    clean(config.build + 'fonts', done);
+});
+
+/**
+ * Remove all images from the build folder
+ * @param  {Function} done - callback when complete
+ */
+gulp.task('clean-images', function (done) {
+    clean(config.build + 'images/**/*.*', done);
+});
+///////////////////////////////////////////////////////////////////////////
 
 /**
  * Compress images
@@ -112,11 +130,14 @@ gulp.task('templatecache', function () {
     return gulp
         .src(config.htmltemplates)
         .pipe($.minifyHtml({ empty: true }))
+        //.pipe($.angularTemplatecache())
+        
         .pipe($.angularTemplatecache(
             config.templateCache.file,
             config.templateCache.options
         ))
-        .pipe(gulp.dest(config.client+config.temp));
+        
+        .pipe(gulp.dest(config.temp));
 });
 
 /**
@@ -138,25 +159,49 @@ gulp.task('templatecache', ['clean-code'], function () {
         .pipe(gulp.dest(config.temp));
 });
 */
-var templateCache = config.temp + config.templateCache.file;
 
-//var templateCache = client + './tmp';
+
+//gulp.task('optimize', ['clean','html', 'fonts','inject'], function () {
 gulp.task('optimize', ['inject'], function () {
-    console.log(templateCache);
+    var templateCache = config.temp + config.templateCache.file;
+
     log('Optimizing the js, css, html');
     var assets = $.useref({ searchPath: './' });
     return gulp
         .src(config.index)
-        //.pipe($.inject(templateCache, 'templates'))
+        .pipe($.plumber())
+        //.pipe($.inject(templateCache, 'templates'))    
+
         .pipe($.inject(gulp.src(templateCache, { read: false }), {
             starttag: '<!-- inject:templates:js -->'
         }))
-        .pipe($.useref())
+        .pipe($.useref()) 
+
         //.pipe(assets.restore())
         //.pipe($.useref())
-        // Minifies only if it's a JavaScript file
+
+        // Minifies only if it's a JavaScript file  
         .pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.minifyCss()))
+        .pipe(gulp.dest(config.build));
+});
+
+/**
+ * Copy fonts
+ * @return {Stream}
+ */
+//gulp.task('fonts', ['clean-fonts'], function () {
+gulp.task('fonts', function () {
+    log('Copying fonts');
+    return gulp
+        .src(config.fonts)
+        .pipe(gulp.dest(config.build + 'fonts'));
+});
+// Task to minify new or changed HTML pages
+gulp.task('html', ['fonts'], function () {
+    return gulp.src(config.html)
+        .pipe($.minifyHtml())
+        //.pipe(gulp.dest('./build/'));
         .pipe(gulp.dest(config.build));
 });
 

@@ -20,7 +20,8 @@ module.exports = {
 		env: 'build',
 		db: '',
 		rootPath: rootPath,
-		port: process.env.PORT || 80,
+		//port: process.env.PORT || 80,
+		port: 80,
 		clientId: '141123056897-q2d7jtq5h3q86jj5f9v3g341h3qgqtpf.apps.googleusercontent.com',
 		clientSecret: 'Q_y6wkKnlP1oDgF--szw80dt',
 		callbackURL: 'http://localhost:3000/auth/google/callback'

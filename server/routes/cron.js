@@ -16,6 +16,7 @@ var router = express.Router();
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 module.exports = function (xbee) {
     var cronCtrl = require('../controllers/cron-ctrl')(xbee);
+    // consider the addr as the device id.
     router.route('/:addr')
         .post(cronCtrl.post)
         .delete(cronCtrl.deleteAll)
@@ -29,9 +30,8 @@ module.exports = function (xbee) {
             req.cron = cron;
     });
     */
-
-    router.route('/:pin')
-    router.route('/:id')
+    router.route('/byId/:id')
+        //.get(cronCtrl.get)
         .delete(cronCtrl.deleteById);
 
     return router;

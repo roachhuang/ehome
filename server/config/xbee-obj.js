@@ -147,7 +147,9 @@ module.exports = function (sensor, devices) {
                 */
 
                 for (i in sensor.detectors) {
-                    sensor.detectors[i].getStatus(frame);
+                    if (sensor.detectors.hasOwnProperty(i)) {
+                        sensor.detectors[i].getStatus(frame);
+                    }
                 }
                 break;
             default:

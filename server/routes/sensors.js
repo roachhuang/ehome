@@ -8,14 +8,24 @@ module.exports = function (sensor) {
             // sensors status: true or false
             console.log('s sensors: ', sensor.detectors);
             res.json({ sensors: sensor.detectors });
+        })
+        .post(function (req, res) {
+            var sensors = req.body.sensors;
+            for (var i = 0; i < sensors.length; i++) {
+                sensor.detectors[i].enable = sensors[i].enable;
+            }
+            res.sendStatus(200);
         });
 
     router.route('/ctrlAll/:val')
         .get(function (req, res) {
-            var val = req.params.val; 
+            var val = req.params.val;
             for (var i in sensor.detectors) {
-                i.enable = val;
-            };
+                if (sensor.detectors.hasOwnProperty(i)) {
+                    i.enable = val;
+                }
+            }
+            res.sendStatus(200);
         });
 
     router.route('/battery/:addr')

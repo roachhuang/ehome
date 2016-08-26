@@ -36,7 +36,7 @@
                 <td>{{job.m}}</td>
                 <td>{{$index%2? 'Off': 'On'}}</td>
 
-                <td><button class='btn btn-warning' ng-click='vm.removeJob($index)'>Delete</button></td>
+                <td><button class='btn btn-warning' ng-click='vm.removeJob($index+1)'>Delete</button></td>
             </tr>
         </tbody>
     </table>

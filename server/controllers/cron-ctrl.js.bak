@@ -1,6 +1,7 @@
 'use strict';
 var cron = require('crontab');
 var fs = require('fs');
+var util = require('util');
 
 module.exports = function (xbee) {
     var crons = [];
@@ -86,8 +87,7 @@ module.exports = function (xbee) {
 
     // save a cron job
     function post(req, res) {
-        var schedule = req.body.job, pin = req.body.pin;
-        var addr = req.params.addr;
+        var schedule = req.body.job, pin = req.body.pin, addr = req.body.addr;
         if (!req.body) {
             return res.sendStatus(400);
         }
@@ -104,11 +104,11 @@ module.exports = function (xbee) {
         //console.log('cmd1', cmd1);
         // if not calling twice, checksum for cmd0 will be the same as cmd1. strange!
         var cmd0 = job.cmd('0');
-        cmd0 = job.cmd('0');
+        var cmd0 = job.cmd('0');
         //console.log('cmd0', cmd0);
         // set cron job on server
         cron.load(function (err, crontab) {
-            // cmd, time, comment=addr
+            // cmd, time, comment
             var job1 = crontab.create(cmd1, schedule.on, addr);
             var job0 = crontab.create(cmd0, schedule.off, addr);
             crontab.save(function (err, crontab) {
@@ -149,7 +149,6 @@ module.exports = function (xbee) {
                 fs.writeFile(vm.addr + vm.pin + val, '\'' + f + '\'' + '\n', function (err) {
                     if (err) throw err;
                 });
-
             } else {
                 console.log('Some other error: ', err.code);
             }
@@ -162,15 +161,15 @@ module.exports = function (xbee) {
         return fullPath + 's.sh ' + fullPath + this.addr + this.pin + val;
     };
 
-    function buildFrame(addr, pin, val) {
+    var buildFrame = function (addr, pin, val) {
         var f = {
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: addr,
-            destination16: 'fffe', // optional, "fffe" is default
+            destination16: "fffe", // optional, "fffe" is default
             remoteCommandOptions: 0x02,
             //id: frameId,
             command: pin,
-            commandParameter: (val === '1') ? [0x05] : [0x04],
+            commandParameter: (val === "1") ? [0x05] : [0x04],
         };
 
         // it returns a buffer
@@ -183,7 +182,7 @@ module.exports = function (xbee) {
             a = a.concat('\\x' + f.substr(i, 2));
         }
         return a;
-    }
+    };
 
     return {
         get: get,

@@ -5,7 +5,8 @@
 	'use strict';
 
 	angular.module('myApp')
-		.constant('baseUrl', 'http://localhost:3000/')
+		//.constant('baseUrl', 'http://localhost:3000/')
+		.constant('baseUrl', 'http://192.168.1.199/')
 		.config(config);
 	config.$inject = ['$routeProvider', '$locationProvider'];
 

@@ -48,6 +48,7 @@
             angular.forEach (devices, function(device) {
                 $timeout(function () {
                     gpioService.outPut(value, device.pin, device.addr);
+                    device.status = value;
                 }, 500);
             });
         };     

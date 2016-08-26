@@ -3,7 +3,7 @@
     'use strict';
 
     angular  
-        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio', 'app.template'])
+        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])
         //.module('myApp', ['ngRoute', 'app.gpio'])
         .controller('mainCtrl', mainCtrl);
 
