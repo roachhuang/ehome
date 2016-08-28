@@ -28,12 +28,12 @@ module.exports = function () {
             //client + '*.js'
             clientApp + '**/*.js', // in angular app we need 2 load any file that starts w/ module.js
             '!' + client + 'lib' // exclude lib files
-        ],        
+        ],
         jsOrder: [
             '**/app.module.js',
             '**/*.module.js',
             '**/*.js'
-        ],        
+        ],
         server: server,
         temp: temp,
         /**
@@ -53,7 +53,7 @@ module.exports = function () {
             options: {
                 //module: 'app.template',
                 module: 'myApp',
-                root: 'js/',              
+                root: 'public/',
                 standAlone: false
             }
         },

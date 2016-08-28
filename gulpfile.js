@@ -131,12 +131,12 @@ gulp.task('templatecache', function () {
         .src(config.htmltemplates)
         .pipe($.minifyHtml({ empty: true }))
         //.pipe($.angularTemplatecache())
-        
+
         .pipe($.angularTemplatecache(
             config.templateCache.file,
             config.templateCache.options
         ))
-        
+
         .pipe(gulp.dest(config.temp));
 });
 
@@ -163,24 +163,24 @@ gulp.task('templatecache', ['clean-code'], function () {
 
 //gulp.task('optimize', ['clean','html', 'fonts','inject'], function () {
 gulp.task('optimize', ['inject'], function () {
-    var templateCache = config.temp + config.templateCache.file;
+    var templateCache = config.client + config.temp + config.templateCache.file;
 
     log('Optimizing the js, css, html');
     var assets = $.useref({ searchPath: './' });
     return gulp
         .src(config.index)
         .pipe($.plumber())
-        //.pipe($.inject(templateCache, 'templates'))    
+        //.pipe($.inject(templateCache, 'templates'))
 
-        .pipe($.inject(gulp.src(templateCache, { read: false }), {
+        .pipe($.inject(gulp.src(config.temp + config.templateCache.file, { read: false }), {
             starttag: '<!-- inject:templates:js -->'
         }))
-        .pipe($.useref()) 
+        .pipe($.useref())
 
         //.pipe(assets.restore())
         //.pipe($.useref())
 
-        // Minifies only if it's a JavaScript file  
+        // Minifies only if it's a JavaScript file
         .pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.minifyCss()))
         .pipe(gulp.dest(config.build));
@@ -222,7 +222,7 @@ gulp.task('jshint', function () {
 });
 
 
-/** 
+/**
  * @desc Minify and bundle the app's js
  */
 gulp.task('js', ['jshint'], function () {

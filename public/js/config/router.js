@@ -52,7 +52,7 @@
 			})
 			.when('/sensors', {
 				templateUrl: '/js/sensors/sensors.html',
-				controller: 'sensorsCtrl as vm'
+				controller: 'sensorsCtrl'
 			})
 			.when('/login', {
 				// set cronjob by devId

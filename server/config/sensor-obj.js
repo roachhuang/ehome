@@ -14,7 +14,7 @@ module.exports = function () {
         // voltage
         this.battery = 0;
         // sensors are enabled by default
-        this.enable = 1;
+        this.enable = true;
         //this.sample = sample;
         events.EventEmitter.call(this);
         this.on('open', this._open);
@@ -30,7 +30,7 @@ module.exports = function () {
         if (this.enable === true) {
             // turn on spot light
             // activate alarm
-            // there should be a limit of sending email and txt msg.                   
+            // there should be a limit of sending email and txt msg.
             email.sendEmail(this.name);
             // send text msg
             //twilio.sendMessage();

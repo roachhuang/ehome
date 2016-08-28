@@ -1,6 +1,6 @@
 <section class='well well-sm'>
     <h1><i class="fa fa-tachometer" aria-hidden="true"></i> 感應數據</h1>
-   
+
     <div class='row'>
         <div class='col-md-12'>
             <table class='table table-striped table-bordered table-condensed table-responsive'>
@@ -10,19 +10,23 @@
                     <th>電池電力</th>
                     <th>啓動</th>
                 </tr>
-                <tr class='warning' ng-repeat='sensor in vm.sensors'>
+                <tr class='warning' ng-repeat='sensor in sensors track by $index'>
                     <td>{{sensor.name}}</td>
                     <td>{{sensor.status}}</td>
                     <td>{{sensor.battery}}</td>
-                    <td><input type='checkbox' ng-model='sensor.enable'>&nbsp <button type='button' class='btn btn-warning' ng-click=save>update</button></td>
+                    <!-- <td><input type='checkbox' ng-model='sensor.enable'></td> -->
+                    <td><input type='checkbox' ng-model='sensors[$index].enable'></td>
                 </tr>
+
+            <label>啓動偵測:
+		        <button class='btn btn-lg btn-danger' ng-click='setSensorsStatus(true)'><i class="fa fa-bell-o" aria-hidden="true"></i> 全開 </button>&nbsp
+		        <button class='btn btn-lg btn-success' ng-click='setSensorsStatus(false)'><i class="fa fa-ban" aria-hidden="true"></i> 全闗 </button>
+	        </label>
+
             </table>
         </div>
 
-        <label>啓動偵測: 
-		    <button class='btn btn-lg btn-danger' ng-click='enableAllSensors()'>全開 </button>&nbsp
-		    <button class='btn btn-lg btn-success' ng-click='disableAllSensors()'>全闗 </button>
-	    </label>
+
 
     </div>
 </section>

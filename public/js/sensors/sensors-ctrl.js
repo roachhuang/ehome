@@ -5,9 +5,9 @@
         .module('myApp')
         .controller('sensorsCtrl', sensorsCtrl);
 
-    sensorsCtrl.$inject = ['$http'];
-    function sensorsCtrl($http) {
-        var vm = this;
+    sensorsCtrl.$inject = ['$scope', '$http', '$location'];
+    function sensorsCtrl($scope, $http, location) {
+        var vm = $scope;
 
         function readBatteryLvl() {
             angular.forEach(vm.sensors, function (sensor) {
@@ -22,6 +22,15 @@
         }
 
         activate();
+        function writeStatus2Server() {
+            var req = {
+                method: 'POST',
+                url: '/sensors/',
+                //transformRequest: transformRequestAsFormPost,
+                data: { sensors: vm.sensors }
+            };
+            return $http(req);
+        }
 
         function loadSensorObjs() {
             $http.get('/sensors').then(function (res) {
@@ -30,35 +39,31 @@
                 console.log('c sensors: ', vm.sensors);
             });
         }
-        function enableAllSensors() {
-            var val = 1;
+
+        vm.setSensorsStatus = function (val) {
             angular.forEach(vm.sensors, function (sensor) {
                 sensor.enable = val;
             });
-            return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
-                // done
-            });
+            writeStatus2Server();
+            //return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
+            // done
+            //});
         }
-        function disableAllSensors() {
-            var val = 0;
+        vm.disableAllSensors = function () {
+            var val = false;
             angular.forEach(vm.sensors, function (sensor) {
                 sensor.enable = val;
             });
-            return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
-                // done
-            });
+            writeStatus2Server();
+            //return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
+            // done
+            //});
         }
 
-        vm.onExit = function () {
-             var req = {
-                method: 'POST',
-                url: '/sensors/',
-                //transformRequest: transformRequestAsFormPost,
-                data: {sensors: vm.sensors} 
-            };
-            return $http(req);
-        }          
-        
+        vm.$on('$locationChangeStart', function () {
+            writeStatus2Server();
+        });
+
         ////////////////
 
         function activate() {
