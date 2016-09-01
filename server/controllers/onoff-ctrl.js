@@ -176,6 +176,23 @@ module.exports = function (xbee) {
             console.log('Command failed:', e);
         });
     };
+/*
+    var pairNewDevice = function (req, res) {
+        var name = req.params.name;
+        xbee.add64=null;
+        xbeeCommand({
+            type: C.FRAME_TYPE.AT_COMMAND,
+            command: 'ND',
+            commandParameter: [],
+        }).then(function (f) {
+            //wait for reply from remote xbee.
+            console.log('Command successful:', f);
+            xbee.sensors.push(new Sensor.Sensor('DIO4', name, xbee.add64));
+        }).catch(function (e) {
+            console.log('Command failed:', e);
+        });
+    };
+*/
     return {
         post: post,
         get: get,

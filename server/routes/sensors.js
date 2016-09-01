@@ -16,7 +16,8 @@ module.exports = function (sensor) {
             }
             res.sendStatus(200);
         });
-
+    
+    // enable or disable all sensors
     router.route('/ctrlAll/:val')
         .get(function (req, res) {
             var val = req.params.val;
@@ -26,12 +27,7 @@ module.exports = function (sensor) {
                 }
             }
             res.sendStatus(200);
-        });
-
-    router.route('/battery/:addr')
-        .get(function (req, res) {
-            res.json(sensor.gauges.dht.data);
-        });
+        }); 
 
     return router;
 };

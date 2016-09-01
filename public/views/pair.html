@@ -1,0 +1,21 @@
+<section class='well well-sm'>
+    <h1><i class="fa fa-plus-circle" aria-hidden="true"></i> 加入新智能家電 </h1>
+    <form class='form' autocomplete="on">
+        <label>智能家電名稱<br>
+		    <input type="text" ng-model="devName">
+	    </label>
+
+        <fieldset class='form-section'>
+            <legend>類別:</legend>
+            <p>開關 or 偵測器? Please select one that apply:</p>
+            <label name='devType'>
+			<input type='checkbox' for='devType'>1-port 開關</label>
+            <label name='devType'>
+			<input type='checkbox' for='devType'>4-port 開關</label>
+            <label name='devType'>
+			<input type='checkbox' for='devType'>偵測器</label>
+        </fieldset>
+        <button class='btn btn-warning' ng-click='vm.ndCmd()'><i class="fa fa-search-plus" aria-hidden="true"></i> 搜尋新智能家電...</button><br/>
+        <button class='btn btn-warning' ng-click='vm.saveDevName()'><i class="fa fa-wrench" aria-hidden="true"></i> Save</button>
+    </form>
+</section>

@@ -22,10 +22,10 @@
         <thead>
             <tr>
                 <th>組別</th>
-                <th>Weekday</th>
-                <th>Hour</th>
-                <th>Minute</th>
-                <th>On/Off</th>
+                <th>星期</th>
+                <th>時</th>
+                <th>分</th>
+                <th>開/関</th>
             </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
                 <td>{{job.m}}</td>
                 <td>{{$index%2? 'Off': 'On'}}</td>
 
-                <td><button class='btn btn-warning' ng-click='vm.removeJob($index+1)'<i class="fa fa-trash-o fa-lg"></i> Delete</button></td>
+                <td><button class='btn btn-warning' ng-click='vm.removeJob($index+1)'><i class="fa fa-trash-o fa-lg"></i> 刪除</button></td>
             </tr>
         </tbody>
     </table>

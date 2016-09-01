@@ -6,7 +6,8 @@
 
 	angular.module('myApp')
 		//.constant('baseUrl', 'http://localhost:3000/')
-		.constant('baseUrl', 'http://192.168.1.199/')
+		//.constant('baseUrl', 'http://192.168.1.199/')
+		.constant('baseUrl', 'http://192.168.1.199:3000/')
 		.config(config);
 	config.$inject = ['$routeProvider', '$locationProvider'];
 
@@ -17,7 +18,7 @@
 			.when('/', {
 				controller: 'widgetsCtrl',
 				templateUrl: '/views/widgets.html'
-			})
+			})			
 			.when('/camera', {
 				templateUrl: '/js/camera/cameraview.html',
 				controller: 'cameraCtrl as vm'
@@ -62,6 +63,10 @@
 			.when('/about', {
 				templateUrl: '/views/about.html'
 			})
+			.when('/pair', {
+				templateUrl: '/views/pair.html',
+				//controller: 'addNewDeviceCtrl as vm'
+			})	
 			.otherwise({
 				redirectTo: '/'
 			});
