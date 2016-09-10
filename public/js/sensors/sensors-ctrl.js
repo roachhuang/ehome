@@ -12,7 +12,7 @@
         function readBatteryLvl() {
             angular.forEach(vm.sensors, function (sensor) {
                 var cmdParm = [];
-                return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V'+ '/' + 'null').then(function (res) {
+                return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V' + '/' + 'null').then(function (res) {
                     //sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
                     sensor.battery = 1024 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) + 600 / 1200;
                     sensor.battery = (sensor.battery / 1000).toFixed(2);
@@ -68,7 +68,7 @@
         });
 
         vm.updateSensorName = function (sensor, index) {
-            //sensor.name==='x'? '': sensor.name;
+            sensor.name = 's'.concat(sensor.name);
             gpio.rmtAtCmd(sensor.addr, 'NI', sensor.name).then(function (res) {
                 console.log('name changed');
                 //vm.sensors[index].name = sensor.name;

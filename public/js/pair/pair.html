@@ -1,7 +1,7 @@
 <section class='well well-sm'>
     <h1><i class="fa fa-plus-circle" aria-hidden="true"></i> 加入新智能家電 </h1>
-    <h2 class="alert alert-danger">請先插入智能家電或打開 sensor 開關，並輸入名稱再按確定.</h2>
-    <form name="myForm" class='form' autocomplete="on">
+    <h1 class="alert alert-danger">請先插入智能家電或打開 sensor 開關，並輸入名稱再按確定.</h1>
+    <form name="myForm" class='form' autocomplete="on" >
         <label>智能家電名稱<br>
 		    <input type='text' name='id' ng-model="vm.formData.id" required>
             <span ng-show="myForm.id.$touched && myForm.id.$invalid">請輸入智能家電名稱</span>
@@ -10,9 +10,9 @@
         <fieldset class='form-section'>
             <legend>類別:</legend>
             <p>開關 or 偵測器? Please select one that apply:</p>     
-			<label><input type='radio' ng-model='vm.formData.type' value='p'>1-port 開關</label>          
-			<label><input type='radio' ng-model='vm.formData.type' value='p4'>4-port 開關</label>          
-			<label><input type='radio' ng-model='vm.formData.type' value='s'>偵測器</label>
+			<label><input type='radio' ng-model='vm.formData.type' value='p' ng-required="true">1-port 開關</label>          
+			<label><input type='radio' ng-model='vm.formData.type' value='p4' ng-required="true">4-port 開關</label>          
+			<label><input type='radio' ng-model='vm.formData.type' value='s' ng-required="true">偵測器</label>
         </fieldset>
 
         <button class='btn btn-warning' ng-click='vm.ndCmd()'><i class="fa fa-search-plus" aria-hidden="true"></i>確定</button><br/>
