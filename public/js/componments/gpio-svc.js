@@ -3,13 +3,17 @@
 
     angular
         .module('app.gpio', [])
-        .factory('gpioService', gpioService);
+        .factory('gpio', gpioService);
     gpioService.$inject = ['$http'];
     function gpioService($http) {
         var service = {
             //value: '',
             inPut: inPut,
-            outPut: outPut
+            outPut: outPut,
+            pair: pair,
+            rmtAtCmd: rmtAtCmd,
+            atCmd: atCmd,
+            getDevices: getDevices
         };
 
         return service;
@@ -22,14 +26,13 @@
             var val = value;
             var req = {
                 method: 'POST',
-                url: '/gpio/' + pin + '/' + addr,
+                url: '/gpio/io/' + pin + '/' + addr,
                 //transformRequest: transformRequestAsFormPost,
                 data: { val: val }
             };
-            return $http(req).then(function (res) {
-                //console.log(res.data);
-                return res.data;
-            });
+            return $http(req);
+            //console.log(res.data);
+            //return res.data;
         }
         /*
                 function inPut(pin, addr) {
@@ -45,9 +48,29 @@
             }
         */
         function inPut(pin, addr) {
-            return $http.get('/gpio/' + pin + '/' + addr).then(function (res) {
-                return res.data.value;
-            });
+            return $http.get('/gpio/io/' + pin + '/' + addr);
+            //    return res.data.value;
         }
+
+        function pair(id, type) {
+            return $http.get('/gpio/pair/' + id + '/' + type);
+            //    return res.data.value;
+        }
+
+        function rmtAtCmd(addr, cmd, cmdParam) {
+            return $http.get('/gpio/rmtAtCmd/' + addr + '/' + cmd + '/' + cmdParam);
+        }
+
+        function atCmd(cmd, cmdParam) {
+            return $http.get('/gpio/atCmd/' + cmd + '/' + cmdParam);
+        }
+
+        function getDevices() {
+            return $http.get('/gpio');
+            //    return res.data.value;
+        }
+        //function atCmd(cmd, cmdParam) {
+        //    return $http.get('/gpio/atCmd/' + '/' + cmd + '/' + cmdParam);
+        //}
     }
 })();

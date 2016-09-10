@@ -79,7 +79,7 @@ module.exports = function (xbee) {
                         */
             crontab.save(function (err, crontab) {
                 console.log(err);
-                res.status(204).send('removed');
+                res.sendStatus(204).send('removed');
             });
         });
     }

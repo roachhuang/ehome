@@ -9,7 +9,7 @@ exports.pixDaily = function (req, res) {
 
 	// Get todays apod data 
 	client().then(function (data) {
-		res.status(200).json(data);
 		//console.log(data);
+		res.status(200).json(data);		
 	});
 };

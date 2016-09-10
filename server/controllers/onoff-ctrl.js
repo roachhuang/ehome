@@ -1,6 +1,7 @@
 
 'use strict';
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
 var exec = require('child_process').exec;
 
 /*
@@ -158,45 +159,63 @@ module.exports = function (xbee) {
         };
     */
 
+    var atCmd = function (req, res) {
+        var addr = req.params.addr;
+        var cmd = req.params.cmd;
+
+        var cmdParam = (req.params.cmdParam === 'null') ? [] : req.params.cmdParam;
+        //xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] }).then(function (f) {
+        console.log('Param: ', cmdParam);
+
+        xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam }).then(function (f) {
+            // response of the command
+            //console.log('Command successful:', f);
+            res.status(200).send(f);
+        }).catch(function (e) {
+            console.log('Command failed:', e);
+            res.status(500).send(e);
+        });
+
+    };
+
     var rmtAtCmd = function (req, res) {
         var addr = req.params.addr;
         var cmd = req.params.cmd;
         cmd = (cmd === 'V') ? '%V' : cmd;
         var cmdParam = req.params.cmdParam;
-        xbee.xbeeCommand({
-            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: addr,
-            command: cmd,
-            commandParameter: cmdParam || []
-        }).then(function (f) {
+        xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] }).then(function (f) {
             // response of the command
             console.log('Command successful:', f);
-            return res.status(200).send(f);
+            res.status(200).send(f);
         }).catch(function (e) {
             console.log('Command failed:', e);
+            res.status(500).send(e);
         });
+
     };
-/*
-    var pairNewDevice = function (req, res) {
-        var name = req.params.name;
-        xbee.add64=null;
-        xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,
-            command: 'ND',
-            commandParameter: [],
-        }).then(function (f) {
-            //wait for reply from remote xbee.
-            console.log('Command successful:', f);
-            xbee.sensors.push(new Sensor.Sensor('DIO4', name, xbee.add64));
+
+    var pair = function (req, res) {
+        xbee.newXbee.id = req.params.id;
+        xbee.newXbee.type = req.params.type;
+        xbee.newXbee.addr64 = null;
+        xbee.atCmd('ND').then(function (f) {
+            res.status(200).send(f);
         }).catch(function (e) {
-            console.log('Command failed:', e);
+            res.status(500).send(e);
         });
     };
-*/
+
+    var getDevices = function (req, res) {
+        res.json({ devices: xbee.devices });
+    }
+
     return {
         post: post,
         get: get,
-        rmtAtCmd: rmtAtCmd
+        atCmd: atCmd,
+        rmtAtCmd: rmtAtCmd,
+        pair: pair,
+        getDevices: getDevices
     };
 };
 

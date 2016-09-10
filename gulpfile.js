@@ -78,7 +78,8 @@ gulp.task('inject', ['templatecache'], function () {
     return gulp.src(config.index)
         .pipe(wiredep(options)) // wiredep looks up bower.json file
         .pipe($.inject(injectSrc, injectOptions))
-        .pipe(gulp.dest(config.clientApp));
+        //.pipe(gulp.dest(config.clientApp));
+        .pipe(gulp.dest(config.client));
 });
 
 /////////////////////////////////////////////////////////////////////////////

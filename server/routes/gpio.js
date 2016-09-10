@@ -27,12 +27,23 @@ module.exports = function (xbee) {
     })
     */
 
-    router.route('/:pin/:addr')
+    // get devices
+    router.route('/')
+        .get(gpioController.getDevices);
+
+    // type: sensor or power socket
+    router.route('/pair/:id/:type')
+        .get(gpioController.pair);
+
+    router.route('/io/:pin/:addr')
         .get(gpioController.get)   // return 0 or 1
         .post(gpioController.post);
 
-    router.route('/rmtAtCmd/:addr/:cmd')
+    router.route('/rmtAtCmd/:addr/:cmd/:cmdParam')
         .get(gpioController.rmtAtCmd);
+
+    router.route('/atCmd/:cmd/:cmdParam')
+        .get(gpioController.atCmd);
 
     return router;
 };

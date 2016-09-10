@@ -11,12 +11,8 @@ var app = express();
 var config = require('./config/config')[env];
 //const io = require('socket.io').listen(app.listen(config.port));
 
-// create sensor objects - window and door
-//var sensorObj = require('./server/config/sensor-obj')(io);
-var sensorObj = require('./config/sensor-obj')();
-
 // init xbee - setup baud rate, com port,  mode, etc.
-var xbee = require('./config/xbee-obj')(sensorObj);
+var xbee = require('./config/xbee-obj')();
 
 require('./config/express')(app, config);
 require('./config/my-passport')(app, config);
@@ -33,7 +29,7 @@ var cron = require('./routes/cron.js')(xbee);
 var gpio = require('./routes/gpio')(xbee);
 var users = require('./routes/users');
 var auth = require('./routes/auth');
-var sensors = require('./routes/sensors')(sensorObj);
+var sensors = require('./routes/sensors')(xbee);
 
 // router is mounted in a particular root url
 app.use('/api', extapi);
@@ -42,16 +38,13 @@ app.use('/gpio', gpio);
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/sensors', sensors);
+
 app.listen(config.port, function() {
     console.log('Express server listening on port ' + config.port);
     console.log('env = ' + app.get('env') +
                 '\n__dirname = ' + __dirname +
                 '\nprocess.cwd = ' + process.cwd());
 });
-
-//app.listen(config.port, function (req, res) {
-//    console.info('Listening on port: ' + config.port + '...');
-//});
 
 
 

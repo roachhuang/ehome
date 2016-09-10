@@ -5,31 +5,44 @@
         .module('myApp')
         .controller('devicesCtrl', devicesCtrl);
 
-    devicesCtrl.$inject = ['$scope', 'gpioService', 'deviceService', '$http', '$timeout'];
-    function devicesCtrl($scope, gpioService, deviceService, $http, $timeout) {
+    devicesCtrl.$inject = ['$scope', 'gpio', '$timeout'];
+    //function devicesCtrl($scope, gpio, deviceService, $http, $timeout) {
+    function devicesCtrl($scope, gpio, $timeout) {
         var vm = $scope;
 
         activate();
 
         ////////////////
         function activate() {
-            vm.devices = deviceService;
+
+            //vm.devices = deviceService;
             // deviceService is a singleton
             // this is very important to know return from  nodejs is res.status(200).send({value: value})
-            angular.forEach(vm.devices, function (device) {
-                gpioService.inPut(device.pin, device.addr).then(function (data) {
-                    device.status = data;
-                }).catch(function (){
-                    console.log('unable to get dev status');
-                });
-                //$timeout(function () {
-                //$http.get('/gpio/' + device.pin + '/' + device.addr).success(function (data) {
-                //    device.status = data.value;
-                //    console.log(device.pin + ': ' + device.status + ' val: ' + data.value);
-                //});
-                //}, 500);
-                //$window.onbeforeunload = vm.onExit;
+            gpio.getDevices().then(function (res) {
+                vm.devices = res.data.devices;
             });
+
+            $timeout(function () {
+                angular.forEach(vm.devices, function (device) {
+                    gpio.inPut(device.pin, device.addr).then(function (res) {
+                        device.status = res.data.value;
+                    }).catch(function (e) {
+                        device.error = e;
+                        console.log('unable to get dev status');
+                    });
+                })
+            }, 500);
+
+
+
+            //$timeout(function () {
+            //$http.get('/gpio/' + device.pin + '/' + device.addr).success(function (data) {
+            //    device.status = data.value;
+            //    console.log(device.pin + ': ' + device.status + ' val: ' + data.value);
+            //});
+            //}, 500);
+            //$window.onbeforeunload = vm.onExit;
+
         }
         /*
                 vm.onExit = function () {
@@ -41,16 +54,21 @@
         vm.onOff = function (device) {
             // toogle btw 0 and 1
             device.status = device.status ^ 1;
-            gpioService.outPut(device.status, device.pin, device.addr);
+            gpio.outPut(device.status, device.pin, device.addr);
         };
 
         vm.ctrlAll = function (devices, value) {
-            angular.forEach (devices, function(device) {
+            angular.forEach(devices, function (device) {
+                device.error = null;
                 $timeout(function () {
-                    gpioService.outPut(value, device.pin, device.addr);
-                    device.status = value;
+                    gpio.outPut(value, device.pin, device.addr).success(function (data) {
+                        device.status = value;
+                    })
+                        .error(function (err, status) {
+                            device.error = err;
+                        });
                 }, 500);
             });
-        };     
+        };
     }
 })();

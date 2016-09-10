@@ -1,7 +1,7 @@
 var YQL = require('yql');
 
 exports.weather = function (req, res) {
-    //console.log('yahoo');
+    console.log('yahoo');
     // return celsius
     var query = new YQL("select * from weather.forecast where (woeid = 2306179) and u='c'");
     query.exec(function (err, data) {
@@ -13,7 +13,8 @@ exports.weather = function (req, res) {
             res.status(200).json(data);
             //console.log(data.query.results.channel.item.forcast);
         } else {
-            res.status(err);
+            console.error(err);
+            res.status(err);            
         }
     });
 };

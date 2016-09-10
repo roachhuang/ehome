@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-module.exports = function (msg) {
+module.exports = function () {
     var sendEmail = function (msg) {
         var smtpConfig = {
             service: 'gmail',
@@ -19,7 +19,7 @@ module.exports = function (msg) {
             priority: 'high',
             subject: 'ehome event', // Subject line
             text: msg, // plaintext body
-            html: '<h1>Hello world</h1>', // html body
+            html: '<h1>Sensor name: ' + msg + '</h1>', // html body
             attachments: [
                 {
                     filename: 'ipcam.jpg',

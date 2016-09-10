@@ -5,14 +5,14 @@
         .module('myApp')
         .controller('sensorsCtrl', sensorsCtrl);
 
-    sensorsCtrl.$inject = ['$scope', '$http', '$location'];
-    function sensorsCtrl($scope, $http, location) {
+    sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio'];
+    function sensorsCtrl($scope, $http, location, gpio) {
         var vm = $scope;
 
         function readBatteryLvl() {
             angular.forEach(vm.sensors, function (sensor) {
                 var cmdParm = [];
-                return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V').then(function (res) {
+                return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V'+ '/' + 'null').then(function (res) {
                     //sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
                     sensor.battery = 1024 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) + 600 / 1200;
                     sensor.battery = (sensor.battery / 1000).toFixed(2);
@@ -22,6 +22,7 @@
         }
 
         activate();
+
         function writeStatus2Server() {
             var req = {
                 method: 'POST',
@@ -33,9 +34,11 @@
         }
 
         function loadSensorObjs() {
+            gpio.atCmd('ND', 'null');
+
             $http.get('/sensors').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
-                readBatteryLvl();
+                //readBatteryLvl();
                 console.log('c sensors: ', vm.sensors);
             });
         }
@@ -48,7 +51,7 @@
             //return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
             // done
             //});
-        }
+        };
         vm.disableAllSensors = function () {
             var val = false;
             angular.forEach(vm.sensors, function (sensor) {
@@ -58,15 +61,31 @@
             //return $http.get('/sensors/ctrlAll/' + val).then(function (res) {
             // done
             //});
-        }
+        };
 
         vm.$on('$locationChangeStart', function () {
             writeStatus2Server();
         });
 
+        vm.updateSensorName = function (sensor, index) {
+            //sensor.name==='x'? '': sensor.name;
+            gpio.rmtAtCmd(sensor.addr, 'NI', sensor.name).then(function (res) {
+                console.log('name changed');
+                //vm.sensors[index].name = sensor.name;
+            });
+            var req = {
+                method: 'PUT',
+                url: '/sensors/' + index,
+                //transformRequest: transformRequestAsFormPost,
+                data: sensor
+            };
+            return $http(req);
+        };
+
         ////////////////
 
         function activate() {
+
             loadSensorObjs();
         }
     }

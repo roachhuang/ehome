@@ -3,8 +3,7 @@
     'use strict';
 
     angular  
-        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])
-        //.module('myApp', ['ngRoute', 'app.gpio'])
+        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])      
         .controller('mainCtrl', mainCtrl);
 
     // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];
@@ -28,11 +27,15 @@
 
             $http.get('/api/yahoo').then(function (res) {
                 vm.yahoo = res.data.query.results.channel;
+            }).catch(function (e) {
+                console.log(e);
             });
 
             $http.get('/api/apod').then(function (res) {
                 vm.apod = res.data;
-            });
+            }).catch(function (e) {
+                console.log(e);
+            });          
         }
 
         function hasAuthorized() {
@@ -43,8 +46,10 @@
                 } else {
                     vm.hasAuthorized = false;
                 }
+            }).catch(function (e) {
+                console.log(e);
             });
-        }
+        }        
     }
 })();
 

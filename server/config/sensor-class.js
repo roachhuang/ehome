@@ -66,7 +66,7 @@ module.exports = function () {
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
     var detectors = [];
-    detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
+    //detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
     //detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
 
@@ -93,8 +93,9 @@ module.exports = function () {
     //var xbeeRouter = new Sensor('xbee', 'xbee Router 電力');
 
     return {
-        detectors: detectors,
+        //detectors: detectors,
         //gauges: gauges
+        constructor: Sensor
     };
 
     /* Remove the binding of listner1 function

@@ -7,7 +7,7 @@
 	angular.module('myApp')
 		//.constant('baseUrl', 'http://localhost:3000/')
 		//.constant('baseUrl', 'http://192.168.1.199/')
-		.constant('baseUrl', 'http://192.168.1.199:3000/')
+		//.constant('baseUrl', 'http://192.168.1.199:3000/')
 		.config(config);
 	config.$inject = ['$routeProvider', '$locationProvider'];
 
@@ -16,27 +16,16 @@
 		$locationProvider.html5Mode({enabled: true, requireBase: false});
 		$routeProvider
 			.when('/', {
-				controller: 'widgetsCtrl',
+				//controller: 'widgetsCtrl',
 				templateUrl: '/views/widgets.html'
 			})			
 			.when('/camera', {
 				templateUrl: '/js/camera/cameraview.html',
-				controller: 'cameraCtrl as vm'
-				/*
-	controller: 'cameraCtrl',
-	resolve: {
-			// I will cause a 1 second delay
-			delay: function($q, $timeout) {
-			var delay = $q.defer();
-			$timeout(delay.resolve, 1000);
-			return delay.promise;
-			}
-	}
-	*/
+				controller: 'cameraCtrl as vm'	
 			})
 			.when('/nasa', {
 				templateUrl: '/views/nasa.html',
-				controller: 'nasaCtrl'
+				//controller: 'nasaCtrl as vm'
 			})
 			.when('/devivesControl', {
 				templateUrl: '/js/devices-ctrl.html',
@@ -64,8 +53,8 @@
 				templateUrl: '/views/about.html'
 			})
 			.when('/pair', {
-				templateUrl: '/views/pair.html',
-				//controller: 'addNewDeviceCtrl as vm'
+				templateUrl: '/js/pair/pair.html',
+				controller: 'pairController as vm'
 			})	
 			.otherwise({
 				redirectTo: '/'

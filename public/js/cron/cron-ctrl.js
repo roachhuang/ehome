@@ -3,7 +3,7 @@
 
     angular
         .module('myApp')
-        .constant('cronUrl', 'http://192.168.1.199/cron/')
+        .constant('cronUrl', 'http://192.168.1.199:3000/cron/')
         .controller('cronCtrl', cronCtrl);
 
     cronCtrl.$inject = ['$routeParams', 'deviceService', '$http', 'cronUrl'];

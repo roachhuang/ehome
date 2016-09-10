@@ -22,16 +22,18 @@ router.all('*', function (req, res, next) {
 })
 */
 
-router.get('/apod', nasa.pixDaily);
+router.route('/apod')
+    .get(nasa.pixDaily);
 
 // sends failure Login state back to angular
-router.get('/yahoo', yahoo.weather);
+router.route('/yahoo')
+    .get(yahoo.weather);
 
 //todo: no route for email is requried. remove it later.
 //router.get('/email', email.sendEmail);
-
-router.get('/saveimage', function () {
+/* todo: fix path bug
+router('/saveimage', function () {
 	console.log('saveimg is called');
 });
-
+*/
 module.exports = router;

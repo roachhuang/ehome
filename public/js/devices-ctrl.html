@@ -1,6 +1,7 @@
 <section class='well well-sm'>
-	<h1><i class="fa fa-plug" aria-hidden="true"></i> 家電 開/關 </h1>
+	<h1><i class="fa fa-plug" aria-hidden="true"></i> 家電 開/關 </h1>	
 		<div ng-repeat='device in devices'>
+			<h2 ng-if='device.error'> {{device.error}}</h2>
 			<!-- passing in param (device) into the url -->
 			<button type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-block btn-danger' : 'btn  btn-block btn-success'"><h4 class='text-left'>
 				<i class="fa fa-power-off fa" aria-hidden="true"></i>
@@ -9,5 +10,4 @@
 
 		<a class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </a>&nbsp
 		<a class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </a>
-
 </section>

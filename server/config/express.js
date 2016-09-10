@@ -62,10 +62,11 @@ module.exports = function (app, config) {
     //app.set('view engine', 'html');
 
     // development error handler
-    // will print stacktrace
+    /* will print stacktrace
     app.use(function (err, req, res, next) {
         // Do logging and user-friendly error message display
-        //console.error(err);
+        console.error(err.stack);
         res.status(500).send('internal server error: ' + err);
     });
+    */
 };

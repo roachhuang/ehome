@@ -21,11 +21,15 @@
                     vm.yahoo = res.data.query.results.channel;
                     //console.log(vm.yahoo.item.forcast);
                 }
+            }).catch(function(e){
+                console.error(e);
             });
 
             vm.apod = {};
             $http.get('/api/apod').then(function (res) {
                 vm.apod = res.data;
+            }).catch(function(e){
+                console.error(e);
             });
         }
     }

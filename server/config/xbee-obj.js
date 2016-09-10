@@ -1,16 +1,29 @@
 
 'use strict';
-
+var _ = require('lodash');
 var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
 var Q = require('q');
+var Sensor = require('./sensor-class')().constructor;
+
 // in order to get devices object. todo: may be change to use deive router instead.
 //var onOff = require('../controllers/onoff-ctrl')();
 
-module.exports = function (sensor, devices) {
-    var routerAddr = '0013A20040EB556C';
+module.exports = function () {
+    var newXbee = { addr64: '', addr16: '', id: null, vcc: null, type: null };
+
+    function Device(GpioPin, name, addr) {
+        this.name = name;
+        this.status = 0;    //toto: 0 or null (init state?)
+        this.pin = GpioPin || 'D0'; // deafult pin D0
+        this.addr = addr || null;
+        this.error = null;
+    }
+    var sensors = [], devices = [];
+    //var routerAddr = '0013A20040EB556C';
+
     var xbeeAPI = new xbee_api.XBeeAPI({ api_mode: 1 });
 
     // ls /dev/ttyAMA0 to make suer it is exist.
@@ -30,17 +43,11 @@ module.exports = function (sensor, devices) {
     var maxWait = 5000; // ms
 
     var initXbee = function () {
-        rmtAtCmd(routerAddr, '%V');
-
-        xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,
-            command: 'ND',
-            commandParameter: [],
-        }).then(function (f) {
-            console.log('Command successful:', f);
-        }).catch(function (e) {
-            console.log('Command failed:', e);
+        rmtAtCmd('0013A20040EB556C', 'NI', 'null').then(function () {
+            atCmd('ND');
         });
+
+        //rmtAtCmd(routerAddr, '%V');
         /*
                 xbeeCommand({
                     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
@@ -64,11 +71,11 @@ module.exports = function (sensor, devices) {
                 };
                 serialport.write(xbeeAPI.buildFrame(f));
         */
-        rmtAtCmd('000000000000FFFF', 'PM', [0]);
-        rmtAtCmd('000000000000FFFF', 'V+', [0x900]);
+        //rmtAtCmd('000000000000FFFF', 'PM', [0]);
+        //rmtAtCmd('000000000000FFFF', 'V+', [0x900]);
         //Read information regarding last node join request
-        rmtAtCmd('000000000000FFFF', 'AI');
-        rmtAtCmd('000000000000FFFF', 'WR');
+        //rmtAtCmd('000000000000FFFF', 'AI');
+        //rmtAtCmd('000000000000FFFF', 'WR');
         //rmtAtCmd('JV', [0x01], '000000000000FFFF');
     };
 
@@ -88,7 +95,7 @@ module.exports = function (sensor, devices) {
         console.log('frame type: ', frame.type);
         switch (frame.type) {
             case 0x97: // remote AT command response
-                console.log('Outer >>' + util.inspect(frame));
+                //console.log('Outer >>' + util.inspect(frame));
                 /*
                 if (frame.commandStatus === 0x00) {
                     if (frame.command === '%V') {
@@ -132,7 +139,15 @@ module.exports = function (sensor, devices) {
                 digiManufacturerID: '101e' } }
                 */
                 if (frame.command === 'ND') {
-                    var addr = frame.nodeIdentification.remote64;
+                    console.log('newXbee.id: ', newXbee.id);
+                    var id = frame.nodeIdentification.nodeIdentifier;
+                    newXbee.addr64 = frame.nodeIdentification.remote64;
+                    if (id === 'null') {
+                        addNewDev();
+                    } else {
+                        // the xbee has name.
+                        checkIfObjExist(id);
+                    }
                 }
                 break;
             case 0x92:  // IO data sample RX indicator
@@ -146,9 +161,9 @@ module.exports = function (sensor, devices) {
                 numSamples: 1 }
                 */
 
-                for (i in sensor.detectors) {
-                    if (sensor.detectors.hasOwnProperty(i)) {
-                        sensor.detectors[i].getStatus(frame);
+                for (i in sensors) {
+                    if (sensors.hasOwnProperty(i)) {
+                        sensors[i].getStatus(frame);
                     }
                 }
                 break;
@@ -156,6 +171,55 @@ module.exports = function (sensor, devices) {
                 break;
         }
     });
+
+    function writeNameToXbee() {
+        var givenName = newXbee.type + newXbee.id;
+        console.log('paried: ', newXbee.id);
+        rmtAtCmd(newXbee.addr64, 'NI', givenName).then(function () {
+            rmtAtCmd(newXbee.addr64, 'WR');
+            newXbee.id = newXbee.type = null;
+        });
+    }
+
+    function newDevObj(devType, name) {
+        if (devType === 's') {
+            sensors.push(new Sensor('DIO4', name, newXbee.addr64));
+        } else {
+            console.log('new pwrObj: ', name)
+            devices.push(new Device('D0', name, newXbee.addr64));
+        }
+    }
+
+    function addNewDev() {
+        if (newXbee.id !== null) {
+            writeNameToXbee(newXbee.type);
+            newDevObj(newXbee.type, newXbee.type + newXbee.id);
+        } else {
+            console.log('just ND cmd resp, not pair!');
+        }
+    }
+
+    // the xbee already has a name
+    function checkIfObjExist(id) {
+        //var exist = false, i;
+        var index = (id[0] === 's') ? _.findIndex(sensors, { name: id }) : _.findIndex(devices, { name: id });
+        if (index === -1) {
+            newDevObj(id[0], id);
+        }
+        /*
+    for (i in sensors) {
+        if (sensors.hasOwnProperty(i)) {
+            // check if the device exists
+            if (sensors[i].name === id) {
+                exist = true;
+                console.log('exists!');
+                break;
+            }
+        }
+    }
+    */
+
+    }
 
     function xbeeCommand(frame) {
         // set frame id
@@ -190,6 +254,9 @@ module.exports = function (sensor, devices) {
     }
 
     var atCmd = function (cmd, cmdParam) {
+        return xbeeCommand({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
+
+        /*
         xbeeCommand({
             type: C.FRAME_TYPE.AT_COMMAND,
             command: cmd,
@@ -200,26 +267,29 @@ module.exports = function (sensor, devices) {
         }).catch(function (e) {
             console.log('Command failed:', e);
         });
+        */
     };
+
     var rmtAtCmd = function (addr, cmd, cmdParam) {
-        xbeeCommand({
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: addr,
-            command: cmd,
-            commandParameter: cmdParam || []
-        }).then(function (f) {
+        return xbeeCommand({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+        /*
+        .then(function (f) {
             console.log('Command successful:', f);
             return f;
         }).catch(function (e) {
             console.log('Command failed:', e);
         });
+        */
     };
 
     return {
         xbeeCommand: xbeeCommand,
         C: C,
-        xbeeAPI: xbeeAPI
+        xbeeAPI: xbeeAPI,
+        newXbee: newXbee,    // new detected xbee
         //rmtAtCmd: rmtAtCmd,
-        //atCmd: atCmd
+        atCmd: atCmd,
+        sensors: sensors,
+        devices: devices
     };
 };
