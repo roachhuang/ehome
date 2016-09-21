@@ -2,6 +2,7 @@
 'use strict';
 var _ = require('lodash');
 var util = require('util');
+const notifier = require('node-notifier');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
@@ -92,7 +93,7 @@ module.exports = function () {
         var i, v;
         console.log('outer>>' + util.inspect(frame));
         // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
-        console.log('frame type: ', frame.type);
+        //console.log('frame type: ', frame.type);
         switch (frame.type) {
             case 0x97: // remote AT command response
                 //console.log('Outer >>' + util.inspect(frame));
@@ -144,6 +145,7 @@ module.exports = function () {
                     newXbee.addr64 = frame.nodeIdentification.remote64;
                     if (id === 'null') {
                         addNewDev();
+                        notifier.notify(newXbee.id + ' 配對成功');
                     } else {
                         // the xbee has name.
                         checkIfObjExist(id);
@@ -183,6 +185,7 @@ module.exports = function () {
 
     function newDevObj(devType, name) {
         if (devType === 's') {
+            console.log('new sensorObj: ', name)
             sensors.push(new Sensor('DIO4', name, newXbee.addr64));
         } else {
             console.log('new pwrObj: ', name)

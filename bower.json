@@ -23,7 +23,9 @@
     "angular": "1.5.8",
     "font-awesome": "^4.6.3",
     "angular-cron-jobs": "^1.4.2",
-    "angular-route": "1.5.8"
+    "angular-route": "1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "angular-toastr": "^2.1.1"
   },
   "overrides": {
     "bootstrap": {

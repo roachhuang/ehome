@@ -3,7 +3,7 @@
     'use strict';
 
     angular  
-        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio'])      
+        .module('myApp', ['ngRoute', 'angular-cron-jobs', 'app.gpio', 'toastr'])      
         .controller('mainCtrl', mainCtrl);
 
     // mainCtrl.$inject = ['$scope', '$http', '$route', '$routeParams', '$location'];

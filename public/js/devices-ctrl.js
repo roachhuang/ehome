@@ -5,9 +5,9 @@
         .module('myApp')
         .controller('devicesCtrl', devicesCtrl);
 
-    devicesCtrl.$inject = ['$scope', 'gpio', '$timeout'];
+    devicesCtrl.$inject = ['$scope', 'gpio', '$timeout', 'toastr'];
     //function devicesCtrl($scope, gpio, deviceService, $http, $timeout) {
-    function devicesCtrl($scope, gpio, $timeout) {
+    function devicesCtrl($scope, gpio, $timeout, toastr) {
         var vm = $scope;
 
         activate();
@@ -18,8 +18,8 @@
             //vm.devices = deviceService;
             // deviceService is a singleton
             // this is very important to know return from  nodejs is res.status(200).send({value: value})
-            gpio.getDevices().then(function (res) {
-                vm.devices = res.data.devices;
+            gpio.getXbee().then(function (res) {
+                vm.devices = res.data.xbee.devices;
             });
 
             $timeout(function () {
@@ -32,8 +32,6 @@
                     });
                 })
             }, 500);
-
-
 
             //$timeout(function () {
             //$http.get('/gpio/' + device.pin + '/' + device.addr).success(function (data) {
@@ -69,6 +67,16 @@
                         });
                 }, 500);
             });
+        };
+
+        vm.updateDeviceName = function (device, index) {
+            device.name = 's'.concat(device.name);
+            gpio.rmtAtCmd(device.addr, 'NI', device.name).then(function (res) {
+                //console.log('dev name changed');
+                toastr.success(device.name, '更名成功');
+                //vm.sensors[index].name = sensor.name;
+            });
+            gpio.updateDeviceName(index, device);
         };
     }
 })();

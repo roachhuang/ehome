@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('settingsCtrl', settingsCtrl);
 
-    settingsCtrl.$inject = ['$scope', 'deviceService'];
-    function settingsCtrl($scope, deviceService) {
+    settingsCtrl.$inject = ['$scope', 'gpio'];
+    function settingsCtrl($scope, gpio) {
         var vm = $scope;
 
         activate();
@@ -14,7 +14,9 @@
         ////////////////
 
         function activate() {
-            vm.devices = deviceService;
+            gpio.getXbee().then(function(res){
+                vm.devices = res.data.xbee.devices;   
+            });
             //angular.copy(deviceService, vm.devices);
             /* move to cron-ctrl.js
             vm.myConfig = {

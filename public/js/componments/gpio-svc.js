@@ -13,7 +13,8 @@
             pair: pair,
             rmtAtCmd: rmtAtCmd,
             atCmd: atCmd,
-            getDevices: getDevices
+            getXbee: getXbee,
+            updateDeviceName: updateDeviceName
         };
 
         return service;
@@ -65,9 +66,19 @@
             return $http.get('/gpio/atCmd/' + cmd + '/' + cmdParam);
         }
 
-        function getDevices() {
+        function getXbee() {
             return $http.get('/gpio');
             //    return res.data.value;
+        }
+
+        function updateDeviceName(index, device){
+         var req = {
+                method: 'PUT',
+                url: '/gpio/' + index,
+                //transformRequest: transformRequestAsFormPost,
+                data: device
+            };
+            return $http(req);
         }
         //function atCmd(cmd, cmdParam) {
         //    return $http.get('/gpio/atCmd/' + '/' + cmd + '/' + cmdParam);

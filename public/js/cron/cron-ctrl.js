@@ -6,8 +6,8 @@
         .constant('cronUrl', 'http://192.168.1.199:3000/cron/')
         .controller('cronCtrl', cronCtrl);
 
-    cronCtrl.$inject = ['$routeParams', 'deviceService', '$http', 'cronUrl'];
-    function cronCtrl($routeParams, deviceService, $http, cronUrl) {
+    cronCtrl.$inject = ['$routeParams', 'gpio', '$http', 'cronUrl'];
+    function cronCtrl($routeParams, gpio, $http, cronUrl) {
         var vm = this;
         /*
                 $scope.cron = Cron.get({id: $routeParams.id});
@@ -27,16 +27,21 @@
 
         function activate() {
             vm.cronJobs = [];
-            //read cronjobs from localstorage.
-            vm.selectedDevice = deviceService[$routeParams.deviceId];
-            //vm.selectedDevice.cronJobs = [];
-            //itemName = vm.selectedDevice.name;
-            //console.log(localStorage.getItem(itemName));
-            //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
+            gpio.getXbee().then(function (res) {
+                var devices = res.data.xbee.devices;
+                vm.selectedDevice = devices[$routeParams.deviceId];
 
-            // retrieve only the device's jobs
-            $http.get(cronUrl + vm.selectedDevice.addr).then(function (res) {
-                vm.cronJobs = res.data.jobs;
+                //read cronjobs from localstorage.
+
+                //vm.selectedDevice.cronJobs = [];
+                //itemName = vm.selectedDevice.name;
+                //console.log(localStorage.getItem(itemName));
+                //vm.cronJobs = JSON.parse(localStorage.getItem(itemName)) || [];
+
+                // retrieve only the device's jobs
+                $http.get(cronUrl + vm.selectedDevice.addr).then(function (res) {
+                    vm.cronJobs = res.data.jobs;
+                });
             });
             // vm.selectedDevice.cronJobs = JSON.parse(localStorage.getItem(itemName)) || {};
             vm.tmpJob = {};
@@ -91,15 +96,15 @@
             return $http.delete('/cron/' + vm.selectedDevice.addr, null).success(function (data) {
                 cb(null, data);
             })
-            .error(function (err) {
-                cb(err);
-            });
+                .error(function (err) {
+                    cb(err);
+                });
         };
 
         function addCronTab(data, cb) {
             var req = {
                 method: 'POST',
-                url: '/cron/'+ vm.selectedDevice.addr,
+                url: '/cron/' + vm.selectedDevice.addr,
                 //transformRequest: transformRequestAsFormPost,
                 data: data // to do: '1' or 1 or can use false
             };

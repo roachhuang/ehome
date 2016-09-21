@@ -3,6 +3,7 @@
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
 var exec = require('child_process').exec;
+var _ = require('lodash');
 
 /*
 The Raspberry Pi's GPIO pins require you to be root to access them.
@@ -205,9 +206,17 @@ module.exports = function (xbee) {
         });
     };
 
-    var getDevices = function (req, res) {
-        res.json({ devices: xbee.devices });
+    var getXbee = function (req, res) {
+        //res.json({ devices: xbee.devices });
+        res.json({ xbee: xbee });
     }
+
+    var updateDevice = function (req, res) {       
+            console.log('put: ', req.body);
+            _.merge(xbee.devices[req.params.index], req.body);
+            //res.sendStatus(200);
+            res.status(200).send({ info: 'dev name updated successfully' });
+        };
 
     return {
         post: post,
@@ -215,7 +224,8 @@ module.exports = function (xbee) {
         atCmd: atCmd,
         rmtAtCmd: rmtAtCmd,
         pair: pair,
-        getDevices: getDevices
+        getXbee: getXbee,
+        updateDevice: updateDevice
     };
 };
 

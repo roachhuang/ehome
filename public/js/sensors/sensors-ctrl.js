@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('sensorsCtrl', sensorsCtrl);
 
-    sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio'];
-    function sensorsCtrl($scope, $http, location, gpio) {
+    sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio', 'toastr'];
+    function sensorsCtrl($scope, $http, location, gpio, toastr) {
         var vm = $scope;
 
         function readBatteryLvl() {
@@ -70,7 +70,7 @@
         vm.updateSensorName = function (sensor, index) {
             sensor.name = 's'.concat(sensor.name);
             gpio.rmtAtCmd(sensor.addr, 'NI', sensor.name).then(function (res) {
-                console.log('name changed');
+                toastr.success(sensor.name, '更名成功');
                 //vm.sensors[index].name = sensor.name;
             });
             var req = {

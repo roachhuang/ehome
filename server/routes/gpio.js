@@ -29,7 +29,10 @@ module.exports = function (xbee) {
 
     // get devices
     router.route('/')
-        .get(gpioController.getDevices);
+        .get(gpioController.getXbee);
+
+    router.route('/:index')
+        .put(gpioController.updateDevice);
 
     // type: sensor or power socket
     router.route('/pair/:id/:type')

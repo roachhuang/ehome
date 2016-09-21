@@ -10,7 +10,7 @@ module.exports = function () {
         };
 
         // create reusable transporter object using the default SMTP transport
-        var transporter = nodemailer.createTransport(smtpConfig);
+        var smtpTransport = nodemailer.createTransport(smtpConfig);
 
         // setup e-mail data with unicode symbols
         var mailOptions = {
@@ -30,11 +30,13 @@ module.exports = function () {
         };
 
         // send mail with defined transport object
-        transporter.sendMail(mailOptions, function (error, info) {
+        smtpTransport.sendMail(mailOptions, function (error, info) {
             if (error) {
-                return console.log(error);
+                console.log(error);
+            } else {
+                console.log('Message sent: ' + info.response);
             }
-            console.log('Message sent: ' + info.response);
+            smtpTransport.close();
         });
     };
 

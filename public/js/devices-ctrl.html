@@ -1,10 +1,10 @@
 <section class='well well-sm'>
 	<h1><i class="fa fa-plug" aria-hidden="true"></i> 家電 開/關 </h1>
-	<div ng-hide='devices.lenght'>
+	<div ng-hide='devices.length'>
 		<h1 class="alert alert-danger">No device found. Please pair devices.</h1>
 	</div>
 
-	<div ng-show='devices.lenght'>
+	<div ng-show='devices.length'>
 		<div ng-repeat='device in devices'>
 			<h2 ng-if='device.error'> {{device.error}}</h2>
 			<!-- passing in param (device) into the url -->
@@ -15,5 +15,17 @@
 
 		<a class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </a>&nbsp
 		<a class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </a>
+
+		<hr/>
+		<table class='table table-striped table-bordered table-condensed table-responsive'>
+			<tr class='info'>
+				<th>Device Name</th>
+				<th>Addr</th>			
+			</tr>
+			<tr class='warning' ng-repeat='device in devices track by $index'>
+				<td><input type='text' ng-model='device.name'>&nbsp<button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名 </button></td>
+				<td>{{device.addr}}</td>
+			</tr>
+		</table>
 	</div>
 </section>
