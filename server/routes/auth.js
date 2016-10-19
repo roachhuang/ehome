@@ -12,14 +12,14 @@ var router = express.Router();
 router.route('/google/callback')
 	// /google/callback?code=xxxxxxx
 	.get(passport.authenticate('google', {
-		successRedirect: '/users',		// go to users route to render a user profile page or whatever info to users.
+		successRedirect: '/users/',		// go to users route to render a user profile page or whatever info to users.
 		failure: '/api/apod/'	// to do: erro route isn't set yet
 	}));
 
 router.route('/google')
 	.get(passport.authenticate('google', {
 		/* scope tells google what data u want to access; 'profile' is a must scope and must enable google+ api */
-		access_type: 'offline',
+		// access_type: 'offline',
 		scope: ['https://www.googleapis.com/auth/drive.file',
 				'https://www.googleapis.com/auth/userinfo.email',					
 				'profile']

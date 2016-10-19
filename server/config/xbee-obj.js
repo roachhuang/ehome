@@ -2,7 +2,7 @@
 'use strict';
 var _ = require('lodash');
 var util = require('util');
-const notifier = require('node-notifier');
+//const notifier = require('node-notifier');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
@@ -185,10 +185,10 @@ module.exports = function () {
 
     function newDevObj(devType, name) {
         if (devType === 's') {
-            console.log('new sensorObj: ', name)
+            //console.log('new sensorObj: ', name);
             sensors.push(new Sensor('DIO4', name, newXbee.addr64));
         } else {
-            console.log('new pwrObj: ', name)
+            //console.log('new pwrObj: ', name);
             devices.push(new Device('D0', name, newXbee.addr64));
         }
     }

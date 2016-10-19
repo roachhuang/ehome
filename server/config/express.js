@@ -10,6 +10,7 @@ module.exports = function (app, config) {
     //app.use(compress());
     // bodyParser looks at the body & see if it has any json obj in it. if so, take the json obj & add it to res.body.
     app.use(bodyParser.json());
+    // it is fo getting info form htlm form
     app.use(bodyParser.urlencoded({
         extended: true
     }));
@@ -22,19 +23,16 @@ module.exports = function (app, config) {
     }));
 
     // logging request details
-    app.use(morgan('dev'));
-    //app.use(bodyParser.urlencoded({
-    //  extended: false
-    //})); // get info form htlm form
-    //app.use(bodyParser.json());
+    app.use(morgan('dev')); 
+ 
     console.log('root: ', config.rootPath);
-    // view engine setup
-    //app.set('views', config.rootPath + '/public/views');
-    //app.use(express.static(config.rootPath + 'public'));
+  
     //config.env='build';
     switch (config.env) {
         case 'build':
             console.log('** BUILD **');
+            // view engine setup - we seems not needing this
+            // app.set('views', config.rootPath + '/views');
             app.use(express.static(config.rootPath + 'build/'));
             // Any invalid calls for templateUrls are under app/* and should return 404
             //app.use('/app/*', function (req, res, next) {
@@ -45,20 +43,22 @@ module.exports = function (app, config) {
             break;
         default:
             console.log('** DEV **');
+            // view engine setup
+            //app.set('views', config.rootPath + '/public/views');
             app.use(express.static(config.rootPath + 'public/'));
             //app.use(express.static('./'));
-            //app.use(express.static('./.tmp'));
-            // All the assets are served at this point.
-            // Any invalid calls for templateUrls are under app/* and should return 404
-            //app.use('/app/*', function (req, res, next) {
-            //four0four.send404(req, res);
-            //});
-            // Any deep link calls should return index.html
-            //app.use('/*', express.static(config.rootPath + 'public/index.html'));
+            //app.use(express.static('./.tmp'));           
             break;
     }
 
-
+/* useless
+    app.use(function (req, res, next) {
+        res.header('Access-Control_allow-Origin', '*');
+        res.header('Access-Control_allow-Methods', 'GET, PUT, POST, DELETE');
+        res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+        next();
+    })
+*/
     //app.set('view engine', 'html');
 
     // development error handler

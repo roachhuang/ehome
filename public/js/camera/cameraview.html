@@ -1,14 +1,19 @@
 <!--
 <img ng-src='http://ubuy.asuscomm.com:8080/image.jpg' class='img-responsive'/>
 <hr/>
+-->
 
 <div>
-<video src='http://ubuy.asuscomm.com:8080/video.cgi' width='400' height='300' autoplay>
-	Your browser does not support the video tag.
-</video>
+	<video width='640' height='480' autoplay>
+		<source src='http://ubuy.asuscomm.com:8080/video.cgi' type='video/mp4'> 
+		Your browser does not support the video tag.
+	</video>
 </div>
--->
+
+
+
 <section>
+	<!--
 <h1>Camera view</h1>
 <figure>
 	<iframe width='640' height='480' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
@@ -16,6 +21,7 @@
 	</iframe>
 	<br/>
 </figure>
-<button class="btn btn-primary" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> 存到 goolge drive</button>
-<a ng-href='/users/saveVideo'> 存到 video</a>
+-->
+	<button class="btn btn-primary" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> 存到 goolge drive</button>
+	<button class="btn btn-primary" ng-click="vm.saveVideo()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> 存 Video 到 goolge drive</button>
 </section>

@@ -11,11 +11,13 @@
         <fieldset class='form-section'>
             <legend>類別:</legend>
             <p>開關 or 偵測器? 請選擇元件類型:</p>
-            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p' required>1-port 開關</label><br/>
-            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p4' required>4-port 開關</label><br/>
-            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='s' required>偵測器: </label><br/>
+            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='p' required> 1-port 開關</label>
+            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='p4' required> 4-port 開關</label>
+            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='s' required> 偵測器</label>
+            <!--
             <p>The control is: {{ myForm.pair.$valid ? 'valid' : 'invalid' }}</p>
             <p>The "required" validator is: {{ myForm.pair.$error.required ? 'not satisfied' : 'satisfied' }}</p>
+            -->
         </fieldset>
 
         <button ng-disabled='myForm.pair.$error.required' class='btn btn-lg btn-warning' ng-click='vm.ndCmd()'><i ng-class='vm.icon'></i> 確定</button><br/>

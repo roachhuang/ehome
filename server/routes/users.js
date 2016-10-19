@@ -2,6 +2,7 @@
 var fs = require('fs');
 var request = require('request');
 var express = require('express');
+var ffmpeg = require('fluent-ffmpeg');
 //var mjpegcamera = require('mjpeg-camera');
 //var FileOnWrite = require('file-on-write');
 // coz windows and linux's path are diff, so we don't specify /.credentitals subfolder here.
@@ -114,7 +115,7 @@ router.get('/saveimage', function (req, res) {
             res.redirect('/auth/google');
         } else {
             var options = {
-                url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media',
+                url: encodeURI('https://www.googleapis.com/upload/drive/v2/files?uploadType=media'),
                 qs: {
                     //request module adds "boundary" and "Content-Length" automatically.
                     'uploadType': 'multipart'
@@ -126,7 +127,7 @@ router.get('/saveimage', function (req, res) {
                 'multipart': [
                     {
                         'Content-Type': 'application/json; charset=UTF-8',
-                        'body': JSON.stringify({'title': fileName})
+                        'body': JSON.stringify({ 'title': fileName })
                     },
                     {
                         'Content-Type': 'image/jpg',
@@ -152,10 +153,69 @@ router.get('/saveimage', function (req, res) {
 });
 
 router.get('/saveVideo', function (req, res) {
-    var writeStream = fs.createWriteStream('./output.avi');
-    request('http://ubuy.asuscomm.com:8080/video.cgi').pipe(fs.createWriteStream('./output.avi'));
-    setTimeout(writeStream.end(), 10000);
+    //var writeStream = fs.createWriteStream('./output.avi');
+    //request('http://ubuy.asuscomm.com:8080/video.cgi').pipe(fs.createWriteStream('./output.avi'));
+    //setTimeout(writeStream.end(), 10000);
+
+    var d = new Date();
+    var fileName = d.toLocaleString();
+
+    fs.readFile(TOKEN_PATH, function (err, token) {
+        if (err) {
+            res.redirect('/auth/google');
+        } else {
+            var options = {
+                url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media',
+                qs: {
+                    //request module adds "boundary" and "Content-Length" automatically.
+                    'uploadType': 'multipart'
+                },
+                headers: {
+                    'Content-Type': 'video/mp4',
+                    'authorization': 'Bearer ' + token
+                },
+                'multipart': [
+                    {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'body': JSON.stringify({ 'title': fileName })
+                    },
+                    {
+                        'Content-Type': 'video/mp4',
+                        'body': ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi').videoCodec('libx264').duration(23).format('flv').size('50%').stream()
+                    }
+                ]
+            };
+            request.post(options, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log('image saved ' + body);
+                    res.sendStatus(200);
+                }
+                else {
+                    console.error(body);
+                }
+            });
+            // send email w/ ipcma img attachment
+            //todo: can't set headers after they are sent
+            // move email addr to config file?
+            //res.redirect('/api/email/');
+        }
+    });
+    //saveVideo(10);
+    //res.sendStatus(200);
 });
+
+var saveVideo = function (duration) {
+    return ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi')
+        .on('err', function (err, stdout, stderr) {
+            console.error('cannot process video');
+        })
+        .videoCodec('mpeg4')
+        .format('mp4')
+        // default 10s
+        //.duration(duation || 10)
+        .size('50%')
+        //.stream();
+}
 
 /*
 router.get('/saveimage', function (req, res) {

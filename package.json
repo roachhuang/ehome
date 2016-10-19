@@ -9,6 +9,7 @@
     "crontab": "^1.1.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "fluent-ffmpeg": "^2.1.0",
     "fs": "0.0.2",
     "gql": "^1.1.0",
     "morgan": "^1.7.0",
@@ -69,7 +70,7 @@
     "smart",
     "home"
   ],
-  "author": "mark huang",
+  "author": "Mark Huang",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/roachhuang/ehome/issues"

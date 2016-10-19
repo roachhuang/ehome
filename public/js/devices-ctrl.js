@@ -30,7 +30,7 @@
                         device.error = e;
                         console.log('unable to get dev status');
                     });
-                })
+                });
             }, 500);
 
             //$timeout(function () {
@@ -71,9 +71,9 @@
 
         vm.updateDeviceName = function (device, index) {
             device.name = 's'.concat(device.name);
-            gpio.rmtAtCmd(device.addr, 'NI', device.name).then(function (res) {
-                //console.log('dev name changed');
-                toastr.success(device.name, '更名成功');
+            gpio.rmtAtCmd(device.addr, 'NI', newName).then(function (res) {             
+                // Extract from position 1, and to the end
+                toastr.success(device.name.slice(1), '更名成功');
                 //vm.sensors[index].name = sensor.name;
             });
             gpio.updateDeviceName(index, device);

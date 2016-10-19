@@ -1,5 +1,6 @@
 'use strict';
 var TOKEN_PATH = 'token.json';
+var ffmpeg = require('fluent-ffmpeg');
 var request = require('request');
 var fs = require('fs');
 
@@ -41,6 +42,18 @@ module.exports = function () {
             res.send(200);
         });
     };
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    var saveVideo = function (duration) {
+        ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi')
+            .on('err', function(err, stdout, stderr){
+                console.error('cannot process video');
+            })
+            .videoCodec('mpeg4')
+            .format('mp4')
+            .duration(duation)
+            .size('50%')
+            .save('a.mp4');
+    }
 
     return {
         get: get

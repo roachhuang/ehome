@@ -15,6 +15,12 @@
 			});
 		};
 
+		vm.saveVideo = function () {
+			return $http.get('/users/saveVideo').then(function (res) {
+				return res.data;
+			});
+		};
+
 		activate();
 
 		////////////////

@@ -209,7 +209,7 @@ module.exports = function (xbee) {
     var getXbee = function (req, res) {
         //res.json({ devices: xbee.devices });
         res.json({ xbee: xbee });
-    }
+    };
 
     var updateDevice = function (req, res) {       
             console.log('put: ', req.body);
