@@ -50,10 +50,10 @@ module.exports = function () {
             })
             .videoCodec('mpeg4')
             .format('mp4')
-            .duration(duation)
+            .duration(duration || 6)
             .size('50%')
             .save('a.mp4');
-    }
+    };
 
     return {
         get: get

@@ -6,8 +6,8 @@
         .constant('cronUrl', 'http://192.168.1.199:3000/cron/')
         .controller('cronCtrl', cronCtrl);
 
-    cronCtrl.$inject = ['$routeParams', 'gpio', '$http', 'cronUrl'];
-    function cronCtrl($routeParams, gpio, $http, cronUrl) {
+    cronCtrl.$inject = ['$routeParams', 'gpio', '$http', 'cronUrl', 'dialogBox'];
+    function cronCtrl($routeParams, gpio, $http, cronUrl, dialogBox) {
         var vm = this;
         /*
                 $scope.cron = Cron.get({id: $routeParams.id});
@@ -73,46 +73,50 @@
         };
 
         vm.removeJob = function (id) {
-            //vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
-            vm.cronJobs.splice(id, 1);
-            //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
-            delCronTab(id, function (res) {
-                readCronJob();
+            dialogBox.confirmRemove(id).then(function () {
+                //vm.cronJobs.splice(vm.cronJobs.indexOf(job), 1);
+                vm.cronJobs.splice(id, 1);
+                //localStorage.setItem(itemName, JSON.stringify(vm.cronJobs)); //JSON.stringify(job);
+                delCronTab(id, function (res) {
+                    readCronJob();
+                });
+                //var json = JSON.parse(localStorage[itemName]);
+                //json.splice(json.indexOf(job), 1);
+                //localStorage[itemName] = JSON.stringify(json);
             });
-            //var json = JSON.parse(localStorage[itemName]);
-            //json.splice(json.indexOf(job), 1);
-            //localStorage[itemName] = JSON.stringify(json);
         };
 
         vm.removeAllJobs = function () {
-            removeAllCronJobs(function (err, data) {
-                if (err) throw err;
-                readCronJob();
+            dialogBox.confirmRemove().then(function () {
+                removeAllCronJobs(function (err, data) {
+                    if (err) throw err;
+                    readCronJob();
+                });
             });
         };
 
-        ///////////////////////////////////////////////////////////////////////////
-        var removeAllCronJobs = function (cb) {
-            return $http.delete('/cron/' + vm.selectedDevice.addr, null).success(function (data) {
-                cb(null, data);
-            })
-                .error(function (err) {
-                    cb(err);
-                });
-        };
-
-        function addCronTab(data, cb) {
-            var req = {
-                method: 'POST',
-                url: '/cron/' + vm.selectedDevice.addr,
-                //transformRequest: transformRequestAsFormPost,
-                data: data // to do: '1' or 1 or can use false
+            ///////////////////////////////////////////////////////////////////////////
+            var removeAllCronJobs = function (cb) {
+                return $http.delete('/cron/' + vm.selectedDevice.addr, null).success(function (data) {
+                    cb(null, data);
+                })
+                    .error(function (err) {
+                        cb(err);
+                    });
             };
-            return $http(req).then(cb);
-        }
 
-        function delCronTab(id, cb) {
-            return $http.delete('/cron/byId/' + id, null).then(cb);
+            function addCronTab(data, cb) {
+                var req = {
+                    method: 'POST',
+                    url: '/cron/' + vm.selectedDevice.addr,
+                    //transformRequest: transformRequestAsFormPost,
+                    data: data // to do: '1' or 1 or can use false
+                };
+                return $http(req).then(cb);
+            }
+
+            function delCronTab(id, cb) {
+                return $http.delete('/cron/byId/' + id, null).then(cb);
+            }
         }
-    }
-})();
+    })();

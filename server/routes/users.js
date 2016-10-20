@@ -213,9 +213,9 @@ var saveVideo = function (duration) {
         .format('mp4')
         // default 10s
         //.duration(duation || 10)
-        .size('50%')
+        .size('50%');
         //.stream();
-}
+};
 
 /*
 router.get('/saveimage', function (req, res) {

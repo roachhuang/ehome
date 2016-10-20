@@ -5,8 +5,8 @@
 		.module('myApp')
 		.controller('cameraCtrl', cameraCtrl);
 
-	cameraCtrl.$inject = ['$http'];
-	function cameraCtrl($http) {
+	cameraCtrl.$inject = ['$http', 'dialogBox'];
+	function cameraCtrl($http, dialogBox) {
 		var vm = this;
 
 		vm.snapShot = function () {
@@ -16,8 +16,10 @@
 		};
 
 		vm.saveVideo = function () {
-			return $http.get('/users/saveVideo').then(function (res) {
-				return res.data;
+			dialogBox.confirmRemove().then(function () {
+				return $http.get('/users/saveVideo').then(function (res) {
+					return res.data;
+				});
 			});
 		};
 

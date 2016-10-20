@@ -145,7 +145,7 @@ module.exports = function () {
                     newXbee.addr64 = frame.nodeIdentification.remote64;
                     if (id === 'null') {
                         addNewDev();
-                        notifier.notify(newXbee.id + ' 配對成功');
+                  
                     } else {
                         // the xbee has name.
                         checkIfObjExist(id);

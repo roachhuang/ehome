@@ -25,7 +25,8 @@
     "angular-cron-jobs": "^1.4.2",
     "angular-route": "1.5.8",
     "angular-sanitize": "^1.5.8",
-    "angular-toastr": "^2.1.1"
+    "angular-toastr": "^2.1.1",
+    "angular-bootstrap": "^2.2.0"
   },
   "overrides": {
     "bootstrap": {
