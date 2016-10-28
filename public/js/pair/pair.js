@@ -31,7 +31,7 @@
                 gpio.getXbee().then(function (res) {
                     if (res.data.xbee.newXbee.id === null) {
                         //vm.icon = "fa fa-check-circle";
-                        toastr.success(vm.formData.id, '新增成功');
+                        toastr.success(vm.formData.id, '新增成功');                         
                         //vm.error = false;
                     } else {
                         //vm.icon = "fa fa-exclamation-circle";

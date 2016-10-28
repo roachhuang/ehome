@@ -247,7 +247,7 @@ module.exports = function () {
         xbeeAPI.on('frame_object', callback);
 
         // Pass the bytes down the serial port
-        console.log(util.inspect(xbeeAPI.buildFrame(frame)));
+        console.log('send 2 serialport: ', util.inspect(xbeeAPI.buildFrame(frame)));
         serialport.write(xbeeAPI.buildFrame(frame), function (err) {
             if (err) throw (err);
         });

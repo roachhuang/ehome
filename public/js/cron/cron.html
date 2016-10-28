@@ -14,13 +14,15 @@
     </div>
 </section>
 
-<button class='btn btn-primary' ng-click='vm.addJob(vm.tmpJob)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-<button class='btn btn-danger' ng-click='vm.removeAllJobs()'><i class="fa fa-trash-o fa-lg"></i> 全部刪除</button>
+<div class='button-wrapper'>
+    <button class='btn btn-lg btn-primary' ng-click='vm.addJob(vm.tmpJob)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+    <button class='btn btn-lg btn-danger' ng-click='vm.removeAllJobs()'><i class="fa fa-trash-o fa-lg"></i> 全部刪除</button>
+</div>
 
 <section>
     <table class="table table-striped table-condensed table-bordered table-hover table-responsive">
         <thead>
-            <tr>
+            <tr class='info'>
                 <th>組別</th>
                 <th>星期</th>
                 <th>時</th>

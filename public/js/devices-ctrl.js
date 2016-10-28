@@ -70,10 +70,10 @@
         };
 
         vm.updateDeviceName = function (device, index) {
-            device.name = 's'.concat(device.name);
+            var newName = 's'.concat(device.name);
             gpio.rmtAtCmd(device.addr, 'NI', newName).then(function (res) {             
                 // Extract from position 1, and to the end
-                toastr.success(device.name.slice(1), '更名成功');
+                toastr.success(device.name, '更名成功');
                 //vm.sensors[index].name = sensor.name;
             });
             gpio.updateDeviceName(index, device);

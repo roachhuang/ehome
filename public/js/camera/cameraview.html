@@ -5,7 +5,7 @@
 
 <div>
 	<video width='640' height='480' autoplay>
-		<source src='http://ubuy.asuscomm.com:8080/video.cgi' type='video/mp4'> 
+		<source src='/users/video' type='video/mp4'> 
 		Your browser does not support the video tag.
 	</video>
 </div>
@@ -22,6 +22,6 @@
 	<br/>
 </figure>
 -->
-	<button class="btn btn-primary" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> 存到 goolge drive</button>
-	<button class="btn btn-primary" ng-click="vm.saveVideo()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> 存 Video 到 goolge drive</button>
+	<button ng-class="'btn btn-primary' + vm.btn1State" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg1}}</button>
+	<button ng-class="'btn btn-primary' + vm.btn2State" ng-click="vm.saveVideo()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg2}}</button>
 </section>

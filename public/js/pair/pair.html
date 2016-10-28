@@ -3,22 +3,23 @@
     <h1 class="alert alert-danger">請先插入智能家電或打開 sensor 開關，並輸入名稱再按確定.</h1>
 
     <form name="myForm" class='form' autocomplete="on">
-        <label>智能家電名稱<br>
-		    <input type='text' name='id' ng-model="vm.formData.id" required>
-            <span ng-show="myForm.id.$touched && myForm.id.$invalid">請輸入智能家電名稱</span>
-	    </label>
+        <div class="form-group">
+            <label for='devName'>智能家電名稱:</label>
+		        <input type='text' class='form-control' name='id' ng-model="vm.formData.id" required>
+                <span ng-show="myForm.id.$touched && myForm.id.$invalid">請輸入智能家電名稱</span>	        
+        </div>
 
-        <fieldset class='form-section'>
+        <div class='radio'>
             <legend>類別:</legend>
-            <p>開關 or 偵測器? 請選擇元件類型:</p>
-            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='p' required> 1-port 開關</label>
-            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='p4' required> 4-port 開關</label>
-            <label class='radio'><input type='radio' name='pair' ng-model='vm.formData.type' value='s' required> 偵測器</label>
+           
+            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p' required> 1-port 開關</label>
+            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p4' required> 4-port 開關</label>
+            <label><input type='radio' name='pair' ng-model='vm.formData.type' value='s' required> 偵測器</label>
             <!--
             <p>The control is: {{ myForm.pair.$valid ? 'valid' : 'invalid' }}</p>
             <p>The "required" validator is: {{ myForm.pair.$error.required ? 'not satisfied' : 'satisfied' }}</p>
             -->
-        </fieldset>
+        </div>
 
         <button ng-disabled='myForm.pair.$error.required' class='btn btn-lg btn-warning' ng-click='vm.ndCmd()'><i ng-class='vm.icon'></i> 確定</button><br/>
     </form>

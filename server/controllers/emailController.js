@@ -45,7 +45,7 @@ module.exports = function () {
                 {
                     filename: 'ipcam.mp4',
                     ContentType: 'video/mp4',
-                    path: ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi').videoCodec('mpeg4').format('mp4').duration(8).size('50%')
+                    path: ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi').videoCodec('mpeg4').format('mp4').duration(8).size('50%')
                 }
             ]
         };

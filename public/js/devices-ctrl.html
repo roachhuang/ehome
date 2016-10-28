@@ -5,25 +5,31 @@
 	</div>
 
 	<div ng-show='devices.length'>
-		<div ng-repeat='device in devices'>
+		<div class='button-wrapper' ng-repeat='device in devices'>
 			<h2 ng-if='device.error'> {{device.error}}</h2>
 			<!-- passing in param (device) into the url -->
 			<button type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-block btn-danger' : 'btn  btn-block btn-success'"><h4 class='text-left'>
 				<i class="fa fa-power-off fa" aria-hidden="true"></i>
-				&nbsp; {{device.name.slice(1)}}</h4></button>
+				&nbsp; {{device.name}}</h4></button>
 		</div>
 
-		<a class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </a>&nbsp
-		<a class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </a>
+		<hr/>
+
+		<div class='button-wrapper'>
+			<button class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </button>&nbsp
+			<button class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </button>
+		</div>
 
 		<hr/>
 		<table class='table table-striped table-bordered table-condensed table-responsive'>
 			<tr class='info'>
 				<th>Device Name</th>
-				<th>Addr</th>			
+				<th>Action</th>
+				<th>Address</th>			
 			</tr>
 			<tr class='warning' ng-repeat='device in devices track by $index'>
-				<td><input type='text' ng-model='device.name.slice(1)'>&nbsp<button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名 </button></td>
+				<td><input class='form-control' type='text' ng-model='device.name'></td>
+				<td><button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i>更名</button></td>
 				<td>{{device.addr}}</td>
 			</tr>
 		</table>

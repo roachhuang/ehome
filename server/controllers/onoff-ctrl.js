@@ -199,6 +199,7 @@ module.exports = function (xbee) {
         xbee.newXbee.id = req.params.id;
         xbee.newXbee.type = req.params.type;
         xbee.newXbee.addr64 = null;
+        console.log('New ID: ',xbee.newXbee.id); 
         xbee.atCmd('ND').then(function (f) {
             res.status(200).send(f);
         }).catch(function (e) {

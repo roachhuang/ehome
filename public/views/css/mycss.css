@@ -125,5 +125,7 @@ a.divLink {
 	/*workaround to make clickable in IE */
 }
 
-
+.button-wrapper .btn {
+    margin-bottom:5px;
+}
 /* center the img (auto) */

@@ -3,8 +3,11 @@ var fs = require('fs');
 var request = require('request');
 var express = require('express');
 var ffmpeg = require('fluent-ffmpeg');
+var webCamController = require('../controllers/webcam-ctrl');
+
 //var mjpegcamera = require('mjpeg-camera');
 //var FileOnWrite = require('file-on-write');
+
 // coz windows and linux's path are diff, so we don't specify /.credentitals subfolder here.
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE);
 //    '/.credentials/';
@@ -131,7 +134,7 @@ router.get('/saveimage', function (req, res) {
                     },
                     {
                         'Content-Type': 'image/jpg',
-                        'body': request('http://ubuy.asuscomm.com:8080/image.jpg')
+                        'body': request('http://ubuy.asuscomm.com:9090/image.jpg')
                     }
                 ]
             };
@@ -181,7 +184,7 @@ router.get('/saveVideo', function (req, res) {
                     },
                     {
                         'Content-Type': 'video/mp4',
-                        'body': ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi').videoCodec('libx264').duration(23).format('flv').size('50%').stream()
+                        'body': ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi').videoCodec('libx264').audioCodec('libfaac').duration(6).format('flv').size('50%').stream()
                     }
                 ]
             };
@@ -204,8 +207,12 @@ router.get('/saveVideo', function (req, res) {
     //res.sendStatus(200);
 });
 
+router.get('/video', function (req, res) {
+    webCamController.video;
+});
+
 var saveVideo = function (duration) {
-    return ffmpeg('http://ubuy.asuscomm.com:8080/video.cgi')
+    return ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi')
         .on('err', function (err, stdout, stderr) {
             console.error('cannot process video');
         })
@@ -214,7 +221,7 @@ var saveVideo = function (duration) {
         // default 10s
         //.duration(duation || 10)
         .size('50%');
-        //.stream();
+    //.stream();
 };
 
 /*

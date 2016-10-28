@@ -50,6 +50,10 @@ module.exports = function (app, config) {
             //app.use(express.static('./.tmp'));           
             break;
     }
+    // this is for html5 routing
+    //app.get('*', function(req, res, next){
+    //    res.sendFile(config.rootPath + 'public/index.html');
+    //});
 
 /* useless
     app.use(function (req, res, next) {
