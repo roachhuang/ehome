@@ -20,6 +20,9 @@
             // this is very important to know return from  nodejs is res.status(200).send({value: value})
             gpio.getXbee().then(function (res) {
                 vm.devices = res.data.xbee.devices;
+                angular.forEach(vm.devices, function (device) {
+                    device.name = device.name.slice(1);
+                });
             });
 
             $timeout(function () {
@@ -70,8 +73,13 @@
         };
 
         vm.updateDeviceName = function (device, index) {
-            var newName = 's'.concat(device.name);
-            gpio.rmtAtCmd(device.addr, 'NI', newName).then(function (res) {             
+            var newName;
+            if (device.name !== 'null') {
+                newName = 'p'.concat(device.name);
+            } else { 
+                newName = null;
+            }
+            gpio.rmtAtCmd(device.addr, 'NI', newName).then(function (res) {
                 // Extract from position 1, and to the end
                 toastr.success(device.name, '更名成功');
                 //vm.sensors[index].name = sensor.name;

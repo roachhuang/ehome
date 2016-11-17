@@ -87,7 +87,7 @@ module.exports = function (xbee) {
         //console.info('remote devices');
         // we assume serialport has been opened. todo: check if it is opened
         //xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
-        xbee.xbeeCommand({
+        xbee.xbeeCmd({
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: this.addr,
             command: this.pin,
@@ -101,7 +101,7 @@ module.exports = function (xbee) {
     RemoteOnOff.prototype.readPin = function () {
         var vm = this, ret;
         console.log('vm.addr', vm.addr);
-        xbee.xbeeCommand({
+        xbee.xbeeCmd({
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: vm.addr,
             command: 'IS',
@@ -168,13 +168,13 @@ module.exports = function (xbee) {
         //xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] }).then(function (f) {
         console.log('Param: ', cmdParam);
 
-        xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam }).then(function (f) {
+        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam }).then(function (f) {
             // response of the command
             //console.log('Command successful:', f);
             res.status(200).send(f);
         }).catch(function (e) {
             console.log('Command failed:', e);
-            res.status(500).send(e);
+            res.status(500).send(e); 
         });
 
     };
@@ -183,8 +183,8 @@ module.exports = function (xbee) {
         var addr = req.params.addr;
         var cmd = req.params.cmd;
         cmd = (cmd === 'V') ? '%V' : cmd;
-        var cmdParam = req.params.cmdParam;
-        xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] }).then(function (f) {
+        var cmdParam = req.params.cmdParam==='null'? []: req.params.cmdParam;
+        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam }).then(function (f) {
             // response of the command
             console.log('Command successful:', f);
             res.status(200).send(f);
@@ -199,7 +199,7 @@ module.exports = function (xbee) {
         xbee.newXbee.id = req.params.id;
         xbee.newXbee.type = req.params.type;
         xbee.newXbee.addr64 = null;
-        console.log('New ID: ',xbee.newXbee.id); 
+        console.log('New ID: ',xbee.newXbee.id);
         xbee.atCmd('ND').then(function (f) {
             res.status(200).send(f);
         }).catch(function (e) {
@@ -212,7 +212,9 @@ module.exports = function (xbee) {
         res.json({ xbee: xbee });
     };
 
-    var updateDevice = function (req, res) {       
+    var updateDevice = function (req, res) {
+            // this a awkward: need to be refacted...
+            req.body.name = 'p'.concat(req.body.name);
             console.log('put: ', req.body);
             _.merge(xbee.devices[req.params.index], req.body);
             //res.sendStatus(200);

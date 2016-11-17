@@ -14,8 +14,11 @@
         ////////////////
 
         function activate() {
-            gpio.getXbee().then(function(res){
-                vm.devices = res.data.xbee.devices;   
+            gpio.getXbee().then(function (res) {
+                vm.devices = res.data.xbee.devices;
+                angular.forEach(vm.devices, function (device) {
+                    device.name = device.name.slice(1);
+                });
             });
             //angular.copy(deviceService, vm.devices);
             /* move to cron-ctrl.js

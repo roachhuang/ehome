@@ -42,9 +42,11 @@ module.exports = function () {
 
     // How long are we prepared to wait for a response to our command?
     var maxWait = 5000; // ms
-
     var initXbee = function () {
+        rmtAtCmd('0013a20040eb5559', 'NI', 'null');
+        // node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
         rmtAtCmd('0013A20040EB556C', 'NI', 'null').then(function () {
+            console.log('reset router name');
             atCmd('ND');
         });
 
@@ -145,7 +147,7 @@ module.exports = function () {
                     newXbee.addr64 = frame.nodeIdentification.remote64;
                     if (id === 'null') {
                         addNewDev();
-                  
+
                     } else {
                         // the xbee has name.
                         checkIfObjExist(id);
@@ -204,7 +206,7 @@ module.exports = function () {
 
     // the xbee already has a name
     function checkIfObjExist(id) {
-        //var exist = false, i;
+        // to see if it is a device or a sensor
         var index = (id[0] === 's') ? _.findIndex(sensors, { name: id }) : _.findIndex(devices, { name: id });
         if (index === -1) {
             newDevObj(id[0], id);
@@ -223,18 +225,41 @@ module.exports = function () {
     */
 
     }
+    /*
+        var xbeeCmd = function (f) {
+            var defer = Q.defer();
+    
+            f.id = xbeeAPI.nextFrameId();
+            var rsp = false, rspFrame;
+            serialport.write(xbeeAPI.buildFrame(f), function (err) {
+                if (err) {
+                    defer.reject(err);
+                }          
+            });
+           
+            xbeeAPI.on('frame_object', function (rcvFrame) {
+                if (rcvFrame.id === f.id) {
+                    defer.resolve(rcvFrame);    
+                    console.log('rsp received!');            
+                }
+            });
+            // Return our promise with a timeout
+            return defer.promise.timeout(maxWait);
+        };
+    */
 
-    function xbeeCommand(frame) {
+    function xbeeCmd(frame) {
         // set frame id
         frame.id = xbeeAPI.nextFrameId();
 
         // We're going to return a promise
-        var deferred = Q.defer();
+        var defer = Q.defer();
 
         var callback = function (receivedFrame) {
             if (receivedFrame.id === frame.id) {
                 // This is our frame's response. Resolve the promise.
-                deferred.resolve(receivedFrame);
+                console.log('get correspondent response!: ', frame.id);
+                defer.resolve(receivedFrame);                
             }
         };
 
@@ -249,15 +274,17 @@ module.exports = function () {
         // Pass the bytes down the serial port
         console.log('send 2 serialport: ', util.inspect(xbeeAPI.buildFrame(frame)));
         serialport.write(xbeeAPI.buildFrame(frame), function (err) {
-            if (err) throw (err);
+            if (err) {
+                defer.reject(err);
+            }
         });
 
         // Return our promise with a timeout
-        return deferred.promise.timeout(maxWait);
+        return defer.promise.timeout(maxWait);
     }
 
     var atCmd = function (cmd, cmdParam) {
-        return xbeeCommand({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
+        return xbeeCmd({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
 
         /*
         xbeeCommand({
@@ -274,7 +301,7 @@ module.exports = function () {
     };
 
     var rmtAtCmd = function (addr, cmd, cmdParam) {
-        return xbeeCommand({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+        return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
         /*
         .then(function (f) {
             console.log('Command successful:', f);
@@ -286,7 +313,8 @@ module.exports = function () {
     };
 
     return {
-        xbeeCommand: xbeeCommand,
+        //xbeeCommand: xbeeCommand,
+        xbeeCmd: xbeeCmd,
         C: C,
         xbeeAPI: xbeeAPI,
         newXbee: newXbee,    // new detected xbee

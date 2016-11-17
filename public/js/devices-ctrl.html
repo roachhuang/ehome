@@ -10,7 +10,7 @@
 			<!-- passing in param (device) into the url -->
 			<button type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-block btn-danger' : 'btn  btn-block btn-success'"><h4 class='text-left'>
 				<i class="fa fa-power-off fa" aria-hidden="true"></i>
-				&nbsp; {{device.name}}</h4></button>
+				&nbsp; {{device.name}} </h4></button>
 		</div>
 
 		<hr/>
@@ -25,11 +25,11 @@
 			<tr class='info'>
 				<th>Device Name</th>
 				<th>Action</th>
-				<th>Address</th>			
+				<th>Address</th>
 			</tr>
 			<tr class='warning' ng-repeat='device in devices track by $index'>
 				<td><input class='form-control' type='text' ng-model='device.name'></td>
-				<td><button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i>更名</button></td>
+				<td><button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名</button></td>
 				<td>{{device.addr}}</td>
 			</tr>
 		</table>

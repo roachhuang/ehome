@@ -208,7 +208,7 @@ router.get('/saveVideo', function (req, res) {
 });
 
 router.get('/video', function (req, res) {
-    webCamController.video;
+    webCamController.video();
 });
 
 var saveVideo = function (duration) {

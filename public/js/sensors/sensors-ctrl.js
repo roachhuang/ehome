@@ -8,19 +8,20 @@
     sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio', 'toastr'];
     function sensorsCtrl($scope, $http, location, gpio, toastr) {
         var vm = $scope;
-
+/*
         function readBatteryLvl() {
             angular.forEach(vm.sensors, function (sensor) {
                 var cmdParm = [];
+
                 return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V' + '/' + 'null').then(function (res) {
                     //sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
-                    sensor.battery = 1024 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) + 600 / 1200;
+                    sensor.battery = res.data.commandData.data[0] * 256 + res.data.commandData.data[1];
                     sensor.battery = (sensor.battery / 1000).toFixed(2);
                     //console.info('voltage: ', voltage);
                 });
             });
         }
-
+*/
         activate();
 
         function writeStatus2Server() {
@@ -34,13 +35,30 @@
         }
 
         function loadSensorObjs() {
-            gpio.atCmd('ND', 'null');
-
+            //gpio.atCmd('ND', 'null');
             $http.get('/sensors').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
-                //readBatteryLvl();
+                angular.forEach(vm.sensors, function (sensor) {
+                    sensor.name = sensor.name.slice(1);
+                });
                 console.log('c sensors: ', vm.sensors);
             });
+            // don't know why. if no dealy here, will get http.get timout error.
+            //setTimeout(readBatteryLvl, 5000);
+
+            /* return a stream
+            var s = $http.get('/sensors');
+            s.on('error', function (err) {
+                console.log(err);
+            });
+            s.on('end', readBatteryLvl);
+            s.on('data', function (chunk) {
+                vm.sensors = chunk;    // inside data there is an object sensors
+                angular.forEach(vm.sensors, function (sensor) {
+                    sensor.name = sensor.name.slice(1);
+                });
+            });
+            */
         }
 
         vm.setSensorsStatus = function (val) {
@@ -68,8 +86,8 @@
         });
 
         vm.updateSensorName = function (sensor, index) {
-            sensor.name = 's'.concat(sensor.name);
-            gpio.rmtAtCmd(sensor.addr, 'NI', sensor.name).then(function (res) {
+            var newName = 's'.concat(sensor.name);
+            gpio.rmtAtCmd(sensor.addr, 'NI', newName).then(function (res) {
                 toastr.success(sensor.name, '更名成功');
                 //vm.sensors[index].name = sensor.name;
             });
@@ -85,7 +103,6 @@
         ////////////////
 
         function activate() {
-
             loadSensorObjs();
         }
     }

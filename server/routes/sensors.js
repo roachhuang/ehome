@@ -7,9 +7,22 @@ module.exports = function (xbee) {
     router.route('/')
         .get(function (req, res) {
             // sensors status: true or false
-            console.log('s sensors: ', xbee.sensors);
-            // 
+            //console.log('s sensors: ', xbee.sensors[0].battery);
+            // read battery value
+
+            for (var i = 0; i < xbee.sensors.length; i++) {
+                var j = i;
+                xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: xbee.sensors[i].addr, command: '%V', commandParameter: [] }).then(function (f) {
+                    var b = f.commandData[0] * 256 + f.commandData[1];
+                    xbee.sensors[j].battery = (b / 1000).toFixed(2);
+                    console.log(xbee.sensors[j].battery);
+                    //b = (b / 1000).toFixed(2);                          
+                    //}).catch(function (e) {
+                    //console.log('%v Command failed:', e);
+                });
+            }
             res.json({ sensors: xbee.sensors });
+
         })
         .post(function (req, res) {
             // enable or disable a certain sensor
@@ -23,21 +36,22 @@ module.exports = function (xbee) {
     router.route('/:index')
         .put(function (req, res) {
             console.log('put: ', req.body);
+            req.body.name = 's'.concat(req.body.name);
             _.merge(xbee.sensors[req.params.index], req.body);
             //res.sendStatus(200);
             res.status(200).send({ info: 'sensor name updated successfully' });
         });
 
-    /* update 
+    /* update
      router.route('/:id')
-        .put(function (req, res) {       
+        .put(function (req, res) {
             var index = _.findIndex(
                 xbee.sensors,
                 {
                     name: req.params.id
                 }
             );
-            _merge(xbee.sensors[index], req.body); 
+            _merge(xbee.sensors[index], req.body);
             //res.sendStatus(200);
             res.json({info: 'sensor name updated successfully'});
         });
@@ -48,7 +62,7 @@ module.exports = function (xbee) {
         .get(function (req, res) {
             var val = req.params.val;
             for (var i in xbee.sensors) {
-                if (xbee.sensor.hasOwnProperty(i)) {
+                if (xbee.sensors.hasOwnProperty(i)) {
                     i.enable = val;
                 }
             }
