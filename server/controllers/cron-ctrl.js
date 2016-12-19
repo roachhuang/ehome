@@ -192,6 +192,5 @@ module.exports = function (xbee) {
         //put: put,
         deleteById: deleteById,
         deleteAll: deleteAll
-    };
-
+    }
 };

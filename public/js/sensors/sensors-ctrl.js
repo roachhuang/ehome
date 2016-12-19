@@ -8,20 +8,20 @@
     sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio', 'toastr'];
     function sensorsCtrl($scope, $http, location, gpio, toastr) {
         var vm = $scope;
-/*
-        function readBatteryLvl() {
-            angular.forEach(vm.sensors, function (sensor) {
-                var cmdParm = [];
-
-                return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V' + '/' + 'null').then(function (res) {
-                    //sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
-                    sensor.battery = res.data.commandData.data[0] * 256 + res.data.commandData.data[1];
-                    sensor.battery = (sensor.battery / 1000).toFixed(2);
-                    //console.info('voltage: ', voltage);
-                });
-            });
-        }
-*/
+        /*
+                function readBatteryLvl() {
+                    angular.forEach(vm.sensors, function (sensor) {
+                        var cmdParm = [];
+        
+                        return $http.get('/gpio/rmtAtCmd/' + sensor.addr + '/' + 'V' + '/' + 'null').then(function (res) {
+                            //sensor.battery = 1200 * (res.data.commandData.data[0] * 256 + res.data.commandData.data[1]) / 1024;
+                            sensor.battery = res.data.commandData.data[0] * 256 + res.data.commandData.data[1];
+                            sensor.battery = (sensor.battery / 1000).toFixed(2);
+                            //console.info('voltage: ', voltage);
+                        });
+                    });
+                }
+        */
         activate();
 
         function writeStatus2Server() {
@@ -35,8 +35,8 @@
         }
 
         function loadSensorObjs() {
-            //gpio.atCmd('ND', 'null');
-            $http.get('/sensors').then(function (res) {
+            gpio.atCmd('ND', 'null');
+            return $http.get('/sensors').then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
                 angular.forEach(vm.sensors, function (sensor) {
                     sensor.name = sensor.name.slice(1);
@@ -103,7 +103,7 @@
         ////////////////
 
         function activate() {
-            loadSensorObjs();
+           loadSensorObjs();
         }
     }
 })();

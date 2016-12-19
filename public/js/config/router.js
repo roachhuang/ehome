@@ -9,22 +9,32 @@
 		//.constant('baseUrl', 'http://192.168.1.199/')
 		//.constant('baseUrl', 'http://192.168.1.199:3000/')
 		.config(config);
-	config.$inject = ['$routeProvider', '$locationProvider'];
+	config.$inject = ['$routeProvider', '$locationProvider', '$provide'];
 
-	function config($routeProvider, $locationProvider) {
+	function config($routeProvider, $locationProvider, $provide) {
 		// base is set to public bah?
-		$locationProvider.html5Mode({enabled: true, requireBase: false});
+		$locationProvider.html5Mode({ enabled: true, requireBase: false });
+		// catch any unhandled exception but no sytax eror or async error
+		$provide.decorator('$exceptionHandler',
+			['$delegate',
+				function ($delegate) {
+					return function (exception, cause) {
+						exception.message = 'Error: ' + exception.message;
+						$delegate(exception, cause);
+						alert(expection.message);
+					};
+				}]);
 		$routeProvider
 			.when('/', {
 				//controller: 'widgetsCtrl',
 				templateUrl: '/views/widgets.html'
-			})			
+			})
 			.when('/camera', {
 				templateUrl: '/js/camera/cameraview.html',
-				controller: 'cameraCtrl as vm'	
+				controller: 'cameraCtrl as vm'
 			})
 			.when('/nasa', {
-				templateUrl: '/views/nasa.html',
+				templateUrl: '/views/nasa.html'
 				//controller: 'nasaCtrl as vm'
 			})
 			.when('/devivesControl', {
@@ -55,7 +65,7 @@
 			.when('/pair', {
 				templateUrl: '/js/pair/pair.html',
 				controller: 'pairController as vm'
-			})	
+			})
 			.otherwise({
 				redirectTo: '/'
 			});

@@ -8,17 +8,15 @@ module.exports = function (xbee) {
         .get(function (req, res) {
             // sensors status: true or false
             //console.log('s sensors: ', xbee.sensors[0].battery);
-            // read battery value
 
+            // todo: move read battery value to a place earlier than returning sensors obj
             for (var i = 0; i < xbee.sensors.length; i++) {
+                // this is weird that when in then {}, i becomes i instead of 0.
                 var j = i;
-                xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: xbee.sensors[i].addr, command: '%V', commandParameter: [] }).then(function (f) {
+                xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: xbee.sensors[i].addr, command: '%V', commandParameter: [] }).then(function (f) {                    
                     var b = f.commandData[0] * 256 + f.commandData[1];
                     xbee.sensors[j].battery = (b / 1000).toFixed(2);
-                    console.log(xbee.sensors[j].battery);
-                    //b = (b / 1000).toFixed(2);                          
-                    //}).catch(function (e) {
-                    //console.log('%v Command failed:', e);
+                    console.log(xbee.sensors[j].battery);                              
                 });
             }
             res.json({ sensors: xbee.sensors });

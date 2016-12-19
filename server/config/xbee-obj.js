@@ -92,7 +92,7 @@ module.exports = function () {
     });
 
     xbeeAPI.on('frame_object', function (frame) {
-        var i, v;
+        var v;
         console.log('outer>>' + util.inspect(frame));
         // ZigBee IO Data Sample Rx Indicator (ZNet, ZigBee)
         //console.log('frame type: ', frame.type);
@@ -165,7 +165,7 @@ module.exports = function () {
                 numSamples: 1 }
                 */
 
-                for (i in sensors) {
+                for (let i in sensors) {
                     if (sensors.hasOwnProperty(i)) {
                         sensors[i].getStatus(frame);
                     }
@@ -248,7 +248,7 @@ module.exports = function () {
         };
     */
 
-    function xbeeCmd(frame) {
+    var xbeeCmd = frame => {
         // set frame id
         frame.id = xbeeAPI.nextFrameId();
 
@@ -283,8 +283,7 @@ module.exports = function () {
         return defer.promise.timeout(maxWait);
     }
 
-    var atCmd = function (cmd, cmdParam) {
-        return xbeeCmd({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
+    var atCmd = (cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
 
         /*
         xbeeCommand({
@@ -298,10 +297,11 @@ module.exports = function () {
             console.log('Command failed:', e);
         });
         */
-    };
+    //};
 
-    var rmtAtCmd = function (addr, cmd, cmdParam) {
-        return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    //var rmtAtCmd = function (addr, cmd, cmdParam) {
+    //    return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
         /*
         .then(function (f) {
             console.log('Command successful:', f);
@@ -310,7 +310,7 @@ module.exports = function () {
             console.log('Command failed:', e);
         });
         */
-    };
+    //};
 
     return {
         //xbeeCommand: xbeeCommand,

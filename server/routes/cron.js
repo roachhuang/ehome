@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 //var _ = require('loadash');
-var router = express.Router();
+
 
 // boday-parser is included in app.js, so no need to do it here.
 // it is alreay apply to express
@@ -14,10 +14,11 @@ var router = express.Router();
 
 // create application/x-www-form-urlencoded parser
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
-module.exports = function (xbee) {
+var routes = function (xbee) {
+    var cronRouter = express.Router();
     var cronCtrl = require('../controllers/cron-ctrl')(xbee);
     // consider the addr as the device id.
-    router.route('/:addr')
+    cronRouter.route('/:addr')
         .post(cronCtrl.post)
         .delete(cronCtrl.deleteAll)
         .get(cronCtrl.get);
@@ -30,9 +31,10 @@ module.exports = function (xbee) {
             req.cron = cron;
     });
     */
-    router.route('/byId/:id')
+    cronRouter.route('/byId/:id')
         //.get(cronCtrl.get)
         .delete(cronCtrl.deleteById);
 
-    return router;
+    return cronRouter;
 };
+module.exports=routes;
