@@ -11,5 +11,9 @@
 		"jspm_packages",
 		"tmp",
 		"temp"
-	]
+	],
+	"skipFiles": [
+    "node_modules/**/*.js",
+    "lib/**/*.js"
+  ]
 }

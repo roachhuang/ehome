@@ -32,7 +32,7 @@ module.exports = function () {
     var serialport = new SerialPort('/dev/ttyAMA0', {
         //var serialport = new SerialPort('COM4', {     // this line is for testing on PC
         baudrate: 9600,
-        parser: xbeeAPI.rawParser(),
+        parser: xbeeAPI.rawParser()
         //rtscts: true
     }, function (err) {
         if (err) {
@@ -42,6 +42,7 @@ module.exports = function () {
 
     // How long are we prepared to wait for a response to our command?
     var maxWait = 5000; // ms
+    // initXbee is called as soon as serial port is opend.
     var initXbee = function () {
         rmtAtCmd('0013a20040eb5559', 'NI', 'null');
         // node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
@@ -141,17 +142,21 @@ module.exports = function () {
                 digiProfileID: 'c105',
                 digiManufacturerID: '101e' } }
                 */
-                if (frame.command === 'ND') {
-                    console.log('newXbee.id: ', newXbee.id);
-                    var id = frame.nodeIdentification.nodeIdentifier;
-                    newXbee.addr64 = frame.nodeIdentification.remote64;
-                    if (id === 'null') {
-                        addNewDev();
-
-                    } else {
-                        // the xbee has name.
-                        checkIfObjExist(id);
+                if (frame.commandStatus != C.COMMAND_STATUS.ERROR) {
+                    if (frame.command === 'ND') {
+                        console.log('newXbee.id: ', newXbee.id);                        
+                        var id = frame.nodeIdentification.nodeIdentifier;
+                        newXbee.addr64 = frame.nodeIdentification.remote64;
+                        if (id === 'null') {
+                            addNewDev();
+                        } else {
+                            // the xbee has name.
+                            checkIfObjExist(id);
+                        }
                     }
+                }
+                else{
+                    console.error('cmd error:' +frame.commandStatus);
                 }
                 break;
             case 0x92:  // IO data sample RX indicator
@@ -259,7 +264,7 @@ module.exports = function () {
             if (receivedFrame.id === frame.id) {
                 // This is our frame's response. Resolve the promise.
                 console.log('get correspondent response!: ', frame.id);
-                defer.resolve(receivedFrame);                
+                defer.resolve(receivedFrame);
             }
         };
 
@@ -285,31 +290,31 @@ module.exports = function () {
 
     var atCmd = (cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
 
-        /*
-        xbeeCommand({
-            type: C.FRAME_TYPE.AT_COMMAND,
-            command: cmd,
-            commandParameter: cmdParam || []
-        }).then(function (f) {
-            console.log('Command successful:', f);
-            return f;
-        }).catch(function (e) {
-            console.log('Command failed:', e);
-        });
-        */
+    /*
+    xbeeCommand({
+        type: C.FRAME_TYPE.AT_COMMAND,
+        command: cmd,
+        commandParameter: cmdParam || []
+    }).then(function (f) {
+        console.log('Command successful:', f);
+        return f;
+    }).catch(function (e) {
+        console.log('Command failed:', e);
+    });
+    */
     //};
 
     var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
     //var rmtAtCmd = function (addr, cmd, cmdParam) {
     //    return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
-        /*
-        .then(function (f) {
-            console.log('Command successful:', f);
-            return f;
-        }).catch(function (e) {
-            console.log('Command failed:', e);
-        });
-        */
+    /*
+    .then(function (f) {
+        console.log('Command successful:', f);
+        return f;
+    }).catch(function (e) {
+        console.log('Command failed:', e);
+    });
+    */
     //};
 
     return {

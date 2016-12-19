@@ -8,7 +8,8 @@ module.exports = function (xbee) {
         .get(function (req, res) {
             // sensors status: true or false
             //console.log('s sensors: ', xbee.sensors[0].battery);
-
+            // refresh devices status by sending ND commmand (in case if a device is truned off);
+            //xbee.atCmd('ND');
             // todo: move read battery value to a place earlier than returning sensors obj
             for (var i = 0; i < xbee.sensors.length; i++) {
                 // this is weird that when in then {}, i becomes i instead of 0.
@@ -31,7 +32,7 @@ module.exports = function (xbee) {
             res.sendStatus(200);
         });
 
-    router.route('/:index')
+    router.route('/:index') 
         .put(function (req, res) {
             console.log('put: ', req.body);
             req.body.name = 's'.concat(req.body.name);
