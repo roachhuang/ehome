@@ -6,7 +6,7 @@ var util = require('util');
 var SerialPort = require('serialport');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
-var Q = require('q');
+//var Q = require('q');
 var Sensor = require('./sensor-class')().constructor;
 
 // in order to get devices object. todo: may be change to use deive router instead.
@@ -41,16 +41,38 @@ module.exports = function () {
     });
 
     // How long are we prepared to wait for a response to our command?
-    var maxWait = 5000; // ms
+    const maxWait = 5000; // ms
     // initXbee is called as soon as serial port is opend.
     var initXbee = function () {
-        rmtAtCmd('0013a20040eb5559', 'NI', 'null');
-        // node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
+        rmtAtCmd('0013a20040eb5559', 'NI', 'null')
+            .then(function (res) {
+                if (res.nodeIdentifier !== 'null') {
+                    console.error('5559 not null: ', res.nodeIdentifier);
+                }
+            })
+            .catch(function (err) { 
+                console.error(err);
+            });
+
+        rmtAtCmd('0013A20040EB556C', 'NI', 'null')
+            .then(function (res) {
+                if (res.nodeIdentifier !== 'null') {
+                    console.error('556c not null: ', res.nodeIdentifier);
+                }
+                atCmd('ND');
+            })
+            .catch(function (err) {
+                console.error(err);
+            })
+
+
+
+        /* node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
         rmtAtCmd('0013A20040EB556C', 'NI', 'null').then(function () {
             console.log('reset router name');
             atCmd('ND');
         });
-
+        */
         //rmtAtCmd(routerAddr, '%V');
         /*
                 xbeeCommand({
@@ -144,7 +166,7 @@ module.exports = function () {
                 */
                 if (frame.commandStatus != C.COMMAND_STATUS.ERROR) {
                     if (frame.command === 'ND') {
-                        console.log('newXbee.id: ', newXbee.id);                        
+                        console.log('newXbee.id: ', newXbee.id);
                         var id = frame.nodeIdentification.nodeIdentifier;
                         newXbee.addr64 = frame.nodeIdentification.remote64;
                         if (id === 'null') {
@@ -155,8 +177,8 @@ module.exports = function () {
                         }
                     }
                 }
-                else{
-                    console.error('cmd error:' +frame.commandStatus);
+                else {
+                    console.error('cmd error:' + frame.commandStatus);
                 }
                 break;
             case 0x92:  // IO data sample RX indicator
@@ -169,7 +191,7 @@ module.exports = function () {
                 analogSamples: {},
                 numSamples: 1 }
                 */
-
+                console.log('I/O data sample TX indicator');
                 for (let i in sensors) {
                     if (sensors.hasOwnProperty(i)) {
                         sensors[i].getStatus(frame);
@@ -184,10 +206,14 @@ module.exports = function () {
     function writeNameToXbee() {
         var givenName = newXbee.type + newXbee.id;
         console.log('paried: ', newXbee.id);
-        rmtAtCmd(newXbee.addr64, 'NI', givenName).then(function () {
+        rmtAtCmd(newXbee.addr64, 'NI', givenName)
+        .then(function () {
             rmtAtCmd(newXbee.addr64, 'WR');
             newXbee.id = newXbee.type = null;
-        });
+        })
+        .catch(function(err){
+            console.error('write xbee name err: ', err);
+        })
     }
 
     function newDevObj(devType, name) {
@@ -254,40 +280,78 @@ module.exports = function () {
     */
 
     var xbeeCmd = frame => {
-        // set frame id
-        frame.id = xbeeAPI.nextFrameId();
-
         // We're going to return a promise
-        var defer = Q.defer();
+        const OK = 0;
+        return new Promise(function (resolve, reject) {
+            var callback = function (receivedFrame) {
+                let vm = this;
+                console.log('inner');
+                if (receivedFrame.id === frame.id) {                    
+                    // This is our frame's response. Resolve the promise.
+                    console.log('got correspondent response!: ', frame.id);
+                    xbeeAPI.removeListener('frame_object', callback);
+                    clearTimeout(timer);
+                    if (receivedFrame.commandStatus === OK) {
+                        console.log('resloved');
+                        resolve(receivedFrame);
+                    }
+                    else {
+                        reject(new Error(receivedFrame.commandStatus));
+                    }
+                }
+            };
 
-        var callback = function (receivedFrame) {
-            if (receivedFrame.id === frame.id) {
-                // This is our frame's response. Resolve the promise.
-                console.log('get correspondent response!: ', frame.id);
-                defer.resolve(receivedFrame);
-            }
-        };
+            frame.id = xbeeAPI.nextFrameId();
+            serialport.write(xbeeAPI.buildFrame(frame), function (err) {
+                if (err) {
+                    reject(new Error(err));
+                }
+                // Attach callback so we're waiting for the response
+                xbeeAPI.on('frame_object', callback);
+            });
 
-        // Clear up: remove listener after the timeout and a bit, it's no longer needed
-        setTimeout(function () {
-            xbeeAPI.removeListener('frame_object', callback);
-        }, maxWait + 1000);
-
-        // Attach callback so we're waiting for the response
-        xbeeAPI.on('frame_object', callback);
-
-        // Pass the bytes down the serial port
-        console.log('send 2 serialport: ', util.inspect(xbeeAPI.buildFrame(frame)));
-        serialport.write(xbeeAPI.buildFrame(frame), function (err) {
-            if (err) {
-                defer.reject(err);
-            }
+            let timer = setTimeout(function () {
+                xbeeAPI.removeListener('frame_object', callback);
+                reject(new Error('timeout'));
+            }, maxWait + 1000);
         });
-
-        // Return our promise with a timeout
-        return defer.promise.timeout(maxWait);
     }
-
+    /*
+       var xbeeCmd = frame => {
+            // set frame id
+            frame.id = xbeeAPI.nextFrameId();
+     
+            // We're going to return a promise
+            var defer = Q.defer();
+     
+            var callback = function (receivedFrame) {
+                if (receivedFrame.id === frame.id) {
+                    // This is our frame's response. Resolve the promise.
+                    console.log('get correspondent response!: ', frame.id);
+                    defer.resolve(receivedFrame);
+                }
+            };
+     
+            // Clear up: remove listener after the timeout and a bit, it's no longer needed
+            setTimeout(function () {
+                xbeeAPI.removeListener('frame_object', callback);
+            }, maxWait + 1000);
+     
+            // Attach callback so we're waiting for the response
+            xbeeAPI.on('frame_object', callback);
+     
+            // Pass the bytes down the serial port
+            console.log('send 2 serialport: ', util.inspect(xbeeAPI.buildFrame(frame)));
+            serialport.write(xbeeAPI.buildFrame(frame), function (err) {
+                if (err) {
+                    defer.reject(err);
+                }
+            });
+     
+            // Return our promise with a timeout
+            return defer.promise.timeout(maxWait);
+        }
+    */
     var atCmd = (cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] });
 
     /*
@@ -304,9 +368,10 @@ module.exports = function () {
     */
     //};
 
-    var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
-    //var rmtAtCmd = function (addr, cmd, cmdParam) {
-    //    return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    //var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    var rmtAtCmd = function (addr, cmd, cmdParam) {
+        return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    }
     /*
     .then(function (f) {
         console.log('Command successful:', f);

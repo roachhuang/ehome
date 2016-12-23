@@ -42,37 +42,35 @@ module.exports = function (xbee) {
         console.log('pin: ' + pin + ' val: ' + val, 'addr:', addr);
 
         // check if it is local gpio pin or remote xbee pin
-        //console.info(typeof pin);
-        var gpio;
-        if (pin[0] !== 'D') {
-            //if (addr === null) {
-            gpio = new LocalOnOff(pin, val);
-        } else {
-            // D0 ~ D7 on xbee
-            gpio = new RemoteOnOff(pin, addr, val);
-        }
-        gpio.onOff();
-        res.sendStatus(200);
+        //console.info(typeof pin); D0~D7 on xbee
+        let gpio = (pin[0] === 'D') ? new RemoteOnOff(pin, addr, val) : new LocalOnOff(pin, addr, val);
+
+        gpio.onOff()
+            .then(function () {
+                res.sendStatus(200);
+            })
+            .catch(function (err) {
+                res.status(500).send(err);
+            })
     };
 
     var get = function (req, res) {
-        var pin = req.params.pin, gpio, addr = req.params.addr;
+        var pin = req.params.pin, addr = req.params.addr;
         console.log('PIN:', pin);
         //if (pin > 0 && pin < 28) {
 
-        if (pin[0] !== 'D') {
-            //if (addr === null) {
-            console.log('local');
-            gpio = new LocalOnOff(pin);
-        } else {
-            console.info('addr ', addr);
-            gpio = new RemoteOnOff(pin, addr);
-
-            console.log(gpio);
-        }
-        var value = gpio.readPin();
-        console.log('pin-', pin, 'val-', value);
-        res.status(200).send({ value: value });
+        let gpio = (pin[0] === 'D') ? new RemoteOnOff(pin, addr) : new LocalOnOff(pin);
+        gpio.readPin()
+            .then(function (result) {
+                //console.log('pin-', pin, 'val-', result);
+                //var p = [vm.pin.slice(0, 1), 'IO', vm.pin.slice(1)].join('');
+                let p = [pin.slice(0, 1), 'IO', pin.slice(1)].join('');
+                res.status(200).send({ value: result.digitalSamples[p] });
+            })
+            .catch(function (err) {
+                console.err('readpin err: ', err);
+                res.status(500).send(err);
+            });
     };
 
     //strategy pattern
@@ -83,6 +81,18 @@ module.exports = function (xbee) {
         //todo: change to 16 addr
 
     }
+    RemoteOnOff.prototype.onOff = function () {
+        //console.info('remote devices');
+        // we assume serialport has been opened. todo: check if it is opened
+        //xbee.rmtAtCmd(this.pin, this.val ? [0x05] : [0x04], this.addr);
+        return xbee.xbeeCmd({
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: this.addr,
+            command: this.pin,
+            commandParameter: this.val ? [0x05] : [0x04],
+        });
+    };
+    /*
     RemoteOnOff.prototype.onOff = function () {
         //console.info('remote devices');
         // we assume serialport has been opened. todo: check if it is opened
@@ -98,6 +108,19 @@ module.exports = function (xbee) {
             console.log('Command failed:', e);
         });
     };
+    */
+
+    RemoteOnOff.prototype.readPin = function () {
+        var vm = this, ret;
+        console.log('vm.addr', vm.addr);
+        return xbee.xbeeCmd({
+            type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: vm.addr,
+            command: 'IS',
+            commandParameter: [],
+        });
+    };
+    /*
     RemoteOnOff.prototype.readPin = function () {
         var vm = this, ret;
         console.log('vm.addr', vm.addr);
@@ -118,6 +141,7 @@ module.exports = function (xbee) {
         }
         return ret;
     };
+    */
 
     function LocalOnOff(pin, val) {
         this.pin = pin;
@@ -168,14 +192,15 @@ module.exports = function (xbee) {
         //xbee.xbeeCommand({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam || [] }).then(function (f) {
         console.log('Param: ', cmdParam);
 
-        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam }).then(function (f) {
-            // response of the command
-            //console.log('Command successful:', f);
-            res.status(200).send(f);
-        }).catch(function (e) {
-            console.log('Command failed:', e);
-            res.status(500).send(e); 
-        });
+        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.AT_COMMAND, command: cmd, commandParameter: cmdParam })
+            .then(function (f) {
+                // response of the command
+                //console.log('Command successful:', f);
+                res.status(200).send(f);
+            }).catch(function (e) {
+                console.log('local at Command failed:', e);
+                res.status(500).send(e);
+            });
 
     };
 
@@ -183,13 +208,13 @@ module.exports = function (xbee) {
         var addr = req.params.addr;
         var cmd = req.params.cmd;
         cmd = (cmd === 'V') ? '%V' : cmd;
-        var cmdParam = req.params.cmdParam==='null'? []: req.params.cmdParam;
+        var cmdParam = req.params.cmdParam === 'null' ? [] : req.params.cmdParam;
         xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam }).then(function (f) {
             // response of the command
             console.log('Command successful:', f);
             res.status(200).send(f);
         }).catch(function (e) {
-            console.log('Command failed:', e);
+            console.log('rmt Command failed:', e);
             res.status(500).send(e);
         });
 
@@ -199,12 +224,13 @@ module.exports = function (xbee) {
         xbee.newXbee.id = req.params.id;
         xbee.newXbee.type = req.params.type;
         xbee.newXbee.addr64 = null;
-        console.log('New ID: ',xbee.newXbee.id);
-        xbee.atCmd('ND').then(function (f) {
-            res.status(200).send(f);
-        }).catch(function (e) {
-            res.status(500).send(e);
-        });
+        console.log('New ID: ', xbee.newXbee.id);
+        xbee.atCmd('ND')
+            .then(function (f) {
+                res.status(200).send(f);
+            }).catch(function (e) {
+                res.status(500).send(e);
+            });
     };
 
     var getXbee = function (req, res) {
@@ -213,13 +239,13 @@ module.exports = function (xbee) {
     };
 
     var updateDevice = function (req, res) {
-            // this a awkward: need to be refacted...
-            req.body.name = 'p'.concat(req.body.name);
-            console.log('put: ', req.body);
-            _.merge(xbee.devices[req.params.index], req.body);
-            //res.sendStatus(200);
-            res.status(200).send({ info: 'dev name updated successfully' });
-        };
+        // this a awkward: need to be refacted...
+        req.body.name = 'p'.concat(req.body.name);
+        console.log('put: ', req.body);
+        _.merge(xbee.devices[req.params.index], req.body);
+        //res.sendStatus(200);
+        res.status(200).send({ info: 'dev name updated successfully' });
+    };
 
     return {
         post: post,
