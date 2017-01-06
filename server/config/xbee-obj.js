@@ -1,13 +1,13 @@
 
 'use strict';
-var _ = require('lodash');
-var util = require('util');
+const _ = require('lodash');
+const util = require('util');
 //const notifier = require('node-notifier');
-var SerialPort = require('serialport');
-var xbee_api = require('xbee-api');
-var C = xbee_api.constants;
+const SerialPort = require('serialport');
+const xbee_api = require('xbee-api');
+const C = xbee_api.constants;
 //var Q = require('q');
-var Sensor = require('./sensor-class')().constructor;
+const Sensor = require('./sensor-class')().constructor;
 
 // in order to get devices object. todo: may be change to use deive router instead.
 //var onOff = require('../controllers/onoff-ctrl')();
@@ -15,12 +15,14 @@ var Sensor = require('./sensor-class')().constructor;
 module.exports = function () {
     var newXbee = { addr64: '', addr16: '', id: null, vcc: null, type: null };
 
-    function Device(GpioPin, name, addr) {
-        this.name = name;
-        this.status = 0;    //toto: 0 or null (init state?)
-        this.pin = GpioPin || 'D0'; // deafult pin D0
-        this.addr = addr || null;
-        this.error = null;
+    class Device {
+        constructor(GpioPin, name, addr) {
+            this.name = name;
+            this.pin = GpioPin || 'D0'; // deafult pin D0
+            this.addr = addr || null;
+        }
+        //this.status = 0;    //todo: 0 or null (init state?)
+        //this.error = null;
     }
     var sensors = [], devices = [];
     //var routerAddr = '0013A20040EB556C';
@@ -44,29 +46,22 @@ module.exports = function () {
     const maxWait = 5000; // ms
     // initXbee is called as soon as serial port is opend.
     var initXbee = function () {
+        atCmd('ND');
+        /*
         rmtAtCmd('0013a20040eb5559', 'NI', 'null')
-            .then(function (res) {
-                if (res.nodeIdentifier !== 'null') {
-                    console.error('5559 not null: ', res.nodeIdentifier);
-                }
-            })
-            .catch(function (err) { 
+            .then(writeToXbee('0013a20040eb5559'))
+            //.then(atCmd('ND'))
+            .catch(function (err) {
                 console.error(err);
             });
 
         rmtAtCmd('0013A20040EB556C', 'NI', 'null')
-            .then(function (res) {
-                if (res.nodeIdentifier !== 'null') {
-                    console.error('556c not null: ', res.nodeIdentifier);
-                }
-                atCmd('ND');
-            })
+            .then(writeToXbee('0013A20040EB556C'))
+            .then(atCmd('ND'))
             .catch(function (err) {
                 console.error(err);
-            })
-
-
-
+            });
+        */
         /* node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
         rmtAtCmd('0013A20040EB556C', 'NI', 'null').then(function () {
             console.log('reset router name');
@@ -86,7 +81,7 @@ module.exports = function () {
                 }).catch(function (e) {
                     console.log('Command failed:', e);
                 });
-
+    
                 var frameId = xbeeAPI.nextFrameId();
                 var f = {
                     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
@@ -143,7 +138,7 @@ module.exports = function () {
                                 sensor.detectors[i].emit('batteryLow');
                             }
                         }
-
+    
                     }
     }
         */
@@ -164,7 +159,7 @@ module.exports = function () {
                 digiProfileID: 'c105',
                 digiManufacturerID: '101e' } }
                 */
-                if (frame.commandStatus != C.COMMAND_STATUS.ERROR) {
+                if (frame.commandStatus !== C.COMMAND_STATUS.ERROR) {
                     if (frame.command === 'ND') {
                         console.log('newXbee.id: ', newXbee.id);
                         var id = frame.nodeIdentification.nodeIdentifier;
@@ -207,13 +202,13 @@ module.exports = function () {
         var givenName = newXbee.type + newXbee.id;
         console.log('paried: ', newXbee.id);
         rmtAtCmd(newXbee.addr64, 'NI', givenName)
-        .then(function () {
-            rmtAtCmd(newXbee.addr64, 'WR');
-            newXbee.id = newXbee.type = null;
-        })
-        .catch(function(err){
-            console.error('write xbee name err: ', err);
-        })
+            .then(function () {
+                rmtAtCmd(newXbee.addr64, 'WR');
+                newXbee.id = newXbee.type = null;
+            })
+            .catch(function (err) {
+                console.error('write xbee name err: ', err);
+            });
     }
 
     function newDevObj(devType, name) {
@@ -259,7 +254,7 @@ module.exports = function () {
     /*
         var xbeeCmd = function (f) {
             var defer = Q.defer();
-    
+     
             f.id = xbeeAPI.nextFrameId();
             var rsp = false, rspFrame;
             serialport.write(xbeeAPI.buildFrame(f), function (err) {
@@ -286,7 +281,7 @@ module.exports = function () {
             var callback = function (receivedFrame) {
                 let vm = this;
                 console.log('inner');
-                if (receivedFrame.id === frame.id) {                    
+                if (receivedFrame.id === frame.id) {
                     // This is our frame's response. Resolve the promise.
                     console.log('got correspondent response!: ', frame.id);
                     xbeeAPI.removeListener('frame_object', callback);
@@ -315,7 +310,7 @@ module.exports = function () {
                 reject(new Error('timeout'));
             }, maxWait + 1000);
         });
-    }
+    };
     /*
        var xbeeCmd = frame => {
             // set frame id
@@ -368,19 +363,18 @@ module.exports = function () {
     */
     //};
 
-    //var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
-    var rmtAtCmd = function (addr, cmd, cmdParam) {
-        return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    var rmtAtCmd = (addr, cmd, cmdParam) => xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+
+    var writeToXbee = function (addr) {
+        rmtAtCmd(addr, 'WR', []).then(function (f) {
+            return 0;
+        }).catch(function (e) {
+            console.log('WR Command failed:', e);
+        });
     }
-    /*
-    .then(function (f) {
-        console.log('Command successful:', f);
-        return f;
-    }).catch(function (e) {
-        console.log('Command failed:', e);
-    });
-    */
-    //};
+    //var rmtAtCmd = function (addr, cmd, cmdParam) {
+    //    return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
+    //};    
 
     return {
         //xbeeCommand: xbeeCommand,
@@ -388,7 +382,7 @@ module.exports = function () {
         C: C,
         xbeeAPI: xbeeAPI,
         newXbee: newXbee,    // new detected xbee
-        //rmtAtCmd: rmtAtCmd,
+        rmtAtCmd: rmtAtCmd,
         atCmd: atCmd,
         sensors: sensors,
         devices: devices

@@ -1,10 +1,10 @@
-var express = require('express');
+const express = require('express');
 //var compress = require('compress');
-var morgan = require('morgan');
+const morgan = require('morgan');
 // parse body into json obj and save it to res.body
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 module.exports = function (app, config) {
     //app.use(compress());

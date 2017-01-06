@@ -3,6 +3,10 @@
   "version": "1.1.0",
   "description": "ehome",
   "main": "app.js",
+  "scripts": {
+    "start": "nodemon ./server/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
@@ -57,10 +61,7 @@
     "parse-glob": "^3.0.4",
     "remove": "^0.1.5",
     "wiredep": "^4.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  }, 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/roachhuang/ehome.git"

@@ -1,10 +1,10 @@
 'use strict';
-var express = require('express');
+const express = require('express');
 var router = express.Router();
 
 // gpiocontroller is a func; in order to have it returns an object back to us, we need to execute it by following "()"
 module.exports = function (xbee) {
-    var gpioController = require('../controllers/onoff-ctrl')(xbee);
+    const gpioController = require('../controllers/onoff-ctrl')(xbee);
 
     //var gpioController = require('../controllers/rpi-gpio-ctrl')();
     /* boday-parser is included in app.js, so no need to do it here.
@@ -31,8 +31,9 @@ module.exports = function (xbee) {
     router.route('/')
         .get(gpioController.getXbee);
 
-    router.route('/:index')
-        .put(gpioController.updateDevice);
+    router.route('/:name')
+        .put(gpioController.updateDevice)
+        .delete(gpioController.delDevice);
 
     // type: sensor or power socket
     router.route('/pair/:id/:type')

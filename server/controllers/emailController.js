@@ -1,5 +1,5 @@
-var nodemailer = require('nodemailer');
-var ffmpeg = require('fluent-ffmpeg');
+const nodemailer = require('nodemailer');
+const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = function () {
     var sendEmail = function (msg) {

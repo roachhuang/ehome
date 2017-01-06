@@ -24,12 +24,13 @@
 		<table class='table table-striped table-bordered table-condensed table-responsive'>
 			<tr class='info'>
 				<th>Device Name</th>
-				<th>Action</th>
+				<th>Action</th>				
 				<th>Address</th>
 			</tr>
 			<tr class='warning' ng-repeat='device in devices track by $index'>
-				<td><input class='form-control' type='text' ng-model='device.name'></td>
-				<td><button class='btn btn-lg btn-warning' ng-click='updateDeviceName(device, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名</button></td>
+				<td><input class='form-control' type='text' ng-model='newName'></td>
+				<td><button class='btn btn-warning' ng-click='updateDeviceName(device.name, newName)'><i class="fa fa-refresh"></i> 更名</button>
+				<button class='btn btn-default' ng-click='delDevice(device.name)'><i class="fa fa-times"></i> Delete</button></td>
 				<td>{{device.addr}}</td>
 			</tr>
 		</table>

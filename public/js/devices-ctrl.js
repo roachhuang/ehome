@@ -14,7 +14,7 @@
 
         ////////////////
         function activate() {
-
+            vm.devices = [];
             //vm.devices = deviceService;
             // deviceService is a singleton
             // this is very important to know return from  nodejs is res.status(200).send({value: value})
@@ -31,7 +31,7 @@
                         device.status = res.data.value;
                     }).catch(function (e) {
                         device.error = e;
-                        console.log('unable to get dev status');
+                        console.log('unable to get dev status', e);
                     });
                 });
             }, 500);
@@ -72,19 +72,36 @@
             });
         };
 
-        vm.updateDeviceName = function (device, index) {
-            var newName;
-            if (device.name !== 'null') {
-                newName = 'p'.concat(device.name);
-            } else { 
-                newName = null;
-            }
+        vm.updateDeviceName = function (oldName, newName) {
+            //var xbeeName;
+            //if (oldName !== 'null') {
+            //xbeeName = 'p'.concat(newName);
+            //} else {
+            //    newName = null;
+            //}
+            /*
             gpio.rmtAtCmd(device.addr, 'NI', newName).then(function (res) {
                 // Extract from position 1, and to the end
                 toastr.success(device.name, '更名成功');
                 //vm.sensors[index].name = sensor.name;
             });
-            gpio.updateDeviceName(index, device);
+            */
+            gpio.updateDeviceName(oldName, newName).then(function (res) {
+                toastr.success('更名成功');
+            })
+            .catch(function (data) {
+                 console.error('err: ', data); 
+            });    
+        };
+
+        vm.delDevice = function (deviceName) {
+            //let xbeeName = 'p'.concat(deviceName);
+            gpio.delDevice(deviceName).then(function (res) {
+                toastr.success('Delete 成功');
+            })
+            .catch(function (err) {
+                 console.log('err: ', err); 
+            });    
         };
     }
 })();

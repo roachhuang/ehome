@@ -1,8 +1,8 @@
 'use strict';
 var TOKEN_PATH = 'token.json';
-var ffmpeg = require('fluent-ffmpeg');
-var request = require('request');
-var fs = require('fs');
+const ffmpeg = require('fluent-ffmpeg');
+const request = require('request');
+const fs = require('fs');
 
 module.exports = function () {
 

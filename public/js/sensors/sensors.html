@@ -12,6 +12,7 @@
                     <tr class='info'>
                         <th>Sensor Name</th>
                         <th>Action</th>
+                        <th>Delete</th>
                         <th>Addr</th>
                         <th>value</th>
                         <th>電池電力</th>
@@ -19,7 +20,8 @@
                     </tr>
                     <tr class='warning' ng-repeat='sensor in sensors track by $index'>
                         <td><input class='form-control' type='text' ng-model='sensor.name'</td>
-                        <td><button class='btn btn-warning' ng-click='updateSensorName(sensor, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名 </button></td>                   
+                        <td><button class='btn btn-warning' ng-click='updateSensorName(sensor.name, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> 更名 </button></td>
+                        <td><button class='btn btn-lg btn-danger' ng-click='delSensor(sensor.name, $index)'><i class="fa fa-refresh" aria-hidden="true"></i> Delete</button></td>                   
                         <td>{{sensor.addr}}</td>
                         <td>{{sensor.status}}</td>
                         <td>{{sensor.battery}}</td>

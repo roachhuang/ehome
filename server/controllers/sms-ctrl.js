@@ -1,7 +1,7 @@
 'use strict';
 // textmagic works but no credit left - have to buy
 // usrid: mark.huang@ca-sec.com
-var TMClient = require('textmagic-rest-client');
+const TMClient = require('textmagic-rest-client');
 
 //module.exports = function () {
     var c = new TMClient('markhuang', 'g4sxO6FrzpOordGvKJNVcgjX45f0sy');

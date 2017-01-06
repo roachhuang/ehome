@@ -2,8 +2,8 @@
 'use strict';
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-var exec = require('child_process').exec;
-var _ = require('lodash');
+const exec = require('child_process').exec;
+const _ = require('lodash');
 
 /*
 The Raspberry Pi's GPIO pins require you to be root to access them.
@@ -26,7 +26,7 @@ After changing the path and reinstalling gpio-admin, you need to change the path
 for pi-gpio lib, pin = physical pin number
 */
 //var util = require('util');
-var Gpio = require('onoff').Gpio;
+const Gpio = require('onoff').Gpio;
 
 module.exports = function (xbee) {
     //var devices;
@@ -51,7 +51,7 @@ module.exports = function (xbee) {
             })
             .catch(function (err) {
                 res.status(500).send(err);
-            })
+            });
     };
 
     var get = function (req, res) {
@@ -113,6 +113,7 @@ module.exports = function (xbee) {
     RemoteOnOff.prototype.readPin = function () {
         var vm = this, ret;
         console.log('vm.addr', vm.addr);
+        // returns a promise object from xbeeCmd
         return xbee.xbeeCmd({
             type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: vm.addr,
@@ -209,14 +210,15 @@ module.exports = function (xbee) {
         var cmd = req.params.cmd;
         cmd = (cmd === 'V') ? '%V' : cmd;
         var cmdParam = req.params.cmdParam === 'null' ? [] : req.params.cmdParam;
-        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam }).then(function (f) {
-            // response of the command
-            console.log('Command successful:', f);
-            res.status(200).send(f);
-        }).catch(function (e) {
-            console.log('rmt Command failed:', e);
-            res.status(500).send(e);
-        });
+        xbee.xbeeCmd({ type: xbee.C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam })
+            .then(function (f) {
+                // response of the command
+                console.log('Command successful:', f);
+                res.status(200).send(f);
+            }).catch(function (e) {
+                console.log('rmt Command failed:', e);
+                res.status(500).send(e);
+            });
 
     };
 
@@ -240,13 +242,36 @@ module.exports = function (xbee) {
 
     var updateDevice = function (req, res) {
         // this a awkward: need to be refacted...
-        req.body.name = 'p'.concat(req.body.name);
-        console.log('put: ', req.body);
-        _.merge(xbee.devices[req.params.index], req.body);
-        //res.sendStatus(200);
-        res.status(200).send({ info: 'dev name updated successfully' });
+        let newName = 'p'.concat(req.body.name);
+        //console.log('put: ', req.body.name);
+        let index = _.findIndex(xbee.devices, { name: 'p'.concat(req.params.name) });
+        //_.merge(xbee.devices[index], newName);
+        xbee.devices[index].name = newName;
+        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', newName).then(function (f) {
+            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+            res.sendStatus(200);
+        })
+            .catch(function (err) {
+                res.status(500).send(err);
+            });
     };
 
+    var delDevice = function (req, res) {
+        //let id = req.params.index;
+        //rmtAtCmd(xbee.devices[id].addr, 'WR').then(function () {
+        let xbeeName = 'p'.concat(req.params.name);
+        let index = _.findIndex(xbee.devices, { name: xbeeName });
+        //console.log('id: ', index);
+
+        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', 'null').then(function (f) {
+            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+            _.remove(xbee.devices, function (device) {
+                return device.name === xbeeName;
+            });
+            res.status(200);
+        });
+
+    }
     return {
         post: post,
         get: get,
@@ -254,7 +279,7 @@ module.exports = function (xbee) {
         rmtAtCmd: rmtAtCmd,
         pair: pair,
         getXbee: getXbee,
-        updateDevice: updateDevice
+        updateDevice: updateDevice,
+        delDevice: delDevice
     };
-};
-
+}

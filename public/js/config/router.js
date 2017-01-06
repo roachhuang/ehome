@@ -21,7 +21,7 @@
 					return function (exception, cause) {
 						exception.message = 'Error: ' + exception.message;
 						$delegate(exception, cause);
-						alert(expection.message);
+						alert(exception.message);
 					};
 				}]);
 		$routeProvider

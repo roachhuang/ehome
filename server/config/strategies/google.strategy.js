@@ -1,5 +1,5 @@
 // var passport = require('passport');
-var GoolgeStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GoolgeStrategy = require('passport-google-oauth').OAuth2Strategy;
 //var GoolgeStrategy = require('passport-google-drive').Strategy;
 module.exports = function (passport, config) {
     // plug in google strategy into passport so we can use it

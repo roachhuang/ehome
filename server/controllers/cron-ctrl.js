@@ -1,6 +1,6 @@
 'use strict';
-var cron = require('crontab');
-var fs = require('fs');
+const cron = require('crontab');
+const fs = require('fs');
 
 module.exports = function (xbee) {
     var crons = [];
@@ -192,5 +192,5 @@ module.exports = function (xbee) {
         //put: put,
         deleteById: deleteById,
         deleteAll: deleteAll
-    }
+    };
 };

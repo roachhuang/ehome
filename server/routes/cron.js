@@ -1,5 +1,5 @@
 'use strict';
-var express = require('express');
+const express = require('express');
 //var _ = require('loadash');
 
 
@@ -16,7 +16,7 @@ var express = require('express');
 //var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var routes = function (xbee) {
     var cronRouter = express.Router();
-    var cronCtrl = require('../controllers/cron-ctrl')(xbee);
+    const cronCtrl = require('../controllers/cron-ctrl')(xbee);
     // consider the addr as the device id.
     cronRouter.route('/:addr')
         .post(cronCtrl.post)

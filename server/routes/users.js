@@ -1,9 +1,9 @@
 'use strict';
-var fs = require('fs');
-var request = require('request');
-var express = require('express');
-var ffmpeg = require('fluent-ffmpeg');
-var webCamController = require('../controllers/webcam-ctrl');
+const fs = require('fs');
+const request = require('request');
+const express = require('express');
+const ffmpeg = require('fluent-ffmpeg');
+const webCamController = require('../controllers/webcam-ctrl');
 
 //var mjpegcamera = require('mjpeg-camera');
 //var FileOnWrite = require('file-on-write');

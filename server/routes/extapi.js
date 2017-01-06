@@ -1,9 +1,9 @@
 'use strict';
 
 //var camera_config = require('../server/config/webcam');
-var express = require('express');
-var nasa = require('../controllers/nasaController');
-var yahoo = require('../controllers/yahooController');
+const express = require('express');
+const nasa = require('../controllers/nasaController');
+const yahoo = require('../controllers/yahooController');
 //var email = require('../controllers/emailController')();
 
 var router = express.Router();

@@ -1,6 +1,6 @@
 'use strict';
-var events = require('events');
-var email = require('../controllers/emailController')();
+const events = require('events');
+const email = require('../controllers/emailController')();
 //var request = require('request');
 
 //module.exports = function (io) {
@@ -65,17 +65,17 @@ module.exports = function () {
     };
 
     //maybe i shouldn't use push instead using detectors.window = new Sensor(....)
-    var detectors = [];
+    //var detectors = [];
     //detectors.push(new Sensor('DIO4', 'in the living room', '0013a20040eb556c'));
     //detectors.push(new Sensor('DIO0', 'main gate'));
     //detectors.push(new Sensor('DIO5', 'somker detector at the kitchen', '0013a20040eb556c'));
 
-    function Gauge(name, addr) {
-        this.addr = addr;   //toto: change to addr16 if have time
-        this.name = name;
-        this.data = [];
+    //function Gauge(name, addr) {
+    //    this.addr = addr;   //toto: change to addr16 if have time
+    //    this.name = name;
+    //    this.data = [];
         //events.EventEmitter.call(this);
-    }
+    //}
 
 
     //var gauges = {};

@@ -14,7 +14,8 @@
             rmtAtCmd: rmtAtCmd,
             atCmd: atCmd,
             getXbee: getXbee,
-            updateDeviceName: updateDeviceName
+            updateDeviceName: updateDeviceName,
+            delDevice: delDevice
         };
 
         return service;
@@ -71,12 +72,23 @@
             //    return res.data.value;
         }
 
-        function updateDeviceName(index, device){
-         var req = {
+        function updateDeviceName(oldName, newName) {
+            var req = {
                 method: 'PUT',
-                url: '/gpio/' + index,
+                url: '/gpio/' + oldName,
+                contentType: 'applicaton/json',
                 //transformRequest: transformRequestAsFormPost,
-                data: device
+                data: { name: newName }
+            };
+            return $http(req);
+        }
+
+        function delDevice(name) {
+            var req = {
+                method: 'DELETE',
+                url: '/gpio/' + name,
+                //transformRequest: transformRequestAsFormPost,
+                data: {}
             };
             return $http(req);
         }

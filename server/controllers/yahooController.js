@@ -1,4 +1,4 @@
-var YQL = require('yql');
+const YQL = require('yql');
 
 exports.weather = function (req, res) {
     console.log('yahoo');

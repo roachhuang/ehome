@@ -85,7 +85,7 @@
             writeStatus2Server();
         });
 
-        vm.updateSensorName = function (sensor, index) {
+        vm.updateSensorName = function (sensor) {
             var newName = 's'.concat(sensor.name);
             gpio.rmtAtCmd(sensor.addr, 'NI', newName).then(function (res) {
                 toastr.success(sensor.name, '更名成功');
@@ -93,9 +93,24 @@
             });
             var req = {
                 method: 'PUT',
-                url: '/sensors/' + index,
+                url: '/sensors/' + newName,
                 //transformRequest: transformRequestAsFormPost,
-                data: sensor
+                //data: sensor
+            };
+            return $http(req);
+        };
+
+        vm.deleteSensor = function (sensor) {
+            var xbeeName = 's'.concat(sensor.name);
+            gpio.rmtAtCmd(sensor.addr, 'NI', 'null').then(function (res) {
+                toastr.success(sensor.name, '更名成功');
+                //vm.sensors[index].name = sensor.name;
+            });
+            var req = {
+                method: 'DELETE',
+                url: '/sensors/' + xbeeName,
+                //transformRequest: transformRequestAsFormPost,
+                //data: sensor
             };
             return $http(req);
         };
@@ -103,7 +118,7 @@
         ////////////////
 
         function activate() {
-           loadSensorObjs();
+            loadSensorObjs();
         }
     }
 })();

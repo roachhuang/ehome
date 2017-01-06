@@ -1,4 +1,4 @@
-var apod = require('nasa-apod');
+const apod = require('nasa-apod');
 
 exports.pixDaily = function (req, res) {
 	//console.log('/apod');
