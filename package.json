@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon ./server/app.js",
+    "prod": "sudo NODE_ENV=build nodemon server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -26,22 +27,22 @@
     "serialport": "^4.0.6",
     "textmagic-rest-client": "0.0.5",
     "util": "^0.10.3",
-    "xbee-api": "^0.4.6",
-    "yargs": "^4.8.1",
+    "xbee-api": "^0.5.x",
     "yql": "^1.0.2"
   },
   "devDependencies": {
-    "browser-sync": "^2.14.0",
+    "browser-sync": "^2.18.x",
     "del": "^2.2.0",
     "glob": "^7.0.5",
-    "gulp": "^3.9.1",
+    "gulp": "^3.9.x",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-bump": "^2.4.0",
     "gulp-bytediff": "^1.0.0",
+    "gulp-fixmyjs": "^1.0.2",
     "gulp-if": "^2.0.1",
-    "gulp-inject": "^4.1.0",
-    "gulp-jscs": "^3.0.2",
+    "gulp-inject": "^4.2.x",
+    "gulp-jscs": "^4.x.x",
     "gulp-jshint": "^2.0.1",
     "gulp-load-plugins": "^1.2.4",
     "gulp-minify-css": "^1.2.4",
@@ -53,15 +54,16 @@
     "gulp-task-listing": "^1.0.1",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.1.0",
-    "gulp-util": "^3.0.7",
+    "gulp-util": "^3.x.x",
     "install": "^0.8.1",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.2.0",
     "lodash": "^4.0.0",
     "parse-glob": "^3.0.4",
     "remove": "^0.1.5",
-    "wiredep": "^4.0.0"
-  }, 
+    "wiredep": "^4.0.0",
+    "yargs": "^6.6.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/roachhuang/ehome.git"
