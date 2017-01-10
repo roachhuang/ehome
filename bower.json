@@ -30,8 +30,10 @@
   },
   "overrides": {
     "bootstrap": {
-      "main": "dist/css/bootstrap.min.css",
-      "dist": "dist/js/bootstrap.js"
+      "main": [
+        "dist/js/bootstrap.min.js",
+        "dist/css/bootstrap.min.css"
+      ]
     },
     "font-awesome": {
       "main": [
