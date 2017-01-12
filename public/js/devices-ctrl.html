@@ -28,9 +28,9 @@
 				<th>Address</th>
 			</tr>
 			<tr class='warning' ng-repeat='device in devices track by $index'>
-				<td><input class='form-control' type='text' ng-model='newName'></td>
-				<td><button class='btn btn-warning' ng-click='updateDeviceName(device.name, newName)'><i class="fa fa-refresh"></i> 更名</button>
-				<button class='btn btn-default' ng-click='delDevice(device.name)'><i class="fa fa-times"></i> Delete</button></td>
+				<td><input class='form-control' type='text' ng-model='device.name'></td>
+				<td><button class='btn btn-primary' ng-click='updateDeviceName(device.name, $index)'><i class="fa fa-pencil-square-o"></i> 更名</button>
+				<button class='btn btn-warning' ng-click='delDevice($index)'><i class="fa fa-times"></i> Delete</button></td>
 				<td>{{device.addr}}</td>
 			</tr>
 		</table>

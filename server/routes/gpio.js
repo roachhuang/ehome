@@ -31,7 +31,7 @@ module.exports = function (xbee) {
     router.route('/')
         .get(gpioController.getXbee);
 
-    router.route('/:name')
+    router.route('/:index')
         .put(gpioController.updateDevice)
         .delete(gpioController.delDevice);
 

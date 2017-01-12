@@ -243,8 +243,7 @@ module.exports = function (xbee) {
     var updateDevice = function (req, res) {
         // this a awkward: need to be refacted...
         let newName = 'p'.concat(req.body.name);
-        //console.log('put: ', req.body.name);
-        let index = _.findIndex(xbee.devices, { name: 'p'.concat(req.params.name) });
+        let index = parseInt(req.params.index);
         //_.merge(xbee.devices[index], newName);
         xbee.devices[index].name = newName;
         xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', newName).then(function (f) {
@@ -256,22 +255,20 @@ module.exports = function (xbee) {
             });
     };
 
-    var delDevice = function (req, res) {
-        //let id = req.params.index;
-        //rmtAtCmd(xbee.devices[id].addr, 'WR').then(function () {
-        let xbeeName = 'p'.concat(req.params.name);
-        let index = _.findIndex(xbee.devices, { name: xbeeName });
-        //console.log('id: ', index);
-
+    var delDevice = function (req, res) {       
+        let index = parseInt(req.params.index);     
+        let xbeeName = xbee.devices[index].name;
         xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', 'null').then(function (f) {
-            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
-            _.remove(xbee.devices, function (device) {
-                return device.name === xbeeName;
+            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR').then(function () {
+                _.remove(xbee.devices, function (device) {
+                    return device.name === xbeeName;
+                });
+                res.status(200).send('deleted');
             });
-            res.status(200);
+        }).catch(function (err) {
+            res.status(500).send(err);
         });
-
-    }
+    };
     return {
         post: post,
         get: get,
@@ -282,4 +279,4 @@ module.exports = function (xbee) {
         updateDevice: updateDevice,
         delDevice: delDevice
     };
-}
+};

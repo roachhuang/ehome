@@ -5,8 +5,8 @@
         .module('myApp')
         .controller('sensorsCtrl', sensorsCtrl);
 
-    sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio', 'toastr'];
-    function sensorsCtrl($scope, $http, location, gpio, toastr) {
+    sensorsCtrl.$inject = ['$scope', '$http', '$location', 'gpio', 'sensorSvc', 'toastr'];
+    function sensorsCtrl($scope, $http, location, gpio, sensorSvc, toastr) {
         var vm = $scope;
         /*
                 function readBatteryLvl() {
@@ -25,23 +25,23 @@
         activate();
 
         function writeStatus2Server() {
-            var req = {
-                method: 'POST',
-                url: '/sensors/',
-                //transformRequest: transformRequestAsFormPost,
-                data: { sensors: vm.sensors }
-            };
-            return $http(req);
+            sensorSvc.setSensorAvailability(vm.sensors).then(function () {
+                console.log('成功');
+            }).catch(function (err) {
+                console.log('err: ', err);
+            });
         }
 
         function loadSensorObjs() {
             gpio.atCmd('ND', 'null');
-            return $http.get('/sensors').then(function (res) {
+            sensorSvc.getSensors().then(function (res) {
                 vm.sensors = res.data.sensors;    // inside data there is an object sensors
                 angular.forEach(vm.sensors, function (sensor) {
                     sensor.name = sensor.name.slice(1);
                 });
                 console.log('c sensors: ', vm.sensors);
+            }).catch(function (err) {
+                console.log('err: ', err);
             });
             // don't know why. if no dealy here, will get http.get timout error.
             //setTimeout(readBatteryLvl, 5000);
@@ -70,6 +70,7 @@
             // done
             //});
         };
+        /*
         vm.disableAllSensors = function () {
             var val = false;
             angular.forEach(vm.sensors, function (sensor) {
@@ -80,39 +81,26 @@
             // done
             //});
         };
-
+        */
         vm.$on('$locationChangeStart', function () {
             writeStatus2Server();
         });
 
-        vm.updateSensorName = function (sensor) {
-            var newName = 's'.concat(sensor.name);
-            gpio.rmtAtCmd(sensor.addr, 'NI', newName).then(function (res) {
-                toastr.success(sensor.name, '更名成功');
-                //vm.sensors[index].name = sensor.name;
+        vm.delSensor = function (index) {
+            //let xbeeName = 'p'.concat(deviceName);
+            sensorSvc.delSensor(index).then(function (res) {
+                toastr.success('Delete 成功');
+            }).catch(function (err) {
+                console.log('err: ', err);
             });
-            var req = {
-                method: 'PUT',
-                url: '/sensors/' + newName,
-                //transformRequest: transformRequestAsFormPost,
-                //data: sensor
-            };
-            return $http(req);
         };
 
-        vm.deleteSensor = function (sensor) {
-            var xbeeName = 's'.concat(sensor.name);
-            gpio.rmtAtCmd(sensor.addr, 'NI', 'null').then(function (res) {
-                toastr.success(sensor.name, '更名成功');
-                //vm.sensors[index].name = sensor.name;
+        vm.updateSensorName = function (newName, index) {
+            sensorSvc.updateSensorName(newName, index).then(function (res) {
+                toastr.success('更名成功');
+            }).catch(function (data) {
+                console.error('err: ', data);
             });
-            var req = {
-                method: 'DELETE',
-                url: '/sensors/' + xbeeName,
-                //transformRequest: transformRequestAsFormPost,
-                //data: sensor
-            };
-            return $http(req);
         };
 
         ////////////////

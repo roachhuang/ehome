@@ -6,12 +6,12 @@
 }
 */
 .navbar-inverse {
-    background-color: rgb(10,40,8);
-    border-color:lightyellow;
+    background-color: #90c3d4;
+    border-color:cadetblue;
 }
 
 .navbar-inverse .navbar-nav>li>a {
-    color: #bbb;
+    color: darkslateblue;
 }
 
 

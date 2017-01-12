@@ -72,10 +72,10 @@
             //    return res.data.value;
         }
 
-        function updateDeviceName(oldName, newName) {
+        function updateDeviceName(newName, index) {
             var req = {
                 method: 'PUT',
-                url: '/gpio/' + oldName,
+                url: '/gpio/' + index,
                 contentType: 'applicaton/json',
                 //transformRequest: transformRequestAsFormPost,
                 data: { name: newName }
@@ -83,12 +83,12 @@
             return $http(req);
         }
 
-        function delDevice(name) {
+        function delDevice(index) {
             var req = {
                 method: 'DELETE',
-                url: '/gpio/' + name,
+                url: '/gpio/' + index,
                 //transformRequest: transformRequestAsFormPost,
-                data: {}
+                //data: {}
             };
             return $http(req);
         }

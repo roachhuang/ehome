@@ -2,7 +2,7 @@
     <h1><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;家電定時設定</h1>
     
     <div ng-hide='devices.length'>
-        <h1 class="alert alert-danger">No device found. Please pair devices.</h1>
+        <div uib-alert class='alert-danger'>No device found. Please pair devices.</div>
     </div>
 
     <div ng-repeat='device in devices'>

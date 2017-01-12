@@ -72,7 +72,7 @@
             });
         };
 
-        vm.updateDeviceName = function (oldName, newName) {
+        vm.updateDeviceName = function (newName, index) {
             //var xbeeName;
             //if (oldName !== 'null') {
             //xbeeName = 'p'.concat(newName);
@@ -86,7 +86,7 @@
                 //vm.sensors[index].name = sensor.name;
             });
             */
-            gpio.updateDeviceName(oldName, newName).then(function (res) {
+            gpio.updateDeviceName(newName, index).then(function (res) {
                 toastr.success('更名成功');
             })
             .catch(function (data) {
@@ -94,9 +94,9 @@
             });    
         };
 
-        vm.delDevice = function (deviceName) {
+        vm.delDevice = function (index) {
             //let xbeeName = 'p'.concat(deviceName);
-            gpio.delDevice(deviceName).then(function (res) {
+            gpio.delDevice(index).then(function (res) {
                 toastr.success('Delete 成功');
             })
             .catch(function (err) {

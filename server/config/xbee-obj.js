@@ -371,10 +371,7 @@ module.exports = function () {
         }).catch(function (e) {
             console.log('WR Command failed:', e);
         });
-    }
-    //var rmtAtCmd = function (addr, cmd, cmdParam) {
-    //    return xbeeCmd({ type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST, destination64: addr, command: cmd, commandParameter: cmdParam || [] });
-    //};    
+    };   
 
     return {
         //xbeeCommand: xbeeCommand,
