@@ -6,12 +6,12 @@
         <div class="form-group">
             <label for='devName'>智能家電名稱:</label>
 		        <input type='text' class='form-control' name='id' ng-model="vm.formData.id" required>
-                <span ng-show="myForm.id.$touched && myForm.id.$invalid">請輸入智能家電名稱</span>	        
+                <span ng-show="myForm.id.$touched && myForm.id.$invalid">請輸入智能家電名稱</span>
         </div>
 
         <div class='radio'>
             <legend>類別:</legend>
-           
+
             <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p' required> 1-port 開關</label>
             <label><input type='radio' name='pair' ng-model='vm.formData.type' value='p4' required> 4-port 開關</label>
             <label><input type='radio' name='pair' ng-model='vm.formData.type' value='s' required> 偵測器</label>
@@ -20,8 +20,9 @@
             <p>The "required" validator is: {{ myForm.pair.$error.required ? 'not satisfied' : 'satisfied' }}</p>
             -->
         </div>
-
-        <button ng-disabled='myForm.pair.$error.required' class='btn btn-lg btn-warning' ng-click='vm.ndCmd()'><i ng-class='vm.icon'></i> 確定</button><br/>
+        <div class='form-control'>
+        <button uib-tooltip='一次只能新增一個智能元件' type="button" ng-disabled='myForm.pair.$error.required' class='btn btn-lg btn-warning' ng-click='vm.ndCmd()'><i ng-class='vm.icon'></i> 確定</button><br/>
+        </div>
     </form>
 
 </section>

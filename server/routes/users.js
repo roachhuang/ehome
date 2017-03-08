@@ -3,7 +3,7 @@ const fs = require('fs');
 const request = require('request');
 const express = require('express');
 const ffmpeg = require('fluent-ffmpeg');
-const webCamController = require('../controllers/webcam-ctrl');
+const webCamCtrl = require('../controllers/webcam-ctrl')();
 
 //var mjpegcamera = require('mjpeg-camera');
 //var FileOnWrite = require('file-on-write');
@@ -184,7 +184,8 @@ router.get('/saveVideo', function (req, res) {
                     },
                     {
                         'Content-Type': 'video/mp4',
-                        'body': ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi').videoCodec('libx264').audioCodec('libfaac').duration(6).format('flv').size('50%').stream()
+                        // i cannnot make audioCodec work
+                        'body': ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi').videoCodec('libx264').duration(6).format('flv').size('50%').stream()
                     }
                 ]
             };
@@ -207,9 +208,10 @@ router.get('/saveVideo', function (req, res) {
     //res.sendStatus(200);
 });
 
-router.get('/video', function (req, res) {
-    webCamController.video();
-});
+// just for displaying live camera stream on webpage.
+router.route('/video') 
+    .get(webCamCtrl.showCameraLiveStream);
+
 
 var saveVideo = function (duration) {
     return ffmpeg('http://ubuy.asuscomm.com:9090/video.cgi')

@@ -54,20 +54,8 @@ module.exports = function () {
             .catch(function (err) {
                 console.error(err);
             });
-
-        rmtAtCmd('0013A20040EB556C', 'NI', 'null')
-            .then(writeToXbee('0013A20040EB556C'))
-            .then(atCmd('ND'))
-            .catch(function (err) {
-                console.error(err);
-            });
         */
-        /* node indentifer command. this is to clear NI of a node for teting purpose. to be removed when going production.
-        rmtAtCmd('0013A20040EB556C', 'NI', 'null').then(function () {
-            console.log('reset router name');
-            atCmd('ND');
-        });
-        */
+   
         //rmtAtCmd(routerAddr, '%V');
         /*
                 xbeeCommand({
@@ -288,6 +276,8 @@ module.exports = function () {
                     clearTimeout(timer);
                     if (receivedFrame.commandStatus === OK) {
                         console.log('resloved');
+                        // The resolve() function is used to change the status of the promise from pending to fulfilled.
+                        // The value that is passed inside the resolve() function becomes the fulfillment value of the promise.
                         resolve(receivedFrame);
                     }
                     else {

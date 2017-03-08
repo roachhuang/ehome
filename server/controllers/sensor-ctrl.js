@@ -50,8 +50,12 @@ module.exports = function (xbee) {
         let newName = 's'.concat(req.body.name);
         let index = parseInt(req.params.index);
         xbee.sensors[index].name = newName;
-        xbee.rmtAtCmd(xbee.sensors[index].addr, 'NI', newName).then(function (f) {
-            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+        // Sequencing Asynchronous Operations
+        xbee.rmtAtCmd(xbee.sensors[index].addr, 'NI', newName).then(function (result1) {
+            console.log(result1);
+            return xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+        }).then(function (result2) {
+            console.log(result2);
             res.sendStatus(200);
         }).catch(function (err) {
             res.status(500).send(err);
@@ -61,13 +65,13 @@ module.exports = function (xbee) {
     var del = function (req, res) {
         let index = parseInt(req.params.index);
         let xbeeName = xbee.sensors[index].name;
-        xbee.rmtAtCmd(xbee.sensors[index].addr, 'NI', 'null').then(function (f) {
-            xbee.rmtAtCmd(xbee.sensors[index].addr, 'WR').then(function () {
-                _.remove(xbee.sensors, function (sensor) {
-                    return sensor.name === xbeeName;
-                });
-                res.status(200).send('deleted');
+        xbee.rmtAtCmd(xbee.sensors[index].addr, 'NI', 'null').then(function (result1) {
+            return xbee.rmtAtCmd(xbee.sensors[index].addr, 'WR')
+        }).then(function () {
+            _.remove(xbee.sensors, function (sensor) {
+                return sensor.name === xbeeName;
             });
+            res.status(200).send('deleted');
         }).catch(function (err) {
             res.status(500).send(err);
         });
@@ -75,7 +79,7 @@ module.exports = function (xbee) {
 
     return {
         get: get,
-        post, post,
+        post: post,
         put: put,
         del: del,
         getAll: getAll

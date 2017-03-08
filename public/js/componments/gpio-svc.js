@@ -87,6 +87,7 @@
             var req = {
                 method: 'DELETE',
                 url: '/gpio/' + index,
+                 contentType: 'applicaton/json',
                 //transformRequest: transformRequestAsFormPost,
                 //data: {}
             };

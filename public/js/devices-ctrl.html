@@ -5,32 +5,34 @@
 	</div>
 
 	<div ng-show='devices.length'>
-		<div class='button-wrapper' ng-repeat='device in devices'>
+		<div ng-repeat='device in devices'>
 			<h2 ng-if='device.error'> {{device.error}}</h2>
 			<!-- passing in param (device) into the url -->
-			<button type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-block btn-danger' : 'btn  btn-block btn-success'"><h4 class='text-left'>
+
+			<button uib-tooltip='Click this button to toggle the device' type="button" ng-click='onOff(device)' ng-class="device.status? 'btn btn-block btn-danger' : 'btn  btn-block btn-success'"><h4 class='text-left'>
 				<i class="fa fa-power-off fa" aria-hidden="true"></i>
-				&nbsp; {{device.name}} </h4></button>
+				&nbsp; {{device.name}} </h4>
+				</button>
 		</div>
 
 		<hr/>
 
 		<div class='button-wrapper'>
-			<button class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </button>&nbsp
-			<button class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </button>
+			<button uib-tooltip='打開全部智能開關' type="button" class='btn btn-lg btn-danger' ng-click='ctrlAll(devices, 1)'><i class="fa fa-toggle-on" aria-hidden="true"></i> 全開 </button>&nbsp
+			<button uib-tooltip='關閉全部智能開關' type="button" class='btn btn-lg btn-success' ng-click='ctrlAll(devices, 0)'><i class="fa fa-toggle-off" aria-hidden="true"></i> 全闗 </button>
 		</div>
 
 		<hr/>
 		<table class='table table-striped table-bordered table-condensed table-responsive'>
 			<tr class='info'>
 				<th>Device Name</th>
-				<th>Action</th>				
+				<th>Action</th>
 				<th>Address</th>
 			</tr>
 			<tr class='warning' ng-repeat='device in devices track by $index'>
 				<td><input class='form-control' type='text' ng-model='device.name'></td>
 				<td><button class='btn btn-primary' ng-click='updateDeviceName(device.name, $index)'><i class="fa fa-pencil-square-o"></i> 更名</button>
-				<button class='btn btn-warning' ng-click='delDevice($index)'><i class="fa fa-times"></i> Delete</button></td>
+					<button class='btn btn-warning' ng-click='delDevice($index)'><i class="fa fa-times"></i> Delete</button></td>
 				<td>{{device.addr}}</td>
 			</tr>
 		</table>

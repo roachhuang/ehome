@@ -1,27 +1,27 @@
 <!--
 <img ng-src='http://ubuy.asuscomm.com:8080/image.jpg' class='img-responsive'/>
 <hr/>
--->
+
 
 <div>
 	<video width='640' height='480' autoplay>
-		<source src='/users/video' type='video/mp4'> 
+		<source src='http://ubuy.asuscomm.com:9090/video.cgi' type='video/mp4'>
 		Your browser does not support the video tag.
 	</video>
 </div>
-
-
-
+-->
 <section>
-	<!--
+
 <h1>Camera view</h1>
 <figure>
-	<iframe width='640' height='480' src='http://ubuy.asuscomm.com:8080/video.cgi' frameborder="0">
+	<iframe width='640' height='480' src='http://ubuy.asuscomm.com:9090/video.cgi' frameborder="0">
 		<p>Your browser does not support iframes. It, however, works on Chrome</p>
 	</iframe>
 	<br/>
 </figure>
--->
-	<button ng-class="'btn btn-primary' + vm.btn1State" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg1}}</button>
-	<button ng-class="'btn btn-primary' + vm.btn2State" ng-click="vm.saveVideo()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg2}}</button>
+
+	<div class='form-control'>
+	<button uib-tooltip='截取圖片到雲端' type="button" ng-class="'btn btn-primary' + vm.btn1State" ng-click="vm.snapShot()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg1}}</button>
+	<button type="button" ng-class="'btn btn-primary' + vm.btn2State" ng-click="vm.saveVideo()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{vm.msg2}}</button>
+	</div>
 </section>

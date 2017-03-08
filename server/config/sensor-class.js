@@ -27,20 +27,22 @@ module.exports = function () {
     };
 
     Sensor.prototype._open = function () {
-        if (this.enable === true) {
-            // turn on spot light
+        if (this.enable === true) {            
             // activate alarm
-            // there should be a limit of sending email and txt msg.
-            email.sendEmail(this.name);
-            // send text msg
-            //twilio.sendMessage();
-            //twilio.makeCall();
-            // start recording video or capture video image 10 times (one time per sec)
-            // 7-eleven call police
-            // alert.window = true;
-            //} else {
-            //lights.switchOn();
-            //voice.speak('Welcome home');
+            // s/w debouncing 
+            this.enable = false;
+            setTimeout(() => {
+                email.sendEmail(this.name);
+                // send text msg
+                // twilio.sendMessage();
+                // twilio.makeCall();
+                // start recording video or capture video image 10 times (one time per sec)
+                // 7-eleven call police
+                // alert.window = true;                
+                // lights.switchOn();
+                // voice.speak('Welcome home');
+                this.enable = true;
+            }, 3000);
         }
     };
 
@@ -74,7 +76,7 @@ module.exports = function () {
     //    this.addr = addr;   //toto: change to addr16 if have time
     //    this.name = name;
     //    this.data = [];
-        //events.EventEmitter.call(this);
+    //events.EventEmitter.call(this);
     //}
 
 

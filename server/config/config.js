@@ -11,8 +11,8 @@ module.exports = {
 		// clientSecret: '3mcYjSf-XBPy4ZB9KPffNTzP',
 		clientId: '141123056897-q2d7jtq5h3q86jj5f9v3g341h3qgqtpf.apps.googleusercontent.com',
 		clientSecret: 'Q_y6wkKnlP1oDgF--szw80dt',
-		callbackURL: 'http://localhost:3000/auth/google/callback',
-		//callbackURL: 'http://ubuy.asuscomm.com:3000/auth/google/callback',
+		//callbackURL: 'http://localhost:3000/auth/google/callback',
+		callbackURL: 'http://ubuy.asuscomm.com:3000/auth/google/callback',
 		textMagic: {
 			key: 'g4sxO6FrzpOordGvKJNVcgjX45f0sy',
 			appName: 'ehome',

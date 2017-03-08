@@ -15,8 +15,8 @@
 </section>
 
 <div class='button-wrapper'>
-    <button class='btn btn-lg btn-primary' ng-click='vm.addJob(vm.tmpJob)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-    <button class='btn btn-lg btn-danger' ng-click='vm.removeAllJobs()'><i class="fa fa-trash-o fa-lg"></i> 全部刪除</button>
+    <button uib-tooltip='新增開關定時排程' type="button" class='btn btn-lg btn-primary' ng-click='vm.addJob(vm.tmpJob)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+    <button uib-tooltip='刪除所有開關定時排程' type="button" class='btn btn-lg btn-danger' ng-click='vm.removeAllJobs()'><i class="fa fa-trash-o fa-lg"></i> 全部刪除</button>
 </div>
 
 <section>
@@ -38,7 +38,7 @@
                 <td>{{job.m}}</td>
                 <td>{{$index%2? 'Off': 'On'}}</td>
 
-                <td><button class='btn btn-warning' ng-click='vm.removeJob($index+1)'><i class="fa fa-trash-o fa-lg"></i> 刪除</button></td>
+                <td><button uib-tooltip='刪除此（this) 開關定時排程' type="button" class='btn btn-warning' ng-click='vm.removeJob($index+1)'><i class="fa fa-trash-o fa-lg"></i> 刪除</button></td>
             </tr>
         </tbody>
     </table>

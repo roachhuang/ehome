@@ -246,29 +246,33 @@ module.exports = function (xbee) {
         let index = parseInt(req.params.index);
         //_.merge(xbee.devices[index], newName);
         xbee.devices[index].name = newName;
-        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', newName).then(function (f) {
-            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', newName).then(function (result1) {
+            console.log('result1 ', result1);
+            return xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+        }).then(function (result2) {
+            console.log('result2: ', result2);
             res.sendStatus(200);
-        })
-            .catch(function (err) {
-                res.status(500).send(err);
-            });
-    };
-
-    var delDevice = function (req, res) {       
-        let index = parseInt(req.params.index);     
-        let xbeeName = xbee.devices[index].name;
-        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', 'null').then(function (f) {
-            xbee.rmtAtCmd(xbee.devices[index].addr, 'WR').then(function () {
-                _.remove(xbee.devices, function (device) {
-                    return device.name === xbeeName;
-                });
-                res.status(200).send('deleted');
-            });
         }).catch(function (err) {
             res.status(500).send(err);
         });
     };
+
+    var delDevice = function (req, res) {
+        let index = parseInt(req.params.index);
+        let xbeeName = xbee.devices[index].name;
+        xbee.rmtAtCmd(xbee.devices[index].addr, 'NI', 'null').then(function (result1) {
+            return xbee.rmtAtCmd(xbee.devices[index].addr, 'WR');
+        }).then(function (result2) {
+            _.remove(xbee.devices, function (device) {
+                return device.name === xbeeName;
+            });
+            res.status(200).send('deleted');
+
+        }).catch(function (err) {
+            res.status(500).send(err);
+        });
+    };
+    
     return {
         post: post,
         get: get,
